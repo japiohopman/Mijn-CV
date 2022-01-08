@@ -48,10 +48,10 @@
 
       <div class="hello_content">
         <h2>Hallo!</h2>
-        <p>Vanaf kleins af aan heb ik 3 groote passies. koken tegnologie (computers) en muziek. Ik heb altijd geprobeerd van mijn passies me beroep te maken. Dat lukt aardig! </p>
+        <p>Vanaf kleins af aan heb ik 3 groote passies. Koken, tegnologie(computers) en muziek. Ik heb altijd geprobeerd van mijn passies me beroep te maken. Ik ben aardig op weg! </p>
       </div>
 
-      <div class="contact_details_content">
+      <div class="personalia">
         <h2>Personalia</h2>
         <p class="purple">Naam:</p>
         <p>Jaap Hopman</p>
@@ -80,25 +80,24 @@
         <p>Schierstins</p>
         <p>Amsterdam, Nederland</p>
         <p>1082 TD</p>
+
+        <!-- button? -->
       </div>
-      <a href="japiehopman@gmail.com" class="send_message_button">
-        <span class="cut1"></span>
-        <span class="cut2"></span>
-        <span class="content">Stuur me een bericht...<i class="far fa-envelope"></i></span>
+      <button class="send_message_button" email="japiohopman@gmail.com" type="email" name="button">Stuur me een bericht...<i class="far fa-envelope"></i></button>
       </a>
       <!-- mijn websites -->
       <div class="mijn-websites">
         <h2>Mijn Websites</h2>
         <ul>
-          <li><a onclick="myFunction()">@YourServies</a></li>
+          <li><a href="https://fierce-meadow-85158.herokuapp.com/">@YourServies</a></li>
           <li><a onclick="myFunction()">Persoonlijke Website</a></li>
         </ul>
       </div>
       <!-- Portfolio Web Apps -->
-      <div id="porfolio-wab-apps" class="hello-content">
-        <h2>Portfolio Web Apps</h2>
+      <div id="porfolio-wab-apps" class="portfolio">
+        <h2>Portfolio Web <br> Apps</h2>
         <a href="https://japiohopman.github.io/calculator/">Calculator</a>
-        <a onclick="myFunction()" href="#">90's Hiphop memory</a>
+        <a onclick="myFunction()" href="">90's Hiphop memory</a>
         <a href="#">ToDo lijst met weer api</a>
         <a href="#">Teteris</a>
         <a href="https://japiohopman.github.io/calculator/">Calculator</a>
@@ -109,12 +108,20 @@
       <!-- deejeeing -->
       <div class="muziek&deejay">
         <h2>Muziek en Deejay</h2>
+        <div class="profile_frame">
+          <img class="hobbie_picture" src="images/zon.jpg" alt="profile picture">
+        </div>
         <h3>Mixtapes</h3>
         <ul>
           <li><a href="https://www.mixcloud.com/jaapjekentem-hpmn/all-seasons/">All seasons</a></li>
           <li><a href="https://www.mixcloud.com/jaapjekentem-hpmn/jaapjekentem-hiphop-mixtape-2010/">HipHop mix 2010</a></li>
         </ul>
       </div>
+<!-- pics -->
+
+<div class="profile_frame">
+  <img class="hobbie_picture" src="images/jaap-Hopman.jpg" alt="profile picture">
+</div>
       <!-- get social -->
       <div class="get_social_content">
         <h2>Get social</h2>
@@ -152,7 +159,8 @@
         <h2>Mijn Filosofie</h2>
         <p>Ik leef volgens ethiek en moraal, niet in opgelegde regels die je "moet" doen of volgen.</p>
         <div class="philosophy_content">
-          <p>Kort stukje Filosofie</p>
+          <p>Er zijn drie absoluten in het leven. Drie dingen waar geen mens wat aan kan doen. Dat zijn waar je op de wereld wordt gegeboren, Wie je ouders zijn En of je welzijn of armoede bent opgegroeit.
+          Daar kan en mag geen mens een ander op afrekenen. Wand die dingen zijn niet belangrijk. Het is belangrijk waar je staat in het leven..   </p>
           <ul>
             <li>Lief</li>
             <li>Oprecht</li>
@@ -176,15 +184,43 @@
         <p>#</p>
         <div class="philosophy_content">
           <p>kleine intro</p>
-          <ul>
-            <li>2009-2013 CMD (Communication and Multimedia Design)</li>
-            <li>2007 SVH leermeester diploma</li>
-            <li>1997-2001 RocAmsterdam</li>
-            <li>1994-1997 TSH Hoorn</li>
-            <li>
-              <==-1994 basis school de wik</li>
+<!-- geefb -->
+<table style="width:100%">
+  <tr>
+    <th>periode</th>
+    <th>School</th>
+    <th>Plaats</th>
+  </tr>
+  <tr>
+    <td>2009-2013</td>
+    <td>CMD (Communication and Multimedia Design)</td>
+    <td>amsterdam</td>
+  </tr>
+  <tr>
+    <td>2007</td>
+    <td>SVH leermeester diploma</td>
+    <td>Amsterdam</td>
+  </tr>
+  <tr>
+    <td>1997-2001</td>
+    <td>Roc Amsterdam</td>
+    <td>Amsterdam</td>
+  </tr>
+  <tr>
+    <td>1994-1997</td>
+    <td>TSH Hoorn</td>
+    <td>Hoorn</td>
+  </tr>
+  <tr>
+    <td>1988-1994</td>
+    <td>Basis school de Wik</td>
+    <td>Hoorn</td>
+  </tr>
+</table>
 
-          </ul>
+
+
+
           <div class="clear"></div>
         </div>
       </div>
@@ -196,8 +232,24 @@
         <div class="line_right"></div>
       </div>
       <!-- skils -->
-      <div id="skills" class="block">
-        <h2>Skills</h2>
+      <div id="skills" class="skills column">
+        <h2>Kithen Skills</h2>
+        <p>Ondangs al mijn diploma's en kilometers aan ervaring bizit ik ook nog wat handigen horeca skills. Ik ben in het bezit van een sociale hygiëne en heb ik mijn leermeester diploma. Verder volg ik graag nog cursussen en volg ik workshops!</p>
+
+        <p>cursussen en volg ik workshops</p>
+        <ul>
+          <li>Japans koken</li>
+          <li>Veganistisch</li>
+        </ul>
+        <div class="skill-logo">
+          <img class="skill-logo-img haccp" src="images/HACCP.png" alt="js css html logo"></li>
+          <img class="skill-logo-img svh" src="images/leermeester.png" alt="js css html logo"></li>
+        </div>
+        <div class="clear"></div>
+
+      </div>
+      <div class="skills">
+        <h2>Developer Skills</h2>
         <p>Hier Developer skills</p>
 
         <p>#</p>
@@ -211,6 +263,8 @@
         <div class="clear"></div>
 
       </div>
+
+      <!-- vfb -->
       <div class="horizontal_line">
         <div class="line_left"></div>
         <div class="left_circle"></div>
@@ -226,22 +280,118 @@
           Ik ben altijd opzoek naar nieuwe uitdagingen!</p>
         <div class="philosophy_content">
           <p>#</p>
-          <ul>
-            <li>Mossels & gin</li>
-            <li>Biestro belleami</li>
-            <li>Jack dish</li>
-            <li>Uitvlugt (surinaams)</li>
-            <li>Cafe Binnen Buiten</li>
-            <li>Brandstof</li>
-            <li>Braque</li>
-            <li>Julze</li>
-            <li>Hot mama Hot (Chef van een groot catterings bedrijf)</li>
-            <li>Marathon weg</li>
-            <li>Bordenwijk</li>
-            <li>Vakzuid</li>
-            <li>De Industrieele Club</li>
 
-          </ul>
+<table class="tabel">
+  <tr>
+    <th>Periode</th>
+    <th>Bedrijf</th>
+    <th>Functie</th>
+    <th>Plaats</th>
+  </tr>
+  <tr>
+    <td>2021</td>
+    <td>Mossels & gin</td>
+    <td>Freelance Kok</td>
+    <td>Amsterdam</td>
+  </tr>
+  <tr>
+    <td>2018-2021</td>
+    <td>Biestro belleami</td>
+    <td>Freelance Kok</td>
+    <td>Amsterdam</td>
+  </tr>
+  <tr>
+    <td>2005-2021</td>
+    <td>Jack dish</td>
+    <td>Freelance Kok</td>
+    <td>Amsterdam</td>
+  </tr>
+  <tr>
+    <td>1994-1997</td>
+    <td>Uitvlugt (surinaams)</td>
+    <td>Freelance Kok</td>
+    <td>Amsterdam</td>
+  </tr>
+  <tr>
+    <td>1994-1997</td>
+    <td>Cafe Binnen Buiten</td>
+    <td>Freelance Kok</td>
+    <td>Amsterdam</td>
+  </tr>
+  <tr>
+    <td>1994-1997</td>
+    <td>Brandstof</td>
+    <td>Freelance Kok</td>
+    <td>Amsterdam</td>
+  </tr>
+  <tr>
+    <td>1994-1997</td>
+    <td>Hot mama Hot</td>
+    <td>Freelance Kok</td>
+    <td>Amsterdam</td>
+  </tr>
+  <tr>
+    <td>1994-1997</td>
+    <td>Amaro</td>
+    <td>Freelance Kok</td>
+    <td>Eindhoven</td>
+  </tr>
+  <tr>
+    <td>1994-1997</td>
+    <td>Braque</td>
+    <td>Freelance Kok</td>
+    <td>Amsterdam</td>
+  </tr>
+  <tr>
+    <td>1994-1997</td>
+    <td>Marathon weg</td>
+    <td>Freelance Kok</td>
+    <td>Amsterdam</td>
+  </tr>
+  <tr>
+    <td>1994-1997</td>
+    <td>Julze</td>
+    <td>Freelance Kok</td>
+    <td>Amsterdam</td>
+  </tr>
+  <tr>
+    <td>1994-1997</td>
+    <td>Bordenwijk</td>
+    <td>Freelance Kok</td>
+    <td>Amsterdam</td>
+  </tr>
+  <tr>
+    <td>1994-1997</td>
+    <td>Bordenwijk</td>
+    <td>Freelance Kok</td>
+    <td>Amsterdam</td>
+  </tr>
+  <tr>
+    <td>1994-1997</td>
+    <td>De Industrieele Club</td>
+    <td>Freelance Kok</td>
+    <td>Amsterdam</td>
+  </tr>
+  <tr>
+    <td>1994-1997</td>
+    <td>Vakzuid</td>
+    <td>Freelance Kok</td>
+    <td>Amsterdam</td>
+  </tr>
+  <tr>
+    <td>1994-1997</td>
+    <td>De Hoofd Toren</td>
+    <td>Freelance Kok</td>
+    <td>Hoorn</td>
+  </tr>
+</table>
+
+
+
+
+
+
+          <!-- hlusfh? -->
           <div class="clear"></div>
         </div>
       </div>
@@ -253,18 +403,68 @@
         <div class="line_right"></div>
       </div>
 
-      <div class="last block">
+      <div class="row last block">
         <h2>Interesses & Hobbies</h2>
         <p></p>
+        <div class="tab">
+  <button class="tablinks active" onmouseover="openCity(event, 'koken')">Koken voor vrienden</button>
+  <button class="tablinks" onmouseover="openCity(event, 'Moestuin')">Moestuin</button>
+  <button class="tablinks" onmouseover="openCity(event, 'Gamming-Solo')">Gamming Solo</button>
+  <button class="tablinks" onmouseover="openCity(event, 'koken')">Koken voor vrienden</button>
+  <button class="tablinks" onmouseover="openCity(event, 'Moestuin')">Moestuin</button>
+  <button class="tablinks" onmouseover="openCity(event, 'Gamming-Solo')">Gamming Solo</button>
+</div>
+
+<div id="koken" class="tabcontent">
+  <h3>Koken voor vrienden</h3>
+  <div class="profile_frame">
+    <img class="hobbie_picture" src="images/jaap-Hopman.jpg" alt="profile picture">
+  </div>
+</div>
+
+<div id="Moestuin" class="tabcontent">
+  <h3>Moestuin</h3>
+  <div class="profile_frame">
+    <img class="hobbie_picture" src="images/jaap-Hopman.jpg" alt="profile picture">
+  </div>
+</div>
+
+<div id="Gamming-Solo" class="tabcontent">
+  <h3>Gamming Solo</h3>
+  <div class="profile_frame">
+    <img class="hobbie_picture" src="images/jaap-Hopman.jpg" alt="profile picture">
+  </div>
+</div>
+
+<div id="koken" class="tabcontent">
+  <h3>Koken voor vrienden</h3>
+  <div class="profile_frame">
+    <img class="hobbie_picture column" src="images/jaap-Hopman.jpg" alt="profile picture">
+  </div>
+</div>
+
+<div id="x" class="tabcontent">
+  <h3>Moestuin</h3>
+  <p>Paris is the capital of France.</p>
+</div>
+
+<div id="x" class="tabcontent">
+  <h3>Gamming Solo</h3>
+  <p>Tokyo is the capital of Japan.</p>
+</div>
+
+<div class="clearfix"></div>
+      <!--
         <ul>
-          <li>Koken voor vrienden</li>
-          <li>Moestuin</li>
+          <li></li>
+          <li></li>
           <li>Joggen </li>
           <li>Optredens</li>
           <li>Web Developing</li>
-          <li>Gamming Solo</li>
+          <li></li>
           <li>Sci-fi boeken & films</li>
-        </ul>
+        </ul> -->
+
       </div>
     </div>
     <ul class="download_print_buttons horizontal_list">
@@ -277,10 +477,7 @@
       <p class="footer_name">Jaap Hopman 2022</p>
     </div>
   </div>
-  <!-- Use a button to open the snackbar -->
-  <button onclick="myFunction()">Show Snackbar</button>
-
-  <!-- The actual snackbar -->
+<!-- The actual snackbar -->
   <div id="snackbar">Sorry nog onder constuctie...</div>
   <!-- Font Awesome -->
   <script src="https://kit.fontawesome.com/bb9bbdfd75.js" crossorigin="anonymous"></script>
