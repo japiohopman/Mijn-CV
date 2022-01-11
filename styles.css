@@ -375,7 +375,8 @@ li:before {
   position: relative;
   z-index: 1;
   border-radius: 4px;
-
+color: #fff;
+border: none;
 
 
 }
@@ -392,6 +393,9 @@ li:before {
   padding: 16px 0 0;
   top: -4px;
   bottom: 10px;
+}
+.skills li {
+  text-align: left;
 }
 
 .send_message_button:hover,
