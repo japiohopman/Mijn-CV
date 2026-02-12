@@ -1,536 +1,145 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-
-<head>
-  <meta charset="utf-8">
-  <title>Curriculum vitae</title>
-
-  <link href='https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="styles.css">
-</head>
-
-<body>
-
-
-
-
-  <!-- MAIN CONTAINER -->
-  <div id="main_container">
-    <!-- HEADER -->
-    <div id="header">
-      <!-- LOGOTYPE/NAME -->
-      <div class="header_logotype_container">
-        <h1 class="logotype_name">Jaap <span class="purple">Hopman</span></h1>
-        <h2 class="logotype_occupation">Free-lance Chef <br>Free-lance Developer </h2>
-
-      </div>
-      <!-- MAIN MENU -->
-
-
-      <div class="header_menu_container">
-
-        <div class="clear"></div>
-        <ul class="header_menu horizontal_list">
-          <li><a class="no_border purple" href="#">Profiel</a></li>
-          <li><a href="#Opleidingen">Opleidingen</a></li>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jaap Hopman | Creative Developer CV</title>
+    <meta
+      name="description"
+      content="Visueel, interactief CV van Jaap Hopman: developer, chef en creator met focus op codeprojecten."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Syne:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="noise-overlay" aria-hidden="true"></div>
+    <header class="hero" id="top">
+      <nav class="nav container">
+        <a href="#top" class="logo">JH<span>_CV</span></a>
+        <ul>
+          <li><a href="#over">Over</a></li>
           <li><a href="#skills">Skills</a></li>
-          <li><a href="#werk-ervaring">Werk Ervaring</a></li>
-          <li><a href="#porfolio-wab-apps">Portfolio Web Apps</a></li>
-
+          <li><a href="#ervaring">Ervaring</a></li>
+          <li><a href="#projecten">Projecten</a></li>
+          <li><a href="#contact">Contact</a></li>
         </ul>
-      </div>
-    </div>
-    <!-- LEFT COL -->
-    <div id="left_col">
-      <div class="profile_frame">
-        <div><img class="profile_picture" src="images/jaap-Hopman.jpg" alt="profile picture"></div>
-      </div>
+      </nav>
 
-      <div class="hello_content">
-        <h2>Hallo!</h2>
-        <p>Van jongs af aan heb ik drie grote passies ontwikkeld: koken, technologie (computers) en muziek. Ik heb er altijd naar gestreefd om van mijn passies mijn beroep te maken, en ik ben goed op weg om dat te bereiken. </p>
-      </div>
-
-      <div class="personalia">
-        <h2>Personalia</h2>
-        <p class="purple">Naam:</p>
-        <p>Jaap Hopman</p>
-        <p class="purple">Geboortedatum</p>
-        <p>8 September 1982</p>
-        <p class="purple">Geboorteplaats</p>
-        <p>Amsterdam, Noord-Holland</p>
-        <p class="purple">Nationaliteit</p>
-        <p>Nederlandse</p>
-        <p class="purple">Woonplaats</p>
-        <p>Amsterdam</p>
-        <p class="purple">Talen</p>
-        <p>Nederlands, Engels</p>
-        <p class="purple">Rijbewijs</p>
-        <p>Nee</p>
-      </div>
-
-
-      <div class="contact_details_content">
-        <h2>Contact details</h2>
-        <p class="purple">Phone:</p>
-        <p>+31 653 774 668</p>
-        <p class="purple">Email:</p>
-        <p>Japiehopman@gmail.com</p>
-        <p class="purple">Adres:</p>
-        <p>Schierstins</p>
-        <p>Amsterdam, Nederland</p>
-        <p>1082 TD</p>
-
-        <!-- button? -->
-      </div>
-      <form action="mailto:japiehopman@gmail.com method="post enctype="text/plain">
-        <button class="send_message_button" type="submit" name="button">Neem contact op!</button>
-
-      </a>
-      <!-- mijn websites -->
-      <div class="mijn-websites">
-        <h2>Mijn Websites</h2>
-        <ul>
-          <li><a href="https://fierce-meadow-85158.herokuapp.com/">@YourServies</a></li>
-          <li><a onclick="myFunction()">Persoonlijke Website</a></li>
-          <li><a href="https://peaceful-everglades-58219.herokuapp.com/">Gaming Blog</a></li>
-        </ul>
-      </div>
-      <!-- Portfolio Web Apps -->
-      <div id="porfolio-wab-apps" class="portfolio">
-        <h2>Portfolio Web <br> Apps</h2>
-        <ul>
-          <li><a href="https://japiohopman.github.io/calculator/">Calculator</a></li>
-          <li><a href="https://japiohopman.github.io/memorys/">90's Hiphop memory</a></li>
-          <li><a href="#">ToDo lijst met weer api</a></li>
-
-        </ul>
-
-
-
-
-      </div>
-      <!-- deejeeing -->
-      <div class="muziek&deejay">
-        <h2>Muziek en Deejay</h2>
-        <div class="profile_frame">
-          <img class="hobbie_picture" src="images/zon.jpg" alt="profile picture">
-        </div>
-        <h3>Mixtapes</h3>
-        <ul>
-          <li><a href="https://www.mixcloud.com/jaapjekentem-hpmn/all-seasons/">All seasons</a></li>
-          <li><a href="https://www.mixcloud.com/jaapjekentem-hpmn/jaapjekentem-hiphop-mixtape-2010/">HipHop mix 2010</a></li>
-        </ul>
-      </div>
-<!-- pics -->
-
-
-      <!-- get social -->
-      <div class="get_social_content">
-        <h2>Get social</h2>
-        <ul class="social_icons horizontal_list">
-          <li><a class="facebook" href="https://www.facebook.com/jaapjekentem.hpmn"><span class="entypo-facebook-circled"></span><span class="invisible">Facebook</span></a></li>
-          <li><a class="facebook" href="https://www.facebook.com/jaapjekentem.hpmn"><span class="entypo-facebook-circled"></span><span class="invisible">Facebook</span></a></li>
-          <li><a class="linkedin" href="https://www.linkedin.com/in/jaap-hopman-9117b619b/"><span class="entypo-linkedin-circled"></span><span class="invisible">LinkedIn</span></a></li>
-          <li><a class="facebook" href="https://www.facebook.com/jaapjekentem.hpmn"><span class="entypo-facebook-circled"></span><span class="invisible">Facebook</span></a></li>
-        </ul>
-      </div>
-    </div>
-    <!-- PROFILE CONTENT -->
-    <div id="content_container">
-      <div class="block">
-        <h1>Profiel</h1>
-        <blockquote class="profile_quote">
-          <p> <em>"Every day it's a school day!"</em> Elke dag is weer een nieuwe kans om te leren! Het leven is een voortdurend leerproces waarin we streven naar groei en nieuwe kennis. Leren hoeft niet saai te zijn; het kan juist leuk en boeiend zijn. We moeten elke dag benaderen met nieuwsgierigheid, verwondering en de wil om te ontdekken. Het is belangrijk om te beseffen dat we nooit uitgeleerd zijn en dat elke dag mogelijkheden biedt voor persoonlijke ontwikkeling. Laten we het leven als een avontuur zien en elke dag streven naar de beste versie van onszelf. </p>
-          <p>Jaap Hopman.</p>
-          <span class="entypo-quote"></span>
-        </blockquote>
-      </div>
-      <div class="block">
-        <h2>HALLO</h2>
-        <p>Ik zal me even voorstellen. Ik ben Jaap! Geboren en getogen in het bruisende Amsterdam in 1982, ben ik een avontuurlijke en gepassioneerde man met een kleurrijk verhaal. Met een liefde voor koken begon ik op mijn 25e als kok en ontdekte ik de kunst van het creëren van heerlijke culinaire ervaringen.
-
-          Naast mijn culinaire avonturen, vond ik altijd vreugde in muziek en begon ik als hobby DJ'en. Het gevoel van mensen zien dansen en genieten van de muziek die ik draaide, was een ware bron van inspiratie voor me.
-          
-          In 2012 besloot ik mijn creativiteit te verkennen in de digitale wereld en begon ik me bezig te houden met webdevelopment. Ik werd betoverd door de mogelijkheid om mooie en functionele websites te bouwen, waarbij ik mijn passie voor design en techniek kon combineren.
-          
-          Mijn reis als kok, DJ en webontwikkelaar heeft me geleerd om met passie, flexibiliteit en precisie te werken. Ik geniet van het aangaan van nieuwe uitdagingen en ben altijd op zoek naar manieren om te groeien en te leren.
-          
-          Met mijn unieke mix van culinaire creativiteit, muzikale vibes en digitale vaardigheden, sta ik klaar om nieuwe vriendelijke en vriendelijke professionele avonturen aan te gaan. Ik geloof in de kracht van positiviteit en het omarmen van nieuwe kansen met een glimlach </p>
-      </div>
-      <div class="horizontal_line">
-        <div class="line_left"></div>
-        <div class="left_circle"></div>
-        <div class="central_circle"></div>
-        <div class="right_circle"></div>
-        <div class="line_right"></div>
-      </div>
-      <!-- mijn filo -->
-      <div class="block">
-        <h2>Mijn Filosofie</h2>
-        <div class="philosophy_content">
-          <p>Leven met passie, creativiteit en een vleugje muziek! Als kok, DJ en webontwikkelaar omarm ik het leven met liefde, creëer ik culinaire ervaringen, laat ik mensen dansen op de ritmes van mijn muziek en bouw ik prachtige digitale ervaringen. Mijn doel is om elk aspect van het leven te vieren, nieuwe uitdagingen aan te gaan en altijd te streven naar groei en positiviteit.   </p>
-          <ul>
-            <li>Lief</li>
-            <li>Oprecht</li>
-            <li>Respect vol</li>
-            <li>Open minded</li>
-            <li>Doorzettings vermogen</li>
-          </ul>
-          <div class="clear"></div>
+      <div class="hero-content container" data-tilt>
+        <img src="images/jaap-Hopman.jpg" alt="Portret van Jaap Hopman" class="avatar" />
+        <div>
+          <p class="kicker">Creative Developer · Freelance Chef · Problem Solver</p>
+          <h1>Jaap Hopman</h1>
+          <p class="subtitle">
+            Ik bouw digitale ervaringen met karakter: visueel sterk, technisch netjes en altijd met gevoel voor detail.
+            Op deze pagina vind je mijn verhaal én mijn codeprojecten.
+          </p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#projecten">Bekijk projecten</a>
+            <a class="btn btn-ghost" href="mailto:japiehopman@gmail.com">Mail mij</a>
+          </div>
         </div>
       </div>
-      <div class="horizontal_line">
-        <div class="line_left"></div>
-        <div class="left_circle"></div>
-        <div class="central_circle"></div>
-        <div class="right_circle"></div>
-        <div class="line_right"></div>
-      </div>
-      <!-- table?? -->
-      <div id="Opleidingen" class="block">
-        <h2>Opleidingen</h2>
-        <div class="philosophy_content">
-          <p>Met mijn onderwijstraject, gestart op de basisschool in Hoorn en voortgezet binnen het voortgezet onderwijs aldaar, heb ik een stevig fundament gelegd voor mijn verdere academische groei. Gedreven door mijn passie voor kennis en ontwikkeling, vervolgde ik mijn opleiding op HBO-niveau in het bruisende Amsterdam.</p>
-<!-- geefb -->
-<table style="width:100%">
-  <tr>
-    <th>periode</th>
-    <th>School</th>
-    <th>Plaats</th>
-    <th>Diploma</th>
-  </tr>
-  <tr>
-    <td>2009-2013</td>
-    <td>CMD (Communication and Multimedia Design) HvA</td>
-    <td>amsterdam</td>
-    <td>Nog niet</td>
-  </tr>
-  <tr>
-    <td>2007</td>
-    <td>SVH leermeester diploma</td>
-    <td>Amsterdam</td>
-    <td>Ja</td>
-  </tr>
-  <tr>
-    <td>1997-2001</td>
-    <td>Roc Amsterdam HBO</td>
-    <td>Amsterdam</td>
-<td>Ja</td>
-  </tr>
-  <tr>
-    <td>1994-1997</td>
-    <td>TSH Hoorn HBO</td>
-    <td>Hoorn</td>
-<td>Ja</td>
-  </tr>
-  <tr>
-    <td>1988-1994</td>
-    <td>Basis school de Wik</td>
-    <td>Hoorn</td>
-<td>Ja</td>
-  </tr>
-</table>
+      <div class="glow glow-1"></div>
+      <div class="glow glow-2"></div>
+    </header>
 
-
-
-
-          <div class="clear"></div>
+    <main>
+      <section id="over" class="container section reveal">
+        <h2>Profiel</h2>
+        <p>
+          Van jongs af aan combineer ik creativiteit met techniek: van muziek en hospitality tot webdevelopment.
+          Die mix zorgt ervoor dat ik niet alleen code schrijf, maar complete ervaringen neerzet: concept, UI,
+          interactie en uitvoering.
+        </p>
+        <div class="stats">
+          <article>
+            <span class="count" data-target="10">0</span>
+            <p>+ jaar ervaring in creatieve & service omgevingen</p>
+          </article>
+          <article>
+            <span class="count" data-target="20">0</span>
+            <p>+ codeprojecten en experimenten</p>
+          </article>
+          <article>
+            <span class="count" data-target="100">0</span>
+            <p>% focus op groei, learning-by-building</p>
+          </article>
         </div>
-      </div>
-      <div class="horizontal_line">
-        <div class="line_left"></div>
-        <div class="left_circle"></div>
-        <div class="central_circle"></div>
-        <div class="right_circle"></div>
-        <div class="line_right"></div>
-      </div>
-      <!-- skils -->
-      <div id="skills" class="skills column">
-        <h2>Kithen Skills</h2>
-        <p>Naast al mijn diploma's en uitgebreide ervaring in het vakgebied, beschik ik ook over waardevolle horeca-vaardigheden. Ik ben in het bezit van een certificaat sociale hygiëne en ik ben tevens gecertificeerd leermeester. Daarnaast ben ik altijd enthousiast om nieuwe cursussen te volgen en deel te nemen aan workshops om mijn kennis verder uit te breiden.</p>
+      </section>
 
-        <p>cursus & workshops</p>
-
-        <ul>
-          <li>Japans koken</li>
-          <li>Veganistisch koken</li>
-          <li>Strategische plannen</li>
-          <li>Organisationele vaardigheden</li>
-        </ul>
-
-
-        <div class="skill-logo">
-          <img class="skill-logo-img haccp" src="images/HACCP.png" alt="js css html logo"></li>
-          <img class="skill-logo-img svh" src="images/leermeester.png" alt="js css html logo"></li>
+      <section id="skills" class="container section reveal">
+        <h2>Skills & stack</h2>
+        <div class="chips">
+          <span>HTML5</span><span>CSS3 / Animations</span><span>JavaScript</span><span>Node.js</span><span>React basics</span>
+          <span>REST API</span><span>Git & GitHub</span><span>UI/UX gevoel</span><span>Photoshop</span><span>Illustrator</span>
+          <span>Hospitality mindset</span><span>Teamwork</span>
         </div>
-        <div class="clear"></div>
+      </section>
 
-      </div>
-      <div class="skills">
-        <h2>Developer Skills</h2>
-        <p>Hier Developer skills</p>
-
-        <ul>
-          <li>HTML</li>
-          <li>CSS</li>
-          <li>JavaScript</li>
-          <li>photoshop & illustrator</li>
-          <li>Express</li>
-          <li>Ejs</li>
-          <li>Mongosh</li>
-          <li>C#</li>
-        </ul>
-        <div class="skill-logo">
-          <img class="skill-logo-img" src="images/js-logo.png" alt="js css html logo"></li>
-          <img class="skill-logo-img adobe" src="images/illustrator.png" alt="js css html logo"></li>
-
-          <img class="skill-logo-img adobe" src="images/photoshop.png" alt="js css html logo"></li>
-          <img class="skill-logo-img" src="images/bst.png" alt="js css html logo"></li>
+      <section id="ervaring" class="container section reveal">
+        <h2>Opleidingen & ervaring</h2>
+        <div class="timeline">
+          <article>
+            <h3>Communication and Multimedia Design (HvA)</h3>
+            <p>2009 – 2013 · Amsterdam</p>
+          </article>
+          <article>
+            <h3>SVH Leermeester diploma</h3>
+            <p>2007 · Amsterdam</p>
+          </article>
+          <article>
+            <h3>Roc Amsterdam (Koksopleiding)</h3>
+            <p>1997 – 2001 · Amsterdam</p>
+          </article>
+          <article>
+            <h3>Freelance chef & creative technologist</h3>
+            <p>
+              Praktijkervaring in stressbestendige omgevingen, vertaald naar software: prioriteren, leveren en
+              kwaliteit bewaken.
+            </p>
+          </article>
         </div>
-        <div class="clear"></div>
+      </section>
 
-      </div>
-
-      <!-- vfb -->
-      <div class="horizontal_line">
-        <div class="line_left"></div>
-        <div class="left_circle"></div>
-        <div class="central_circle"></div>
-        <div class="right_circle"></div>
-        <div class="line_right"></div>
-      </div>
-
-      <!-- werk ervaring -->
-      <div id="werk-ervaring" class="block">
-        <h2>Werk ervaring</h2>
-        <p>De laatste 12 jaar van mijn werk ervaring werk ik voornamelijk als freelancer. Zomers lange zware dagen in de keuken. Winters meer development klussen. Dit zijn vaak klussen particulier of front-end development voornamelijk restaurants.
-          Ik ben altijd opzoek naar nieuwe uitdagingen!</p>
-        <div class="philosophy_content">
-          <p>#</p>
-
-<table class="tabel">
-  <tr>
-    <th>Periode</th>
-    <th>Bedrijf</th>
-    <th>Functie</th>
-    <th>Plaats</th>
-  </tr>
-  <tr>
-    <td>2023</td>
-    <td>Ijver</td>
-    <td>Freelance Kok</td>
-    <td>Amsterdam</td>
-  </tr>
-  <tr>
-    <td>2021</td>
-    <td>Mossels & gin</td>
-    <td>Freelance Kok</td>
-    <td>Amsterdam</td>
-  </tr>
-  <tr>
-    <td>2018-2021</td>
-    <td>Biestro belleami</td>
-    <td>Freelance Kok</td>
-    <td>Amsterdam</td>
-  </tr>
-  <tr>
-    <td>2020-2021</td>
-    <td>Cafe Binnen Buiten</td>
-    <td>Freelance Kok</td>
-    <td>Amsterdam</td>
-  </tr>
-  <tr>
-    <td>2005-2021</td>
-    <td>Jack dish</td>
-    <td>Freelance Kok</td>
-    <td>Amsterdam</td>
-  </tr>
-  <tr>
-    <td>2018-2021</td>
-    <td>Uitvlugt (surinaams)</td>
-    <td>Freelance Kok</td>
-    <td>Amsterdam</td>
-  </tr>
-
-  <tr>
-    <td>2016-2017</td>
-    <td>Brandstof</td>
-    <td>Freelance Kok</td>
-    <td>Amsterdam</td>
-  </tr>
-  <tr>
-    <td>2016-2017</td>
-    <td>Amaro</td>
-    <td>Freelance Kok</td>
-    <td>Eindhoven</td>
-  </tr>
-  <tr>
-    <td>2009-2016</td>
-    <td>Hot mama Hot</td>
-    <td>Chef</td>
-    <td>Amsterdam</td>
-  </tr>
-  <tr>
-    <td>2015-2016</td>
-    <td>Marathon weg</td>
-    <td>zefstandig werkend kok</td>
-    <td>Amsterdam</td>
-  </tr>
-  <tr>
-    <td>2008-2016</td>
-    <td>Braque</td>
-    <td>Zefstandig werkend kok</td>
-    <td>Amsterdam</td>
-  </tr>
-
-  <tr>
-    <td>Rond 2015</td>
-    <td>Julze</td>
-    <td>Freelance Kok</td>
-    <td>Amsterdam</td>
-  </tr>
-  <tr>
-    <td>Rond 2010</td>
-    <td>Cafe George</td>
-    <td>Zefstandig werkend kok</td>
-    <td>Amsterdam</td>
-  </tr>
-  <tr>
-    <td>Rond 2005</td>
-    <td>Mjanet</td>
-    <td>Zefstandig werkend kok</td>
-    <td>Amsterdam</td>
-  </tr>
-  <tr>
-    <td>Rond 2000</td>
-    <td>Bordenwijk</td>
-    <td>Zefstandig werkend kok</td>
-    <td>Amsterdam</td>
-  </tr>
-  <tr>
-    <td>Rond 2000</td>
-    <td>De Industrieele Club</td>
-    <td>Leerling Kok (stage)</td>
-    <td>Amsterdam</td>
-  </tr>
-  <tr>
-    <td>Rond 2000</td>
-    <td>Vakzuid</td>
-    <td>Zefstandig werkend kok</td>
-    <td>Amsterdam</td>
-  </tr>
-  <tr>
-    <td>1997-1998</td>
-    <td>De Oude Rosmolen</td>
-    <td>Leerling Kok (stage)</td>
-    <td>Amsterdam</td>
-  </tr>
-
-  <tr>
-    <td>1994-1997</td>
-    <td>De Hoofd Toren</td>
-    <td>Kok/Afwas</td>
-    <td>Hoorn</td>
-  </tr>
-</table>
-
-
-
-
-
-
-          <!-- hlusfh? -->
-          <div class="clear"></div>
+      <section id="projecten" class="container section reveal">
+        <div class="section-head">
+          <h2>Codeprojecten</h2>
+          <a href="https://github.com/japiohopman" target="_blank" rel="noreferrer">GitHub: @japiohopman</a>
         </div>
-      </div>
-      <div class="horizontal_line">
-        <div class="line_left"></div>
-        <div class="left_circle"></div>
-        <div class="central_circle"></div>
-        <div class="right_circle"></div>
-        <div class="line_right"></div>
-      </div>
+        <div class="projects" id="projectGrid" aria-live="polite">
+          <article class="project-card pinned">
+            <h3>Calculator App</h3>
+            <p>Snelle, minimal calculator gebouwd met HTML/CSS/JS.</p>
+            <a href="https://japiohopman.github.io/calculator/" target="_blank" rel="noreferrer">Live demo ↗</a>
+          </article>
+          <article class="project-card pinned">
+            <h3>90's Hiphop Memory</h3>
+            <p>Memory game met nostalgische styling en score-logica.</p>
+            <a href="https://japiohopman.github.io/memorys/" target="_blank" rel="noreferrer">Live demo ↗</a>
+          </article>
+          <article class="project-card pinned">
+            <h3>Gaming Blog</h3>
+            <p>Blog-ervaring met focus op content, layout en interactie.</p>
+            <a href="https://peaceful-everglades-58219.herokuapp.com/" target="_blank" rel="noreferrer">Bekijk ↗</a>
+          </article>
+        </div>
+      </section>
+    </main>
 
-      <div class="row last block">
-        <h2>Interesses & Hobbies</h2>
-        <p></p>
-        <div class="tab">
-  <button class="tablinks active" onmouseover="openCity(event, 'koken')">Koken voor vrienden</button>
-  <button class="tablinks" onmouseover="openCity(event, 'Moestuin')">Moestuin</button>
-  <button class="tablinks" onmouseover="openCity(event, 'Gamming-Solo')">Gamming Solo</button>
-  <button class="tablinks" onmouseover="openCity(event, 'koken')">Koken voor vrienden</button>
-  <button class="tablinks" onmouseover="openCity(event, 'Moestuin')">Moestuin</button>
-  <button class="tablinks" onmouseover="openCity(event, 'Gamming-Solo')">Gamming Solo</button>
-</div>
+    <footer id="contact" class="footer container section reveal">
+      <h2>Laten we iets vets bouwen.</h2>
+      <p>
+        📍 Amsterdam · 📧 <a href="mailto:japiehopman@gmail.com">japiehopman@gmail.com</a> ·
+        💼 <a href="https://www.linkedin.com/in/jaap-hopman-9117b619b/" target="_blank" rel="noreferrer">LinkedIn</a>
+      </p>
+    </footer>
 
-<div id="koken" class="tabcontent">
-  <h3>Koken voor vrienden</h3>
-  <div class="profile_frame">
-    <img class="hobbie_picture" src="images/jaap-Hopman.jpg" alt="profile picture">
-  </div>
-</div>
-
-<div id="Moestuin" class="tabcontent">
-  <h3>Moestuin</h3>
-  <div class="profile_frame">
-    <img class="hobbie_picture" src="images/jaap-Hopman.jpg" alt="profile picture">
-  </div>
-</div>
-
-<div id="Gamming-Solo" class="tabcontent">
-  <h3>Gamming Solo</h3>
-  <div class="profile_frame">
-    <img class="hobbie_picture" src="images/jaap-Hopman.jpg" alt="profile picture">
-  </div>
-</div>
-
-<div id="koken" class="tabcontent">
-  <h3>Koken voor vrienden</h3>
-  <div class="profile_frame">
-    <img class="hobbie_picture column" src="images/jaap-Hopman.jpg" alt="profile picture">
-  </div>
-</div>
-
-<div id="x" class="tabcontent">
-  <h3>Moestuin</h3>
-  <p>Paris is the capital of France.</p>
-</div>
-
-<div id="x" class="tabcontent">
-  <h3>Gamming Solo</h3>
-  <p>Tokyo is the capital of Japan.</p>
-</div>
-
-<div class="clearfix"></div>
-      <!--
-        <ul>
-          <li></li>
-          <li></li>
-          <li>Joggen </li>
-          <li>Optredens</li>
-          <li>Web Developing</li>
-          <li></li>
-          <li>Sci-fi boeken & films</li>
-        </ul> -->
-
-      </div>
-    </div>
-    <ul class="download_print_buttons horizontal_list">
-      <li><a href="#"><span class="icon entypo-download"></span>Download CV</a></li>
-      <li><a href="#"><span class="icon entypo-print"></span>Print CV</a></li>
-    </ul>
-    <div class="clear"></div>
-    <!-- FOOTER -->
-    <div id="footer">
-      <p class="footer_name">Jaap Hopman 2023</p>
-    </div>
-  </div>
-<!-- The actual snackbar -->
-  <div id="snackbar">Sorry nog onder constuctie...</div>
-  <!-- Font Awesome -->
-  <script src="https://kit.fontawesome.com/bb9bbdfd75.js" crossorigin="anonymous"></script>
-  <script src="app.js" charset="utf-8"></script>
-</body>
-
+    <script src="app.js" defer></script>
+  </body>
 </html>
