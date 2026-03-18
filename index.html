@@ -6,7 +6,7 @@
     <title>Jaap Hopman | Creative Developer CV</title>
     <meta
       name="description"
-      content="Visueel, interactief CV van Jaap Hopman: developer, chef en creator met focus op codeprojecten."
+      content="Visueel en interactief CV van Jaap Hopman: creative developer, freelance chef en maker met focus op code, design en uitvoering."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,128 +17,308 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="noise-overlay" aria-hidden="true"></div>
-    <header class="hero" id="top">
-      <nav class="nav container">
-        <a href="#top" class="logo">JH<span>_CV</span></a>
-        <ul>
-          <li><a href="#over">Over</a></li>
-          <li><a href="#skills">Skills</a></li>
-          <li><a href="#ervaring">Ervaring</a></li>
-          <li><a href="#projecten">Projecten</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
+    <div class="page-shell">
+      <div class="noise-overlay" aria-hidden="true"></div>
+      <div class="page-orb page-orb-a" aria-hidden="true"></div>
+      <div class="page-orb page-orb-b" aria-hidden="true"></div>
 
-      <div class="hero-content container" data-tilt>
-        <img src="images/jaap-Hopman.jpg" alt="Portret van Jaap Hopman" class="avatar" />
-        <div>
-          <p class="kicker">Creative Developer · Freelance Chef · Problem Solver</p>
-          <h1>Jaap Hopman</h1>
-          <p class="subtitle">
-            Ik bouw digitale ervaringen met karakter: visueel sterk, technisch netjes en altijd met gevoel voor detail.
-            Op deze pagina vind je mijn verhaal én mijn codeprojecten.
-          </p>
-          <div class="hero-cta">
-            <a class="btn btn-primary" href="#projecten">Bekijk projecten</a>
-            <a class="btn btn-ghost" href="mailto:japiehopman@gmail.com">Mail mij</a>
+      <header class="hero" id="top">
+        <nav class="nav container">
+          <a href="#top" class="logo">JH<span>_CV</span></a>
+          <ul>
+            <li><a href="#over">Over</a></li>
+            <li><a href="#ervaring">Ervaring</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projecten">Projecten</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+
+        <div class="hero-backdrop" aria-hidden="true">
+          <svg viewBox="0 0 800 600" class="hero-lines" role="presentation">
+            <defs>
+              <linearGradient id="heroStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#7df9d0" stop-opacity="0.9" />
+                <stop offset="100%" stop-color="#ff8d5c" stop-opacity="0.15" />
+              </linearGradient>
+            </defs>
+            <path d="M40 250C170 90 320 60 510 150s220 240 250 360" />
+            <path d="M120 520c170-70 250-240 410-250 95-6 160 25 220 82" />
+            <path d="M90 90c62 40 85 110 40 190-44 77-7 136 79 145 94 9 151-58 204-117" />
+          </svg>
+          <div class="grid-accent"></div>
+        </div>
+
+        <div class="hero-content container" data-tilt>
+          <div class="hero-copy">
+            <p class="eyebrow">Creative Developer / Freelance Chef / Problem Solver</p>
+            <h1>
+              Een CV dat voelt als een visitekaartje:
+              <span>visueel sterk, technisch scherp, menselijk in uitvoering.</span>
+            </h1>
+            <p class="subtitle">
+              Ik combineer hospitality, designgevoel en front-end development om digitale
+              ervaringen te bouwen die niet alleen werken, maar ook karakter hebben.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#projecten">Bekijk projecten</a>
+              <a class="btn btn-ghost" href="mailto:japiehopman@gmail.com">Mail mij</a>
+              <a class="btn btn-ghost" href="https://github.com/japiohopman" target="_blank" rel="noreferrer">
+                GitHub
+              </a>
+            </div>
+
+            <div class="proof-strip reveal">
+              <article>
+                <span class="proof-label">Focus</span>
+                <strong>Front-end, UX en interactieve presentaties</strong>
+              </article>
+              <article>
+                <span class="proof-label">Achtergrond</span>
+                <strong>12+ jaar freelance ritme en leverdiscipline</strong>
+              </article>
+              <article>
+                <span class="proof-label">Werkwijze</span>
+                <strong>Concept, UI, code en afwerking in een flow</strong>
+              </article>
+            </div>
+          </div>
+
+          <aside class="hero-panel reveal">
+            <div class="portrait-wrap">
+              <img src="images/jaap-Hopman.jpg" alt="Portret van Jaap Hopman" class="avatar" />
+              <div class="portrait-ring portrait-ring-a" aria-hidden="true"></div>
+              <div class="portrait-ring portrait-ring-b" aria-hidden="true"></div>
+            </div>
+
+            <div class="hero-panel-card">
+              <p class="panel-kicker">Nu beschikbaar voor</p>
+              <ul class="availability-list">
+                <li>Front-end opdrachten</li>
+                <li>Creatieve websites voor horeca of makers</li>
+                <li>Digitale concepten met persoonlijkheid</li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </header>
+
+      <main>
+        <section id="over" class="container section section-story reveal">
+          <div class="section-tag">Zone 1 / Introductie</div>
+          <div class="section-heading">
+            <h2>Profiel met creatieve drive en uitvoerende discipline</h2>
+            <p>
+              Vanaf jonge leeftijd lopen koken, technologie en muziek als rode draad door mijn
+              leven. Die combinatie heeft me geleerd om zowel creatief te denken als praktisch te
+              leveren: van idee en sfeer tot detailniveau en strakke uitvoering.
+            </p>
+          </div>
+
+          <div class="story-grid">
+            <article class="glass-card story-card">
+              <h3>Wat ik breng</h3>
+              <p>
+                Ik bouw geen losse schermen, maar complete ervaringen. Mijn kracht zit in het
+                combineren van visueel gevoel, technische nieuwsgierigheid en een hoog ritme van
+                leren en itereren.
+              </p>
+            </article>
+            <article class="glass-card story-card">
+              <h3>Waarom dat werkt</h3>
+              <p>
+                Werken in keukens en als freelancer heeft me scherp gemaakt in tempo, prioriteit,
+                samenwerking en kwaliteit onder druk. Dat vertaal ik nu naar code en digitale
+                producten.
+              </p>
+            </article>
+          </div>
+
+          <div class="stats">
+            <article class="glass-card">
+              <span class="count" data-target="12">0</span>
+              <p>jaar ervaring in service, creatie en zelfstandig leveren</p>
+            </article>
+            <article class="glass-card">
+              <span class="count" data-target="20">0</span>
+              <p>projecten en experimenten waarin design en code samenkomen</p>
+            </article>
+            <article class="glass-card">
+              <span class="count" data-target="100">0</span>
+              <p>procent leergierigheid, hands-on mentaliteit en bouwen vanuit nieuwsgierigheid</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="ervaring" class="container section reveal">
+          <div class="section-tag">Zone 2 / Ervaring</div>
+          <div class="section-heading split-heading">
+            <div>
+              <h2>Opleiding en praktijkervaring die elkaar versterken</h2>
+            </div>
+            <p>
+              Mijn pad loopt via designopleiding, horeca en freelance werk. Juist die mix maakt
+              me sterk in communicatie, presentatie en het daadwerkelijk afmaken van dingen.
+            </p>
+          </div>
+
+          <div class="timeline">
+            <article class="timeline-item">
+              <span class="timeline-year">2009 - 2013</span>
+              <div>
+                <h3>Communication and Multimedia Design / HvA</h3>
+                <p>
+                  Basis gelegd in conceptontwikkeling, interactie, visuele communicatie en het
+                  vertalen van ideeen naar digitale ervaringen.
+                </p>
+              </div>
+            </article>
+            <article class="timeline-item">
+              <span class="timeline-year">2007</span>
+              <div>
+                <h3>SVH Leermeester diploma</h3>
+                <p>
+                  Begeleiden, structureren en kwaliteit bewaken: vaardigheden die ook in software
+                  teams verrassend veel waarde hebben.
+                </p>
+              </div>
+            </article>
+            <article class="timeline-item">
+              <span class="timeline-year">1997 - 2001</span>
+              <div>
+                <h3>ROC Amsterdam / Koksopleiding</h3>
+                <p>
+                  Geleerd om onder druk te presteren, processen te bewaken en constant te blijven
+                  leren in een omgeving waar timing alles is.
+                </p>
+              </div>
+            </article>
+            <article class="timeline-item">
+              <span class="timeline-year">2012 - nu</span>
+              <div>
+                <h3>Freelance chef en creative technologist</h3>
+                <p>
+                  Praktijkervaring in dynamische omgevingen, met focus op zelfstandigheid,
+                  klantgevoel en het leveren van strak eindwerk binnen echte tijdsdruk.
+                </p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="skills" class="container section reveal">
+          <div class="section-tag">Zone 3 / Skills & tooling</div>
+          <div class="section-heading">
+            <h2>Een stack die technisch genoeg is om te bouwen en creatief genoeg om op te vallen</h2>
+            <p>
+              Ik beweeg graag tussen front-end fundamentals, visuele tools en de menselijke kant
+              van samenwerken. Daardoor voelt mijn werk vaak zowel verzorgd als bruikbaar.
+            </p>
+          </div>
+
+          <div class="skills-layout">
+            <article class="glass-card skill-column">
+              <h3>Development</h3>
+              <div class="chips">
+                <span>HTML5</span>
+                <span>CSS3 / Motion</span>
+                <span>JavaScript</span>
+                <span>Node.js</span>
+                <span>REST API</span>
+                <span>Git & GitHub</span>
+                <span>Responsive UI</span>
+                <span>Interactive storytelling</span>
+              </div>
+            </article>
+
+            <article class="glass-card skill-column">
+              <h3>Creative toolkit</h3>
+              <div class="chips">
+                <span>UI gevoel</span>
+                <span>Photoshop</span>
+                <span>Illustrator</span>
+                <span>Brand sfeer</span>
+                <span>Visual hierarchy</span>
+                <span>Concepting</span>
+              </div>
+            </article>
+
+            <article class="glass-card skill-column">
+              <h3>Human skills</h3>
+              <div class="chips">
+                <span>Hospitality mindset</span>
+                <span>Stressbestendig</span>
+                <span>Teamwork</span>
+                <span>Klantgevoel</span>
+                <span>Leergierig</span>
+                <span>Ownership</span>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="projecten" class="container section reveal">
+          <div class="section-tag">Zone 4 / Projecten</div>
+          <div class="section-head">
+            <div>
+              <h2>Projecten die laten zien hoe ik denk, ontwerp en bouw</h2>
+              <p>
+                Een selectie van werk en experimenten waarin code, sfeer en interactie samenkomen.
+              </p>
+            </div>
+            <a href="https://github.com/japiohopman" target="_blank" rel="noreferrer">GitHub: @japiohopman</a>
+          </div>
+
+          <div class="projects" id="projectGrid" aria-live="polite">
+            <article class="project-card pinned">
+              <div class="project-topline">
+                <span class="project-badge">Featured</span>
+                <span class="project-type">UI / Tool</span>
+              </div>
+              <h3>Calculator App</h3>
+              <p>Snelle minimal calculator gebouwd met HTML, CSS en JavaScript met focus op strakke interactie.</p>
+              <a href="https://japiohopman.github.io/calculator/" target="_blank" rel="noreferrer">Live demo &rarr;</a>
+            </article>
+            <article class="project-card pinned">
+              <div class="project-topline">
+                <span class="project-badge">Featured</span>
+                <span class="project-type">Game / Nostalgia</span>
+              </div>
+              <h3>90's Hiphop Memory</h3>
+              <p>Memory game met nostalgische styling, score-logica en een duidelijke feel voor sfeer en pacing.</p>
+              <a href="https://japiohopman.github.io/memorys/" target="_blank" rel="noreferrer">Live demo &rarr;</a>
+            </article>
+            <article class="project-card pinned">
+              <div class="project-topline">
+                <span class="project-badge">Featured</span>
+                <span class="project-type">Content / Layout</span>
+              </div>
+              <h3>Gaming Blog</h3>
+              <p>Contentgedreven blog-ervaring met focus op layout, typografie en een speelse presentatie.</p>
+              <a href="https://peaceful-everglades-58219.herokuapp.com/" target="_blank" rel="noreferrer">Bekijk project &rarr;</a>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer id="contact" class="footer container section reveal">
+        <div class="footer-panel glass-card">
+          <div>
+            <div class="section-tag">Contact</div>
+            <h2>Laten we iets bouwen dat niet generiek voelt.</h2>
+            <p>
+              Beschikbaar vanuit Amsterdam voor creatieve front-end opdrachten, hospitality-concepten
+              en digitale presentaties met karakter.
+            </p>
+          </div>
+          <div class="footer-links">
+            <a href="mailto:japiehopman@gmail.com">japiehopman@gmail.com</a>
+            <a href="https://www.linkedin.com/in/jaap-hopman-9117b619b/" target="_blank" rel="noreferrer">LinkedIn</a>
+            <a href="https://github.com/japiohopman" target="_blank" rel="noreferrer">GitHub</a>
           </div>
         </div>
-      </div>
-      <div class="glow glow-1"></div>
-      <div class="glow glow-2"></div>
-    </header>
-
-    <main>
-      <section id="over" class="container section reveal">
-        <h2>Profiel</h2>
-        <p>
-          Van jongs af aan combineer ik creativiteit met techniek: van muziek en hospitality tot webdevelopment.
-          Die mix zorgt ervoor dat ik niet alleen code schrijf, maar complete ervaringen neerzet: concept, UI,
-          interactie en uitvoering.
-        </p>
-        <div class="stats">
-          <article>
-            <span class="count" data-target="10">0</span>
-            <p>+ jaar ervaring in creatieve & service omgevingen</p>
-          </article>
-          <article>
-            <span class="count" data-target="20">0</span>
-            <p>+ codeprojecten en experimenten</p>
-          </article>
-          <article>
-            <span class="count" data-target="100">0</span>
-            <p>% focus op groei, learning-by-building</p>
-          </article>
-        </div>
-      </section>
-
-      <section id="skills" class="container section reveal">
-        <h2>Skills & stack</h2>
-        <div class="chips">
-          <span>HTML5</span><span>CSS3 / Animations</span><span>JavaScript</span><span>Node.js</span><span>React basics</span>
-          <span>REST API</span><span>Git & GitHub</span><span>UI/UX gevoel</span><span>Photoshop</span><span>Illustrator</span>
-          <span>Hospitality mindset</span><span>Teamwork</span>
-        </div>
-      </section>
-
-      <section id="ervaring" class="container section reveal">
-        <h2>Opleidingen & ervaring</h2>
-        <div class="timeline">
-          <article>
-            <h3>Communication and Multimedia Design (HvA)</h3>
-            <p>2009 – 2013 · Amsterdam</p>
-          </article>
-          <article>
-            <h3>SVH Leermeester diploma</h3>
-            <p>2007 · Amsterdam</p>
-          </article>
-          <article>
-            <h3>Roc Amsterdam (Koksopleiding)</h3>
-            <p>1997 – 2001 · Amsterdam</p>
-          </article>
-          <article>
-            <h3>Freelance chef & creative technologist</h3>
-            <p>
-              Praktijkervaring in stressbestendige omgevingen, vertaald naar software: prioriteren, leveren en
-              kwaliteit bewaken.
-            </p>
-          </article>
-        </div>
-      </section>
-
-      <section id="projecten" class="container section reveal">
-        <div class="section-head">
-          <h2>Codeprojecten</h2>
-          <a href="https://github.com/japiohopman" target="_blank" rel="noreferrer">GitHub: @japiohopman</a>
-        </div>
-        <div class="projects" id="projectGrid" aria-live="polite">
-          <article class="project-card pinned">
-            <h3>Calculator App</h3>
-            <p>Snelle, minimal calculator gebouwd met HTML/CSS/JS.</p>
-            <a href="https://japiohopman.github.io/calculator/" target="_blank" rel="noreferrer">Live demo ↗</a>
-          </article>
-          <article class="project-card pinned">
-            <h3>90's Hiphop Memory</h3>
-            <p>Memory game met nostalgische styling en score-logica.</p>
-            <a href="https://japiohopman.github.io/memorys/" target="_blank" rel="noreferrer">Live demo ↗</a>
-          </article>
-          <article class="project-card pinned">
-            <h3>Gaming Blog</h3>
-            <p>Blog-ervaring met focus op content, layout en interactie.</p>
-            <a href="https://peaceful-everglades-58219.herokuapp.com/" target="_blank" rel="noreferrer">Bekijk ↗</a>
-          </article>
-        </div>
-      </section>
-    </main>
-
-    <footer id="contact" class="footer container section reveal">
-      <h2>Laten we iets vets bouwen.</h2>
-      <p>
-        📍 Amsterdam · 📧 <a href="mailto:japiehopman@gmail.com">japiehopman@gmail.com</a> ·
-        💼 <a href="https://www.linkedin.com/in/jaap-hopman-9117b619b/" target="_blank" rel="noreferrer">LinkedIn</a>
-      </p>
-    </footer>
+      </footer>
+    </div>
 
     <script src="app.js" defer></script>
   </body>
