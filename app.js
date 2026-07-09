@@ -118,9 +118,12 @@ const addRepoCards = async () => {
     const repos = await response.json();
     const filteredRepos = repos.filter((repo) => !repo.fork && repo.description).slice(0, 3);
 
+    // Bepaal hoeveel elementen er al in het grid staan om de staggers correct te laten doorlopen
+    const existingCount = projectGrid.children.length;
+
     filteredRepos.forEach((repo, index) => {
       const card = createRepoCard(repo);
-      card.style.setProperty("--stagger-index", index + 3);
+      card.style.setProperty("--stagger-index", index + existingCount);
       projectGrid.appendChild(card);
     });
   } catch {
