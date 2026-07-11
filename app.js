@@ -132,3 +132,33 @@ const addRepoCards = async () => {
 };
 
 addRepoCards();
+
+// Handle interaction with the image gallery thumbs
+const setupGalleryListeners = () => {
+  const galleries = document.querySelectorAll(".hero-project-gallery");
+  galleries.forEach((gallery) => {
+    const mainImg = gallery.querySelector(".main-preview-img");
+    const thumbBtns = gallery.querySelectorAll(".thumb-btn");
+
+    thumbBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        // Remove active class from other buttons in the same gallery
+        thumbBtns.forEach((b) => b.classList.remove("active"));
+        // Add active class to clicked button
+        btn.classList.add("active");
+
+        // Swap main image source with full image url
+        const fullUrl = btn.dataset.full;
+        if (mainImg && fullUrl) {
+          mainImg.style.opacity = "0.4";
+          setTimeout(() => {
+            mainImg.src = fullUrl;
+            mainImg.style.opacity = "1";
+          }, 150);
+        }
+      });
+    });
+  });
+};
+
+setupGalleryListeners();
