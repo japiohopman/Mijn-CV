@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@900&display=swap');
+
 :root {
   --bg: #07111f;
   --bg-alt: #0b1630;
@@ -416,7 +418,7 @@ img {
 }
 
 .story-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .story-card,
@@ -424,6 +426,228 @@ img {
 .skill-column,
 .project-card {
   padding: 1.4rem;
+}
+
+/* Chess Card Integration styling */
+.chess-card {
+  grid-column: span 3;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: center;
+  padding: 2.2rem !important;
+  background:
+    radial-gradient(circle at top right, rgba(241, 216, 116, 0.08), transparent 45%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(241, 216, 116, 0.2);
+}
+
+.chess-card:hover,
+.chess-card:focus-within {
+  border-color: #f1d874;
+  box-shadow: 0 32px 80px rgba(241, 216, 116, 0.1);
+  transform: translateY(-4px);
+}
+
+.chess-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.chess-info h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.8rem;
+  margin: 0 0 1rem;
+}
+
+.chess-info p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: var(--muted);
+}
+
+.btn-chess-link {
+  align-self: start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.3rem;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, #f1d874, #ffe990);
+  color: #07111f !important;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.btn-chess-link:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.chess-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f1d874;
+  border-radius: var(--radius-md);
+  padding: 2.5rem;
+  min-height: 380px;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Chess visual sub-elements scoped strictly to prevent global page leakage */
+.chess-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0.85);
+  transition: transform 1s var(--ease-out);
+}
+
+.chess-card:hover .chess-container {
+  transform: scale(0.9);
+}
+
+.chess-container .head {
+  height: 80px;
+  width: 80px;
+  background-color: black;
+  display: flex;
+  position: relative;
+  border-radius: 50%;
+}
+
+.chess-container .glare {
+  height: 16px;
+  width: 8px;
+  background-color: #f7fecf;
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  transform: rotate(-30deg);
+  border-radius: 50%;
+}
+
+.chess-container .main-piece {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chess-container .neck {
+  height: 12px;
+  width: 40px;
+  background-color: black;
+  border-radius: 8px;
+  border: 3px solid transparent;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.chess-container .shoulders {
+  height: 16px;
+  width: 96px;
+  background-color: black;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  margin-bottom: 2px;
+}
+
+.chess-container .torso {
+  width: 80px;
+  height: 112px;
+  background-color: black;
+  position: relative;
+}
+
+.chess-container .torso-glare {
+  position: absolute;
+  background-color: #f7fecf;
+  border-radius: 50%;
+  width: 4px;
+  height: 72px;
+  top: 24px;
+  left: 80%;
+  transform: rotate(-10deg);
+}
+
+.chess-container .torso::before {
+  content: '';
+  display: block;
+  height: 120px;
+  width: 40px;
+  background-color: #f1d874;
+  border-radius: 16px;
+  position: absolute;
+  transform: rotate(10deg);
+  left: -40%;
+  top: -1%;
+}
+
+.chess-container .torso::after {
+  content: '';
+  display: block;
+  height: 120px;
+  width: 40px;
+  background-color: #f1d874;
+  border-radius: 16px;
+  position: absolute;
+  transform: rotate(-10deg);
+  right: -40%;
+  top: -1%;
+}
+
+.chess-container .waist {
+  height: 12px;
+  width: 112px;
+  background-color: black;
+  z-index: 2;
+  border-radius: 16px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.chess-container .hips {
+  height: 8px;
+  width: 80px;
+  background-color: black;
+  position: relative;
+}
+
+.chess-container .legs {
+  background-color: black;
+  width: 144px;
+  height: 48px;
+  border-top-right-radius: 32px;
+  border-top-left-radius: 32px;
+  position: relative;
+}
+
+.chess-container .legs-glare {
+  position: absolute;
+  background-color: #f7fecf;
+  border-radius: 50%;
+  width: 4px;
+  height: 20px;
+  top: 8px;
+  left: 87%;
+  transform: rotate(-45deg);
+}
+
+.chess-container .feet {
+  width: 160px;
+  height: 12px;
+  background-color: black;
+  border-radius: 16px;
+  margin-top: 2px;
 }
 
 .stats {
@@ -853,6 +1077,12 @@ img {
   .proof-strip,
   .story-grid {
     grid-template-columns: 1fr;
+  }
+
+  .chess-card {
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+    padding: 1.5rem !important;
   }
 
   .projects .hero-project {
