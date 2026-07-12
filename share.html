@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deel CV | Jaap Hopman</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Syne:wght@600;700;800&family=Heebo:wght@900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* Standalone share page refinements */
+      .share-page-container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem 1rem;
+        position: relative;
+        z-index: 5;
+      }
+
+      .share-card {
+        width: 100%;
+        max-width: 480px;
+        padding: 2.5rem;
+        border-radius: var(--radius-xl);
+        text-align: center;
+        border: 1px solid rgba(125, 249, 208, 0.2);
+        background:
+          radial-gradient(circle at top right, rgba(125, 249, 208, 0.05), transparent 40%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+        box-shadow: var(--shadow);
+      }
+
+      .share-header h1 {
+        font-family: 'Syne', sans-serif;
+        font-size: 2.2rem;
+        margin: 0 0 0.5rem;
+        line-height: 1.1;
+      }
+
+      .share-header p {
+        color: var(--muted);
+        font-size: 1rem;
+        margin: 0 0 2rem;
+      }
+
+      .qr-wrapper {
+        display: inline-flex;
+        background: var(--secondary);
+        padding: 1.25rem;
+        border-radius: var(--radius-lg);
+        margin-bottom: 2rem;
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+        position: relative;
+        transition: transform 0.3s var(--ease-out);
+      }
+
+      .qr-wrapper:hover {
+        transform: scale(1.03);
+      }
+
+      .qr-image {
+        width: 220px;
+        height: 220px;
+        display: block;
+        border-radius: 0.5rem;
+      }
+
+      .share-actions-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+        width: 100%;
+        margin-bottom: 1.8rem;
+      }
+
+      .btn-share {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        min-height: 3.2rem;
+        border-radius: 999px;
+        font-weight: 700;
+        text-decoration: none;
+        border: 1px solid transparent;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 1rem;
+        transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+      }
+
+      .btn-share:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn-native {
+        background: linear-gradient(135deg, var(--secondary), #a4fff1);
+        color: #07111f;
+      }
+
+      .btn-whatsapp {
+        background: #25d366;
+        color: white;
+      }
+
+      .btn-email {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: var(--text);
+      }
+
+      .btn-copy {
+        background: rgba(125, 148, 255, 0.1);
+        border: 1px solid rgba(125, 148, 255, 0.25);
+        color: #a7b7ff;
+      }
+
+      .btn-copy.success {
+        background: rgba(37, 211, 102, 0.15);
+        border-color: #25d366;
+        color: #25d366;
+      }
+
+      .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--muted);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 180ms ease;
+        margin-top: 1rem;
+      }
+
+      .btn-back:hover {
+        color: var(--text);
+      }
+
+      /* Mobile optimization */
+      @media (max-width: 480px) {
+        .share-card {
+          padding: 1.8rem 1.2rem;
+          border-radius: var(--radius-lg);
+        }
+
+        .qr-wrapper {
+          padding: 1rem;
+        }
+
+        .qr-image {
+          width: 180px;
+          height: 180px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="noise-overlay" aria-hidden="true"></div>
+      <div class="page-orb page-orb-a" aria-hidden="true"></div>
+      <div class="page-orb page-orb-b" aria-hidden="true"></div>
+
+      <div class="share-page-container">
+        <article class="share-card glass-card">
+          <div class="share-header">
+            <h1>Deel dit CV</h1>
+            <p>Scan de QR-code om dit portfolio direct op je telefoon te openen of deel het via de opties hieronder.</p>
+          </div>
+
+          <div class="qr-wrapper">
+            <!-- Dynamic QR Code pointing directly to index.html -->
+            <img id="qrImage" src="" alt="Permanent QR Code" class="qr-image" />
+          </div>
+
+          <div class="share-actions-grid">
+            <!-- Native Share (navigator.share) -->
+            <button id="nativeShareBtn" class="btn-share btn-native">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+              </svg>
+              Snel Delen (Systeem)
+            </button>
+
+            <!-- WhatsApp share link -->
+            <a id="whatsappShareLink" href="" target="_blank" rel="noreferrer" class="btn-share btn-whatsapp">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.704 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"></path>
+              </svg>
+              Deel via WhatsApp
+            </a>
+
+            <!-- Email share link -->
+            <a id="emailShareLink" href="" class="btn-share btn-email">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              Deel via E-mail
+            </a>
+
+            <!-- Copy link to clipboard -->
+            <button id="copyLinkBtn" class="btn-share btn-copy">
+              <svg id="copyIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <svg id="checkIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span id="copyButtonText">Kopieer Link</span>
+            </button>
+          </div>
+
+          <a href="index.html" class="btn-back">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Terug naar Portfolio
+          </a>
+        </article>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // Build direct URL back to index.html (the homepage of the site)
+        const portfolioUrl = window.location.origin + window.location.pathname.replace('share.html', 'index.html');
+
+        // 1. Set dynamic permanent QR Code image source using QR Server API
+        // Using dark slate color (#07111f -> 07111f) on secondary teal background (#7df9d0 -> 7df9d0)
+        const qrImage = document.getElementById('qrImage');
+        qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(portfolioUrl)}&color=07111f&bgcolor=7df9d0`;
+
+        // 2. Setup standard messaging sharing options
+        const shareTitle = 'Jaap Hopman | Creative Developer CV';
+        const shareText = 'Bekijk het visuele en interactieve CV van Jaap Hopman (Creative Developer / Freelance Chef):';
+
+        // WhatsApp link setup
+        const whatsappLink = document.getElementById('whatsappShareLink');
+        whatsappLink.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + portfolioUrl)}`;
+
+        // Email link setup
+        const emailLink = document.getElementById('emailShareLink');
+        emailLink.href = `mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(shareText + '\n\n' + portfolioUrl)}`;
+
+        // 3. Web Share API (native share on Android/iOS)
+        const nativeShareBtn = document.getElementById('nativeShareBtn');
+        if (navigator.share) {
+          nativeShareBtn.addEventListener('click', async () => {
+            try {
+              await navigator.share({
+                title: shareTitle,
+                text: shareText,
+                url: portfolioUrl
+              });
+            } catch (err) {
+              if (err.name !== 'AbortError') {
+                console.error('Sharing failed:', err);
+              }
+            }
+          });
+        } else {
+          // If native share is not supported, hide or style it as fallback trigger
+          nativeShareBtn.style.display = 'none';
+        }
+
+        // 4. Copy to Clipboard logic
+        const copyBtn = document.getElementById('copyLinkBtn');
+        const copyIcon = document.getElementById('copyIcon');
+        const checkIcon = document.getElementById('checkIcon');
+        const copyBtnText = document.getElementById('copyButtonText');
+
+        copyBtn.addEventListener('click', () => {
+          navigator.clipboard.writeText(portfolioUrl).then(() => {
+            // Success visual feedback
+            copyBtn.classList.add('success');
+            copyIcon.style.display = 'none';
+            checkIcon.style.display = 'block';
+            copyBtnText.textContent = 'Gekopieerd!';
+
+            setTimeout(() => {
+              copyBtn.classList.remove('success');
+              copyIcon.style.display = 'block';
+              checkIcon.style.display = 'none';
+              copyBtnText.textContent = 'Kopieer Link';
+            }, 2000);
+          }).catch(err => {
+            console.error('Failed to copy link:', err);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
