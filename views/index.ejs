@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <%- include('partials/head') %>
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="noise-overlay" aria-hidden="true"></div>
+      <div class="page-orb page-orb-a" aria-hidden="true"></div>
+      <div class="page-orb page-orb-b" aria-hidden="true"></div>
+
+      <header class="hero" id="top">
+        <%- include('partials/nav') %>
+
+        <div class="hero-backdrop" aria-hidden="true">
+          <svg viewBox="0 0 800 600" class="hero-lines" role="presentation">
+            <defs>
+              <linearGradient id="heroStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#7df9d0" stop-opacity="0.9" />
+                <stop offset="100%" stop-color="#ff8d5c" stop-opacity="0.15" />
+              </linearGradient>
+            </defs>
+            <path d="M40 250C170 90 320 60 510 150s220 240 250 360" />
+            <path d="M120 520c170-70 250-240 410-250 95-6 160 25 220 82" />
+            <path d="M90 90c62 40 85 110 40 190-44 77-7 136 79 145 94 9 151-58 204-117" />
+          </svg>
+          <div class="grid-accent"></div>
+        </div>
+
+        <div class="hero-content container" data-tilt>
+          <div class="hero-copy">
+            <p class="eyebrow">Creative Developer / Freelance Chef / Problem Solver</p>
+            <h1>
+              Een CV dat voelt als een visitekaartje:
+              <span>visueel sterk, technisch scherp, menselijk in uitvoering.</span>
+            </h1>
+            <p class="subtitle">
+              Ik combineer hospitality, designgevoel en front-end development om digitale
+              ervaringen te bouwen die niet alleen werken, maar ook karakter hebben.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#projecten">Bekijk projecten</a>
+              <a class="btn btn-ghost share-btn-accent" href="/share">Deel &amp; QR</a>
+              <a class="btn btn-ghost" href="mailto:japiehopman@gmail.com">Mail mij</a>
+              <a class="btn btn-ghost" href="https://github.com/japiohopman" target="_blank" rel="noreferrer">
+                GitHub
+              </a>
+            </div>
+
+            <div class="proof-strip reveal">
+              <article>
+                <span class="proof-label">Focus</span>
+                <strong>Front-end, UX en interactieve presentaties</strong>
+              </article>
+              <article>
+                <span class="proof-label">Achtergrond</span>
+                <strong>12+ jaar freelance ritme en leverdiscipline</strong>
+              </article>
+              <article>
+                <span class="proof-label">Werkwijze</span>
+                <strong>Concept, UI, code en afwerking in een flow</strong>
+              </article>
+            </div>
+          </div>
+
+          <aside class="hero-panel reveal">
+            <div class="portrait-wrap">
+              <img src="/images/jaap-Hopman.jpg" alt="Portret van Jaap Hopman" class="avatar" />
+              <div class="portrait-ring portrait-ring-a" aria-hidden="true"></div>
+              <div class="portrait-ring portrait-ring-b" aria-hidden="true"></div>
+            </div>
+
+            <div class="hero-panel-card">
+              <p class="panel-kicker">Nu beschikbaar voor</p>
+              <ul class="availability-list">
+                <li>Front-end opdrachten</li>
+                <li>Creatieve websites voor horeca of makers</li>
+                <li>Digitale concepten met persoonlijkheid</li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </header>
+
+      <main>
+        <%- include('partials/over') %>
+        <%- include('partials/ervaring') %>
+        <%- include('partials/skills') %>
+        <%- include('partials/projecten') %>
+      </main>
+
+      <%- include('partials/footer') %>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "artificer-portfolio",
+  "version": "1.0.0",
+  "description": "Visual and interactive portfolio for Jaap Hopman built with Express and EJS",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "ejs": "^3.1.10"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "license": "ISC"
+}
