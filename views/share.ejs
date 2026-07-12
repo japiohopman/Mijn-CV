@@ -1,16 +1,7 @@
 <!DOCTYPE html>
 <html lang="nl">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Deel CV | Jaap Hopman</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Syne:wght@600;700;800&family=Heebo:wght@900&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
+    <%- include('partials/head') %>
     <style>
       /* Standalone share page refinements */
       .share-page-container {
@@ -168,14 +159,16 @@
       <div class="page-orb page-orb-b" aria-hidden="true"></div>
 
       <div class="share-page-container">
-        <article class="share-card glass-card">
+        <%- include('partials/nav') %>
+
+        <article class="share-card glass-card" style="margin-top: 2rem;">
           <div class="share-header">
             <h1>Deel dit CV</h1>
             <p>Scan de QR-code om dit portfolio direct op je telefoon te openen of deel het via de opties hieronder.</p>
           </div>
 
           <div class="qr-wrapper">
-            <!-- Dynamic QR Code pointing directly to index.html -->
+            <!-- Dynamic QR Code pointing directly to homepage -->
             <img id="qrImage" src="" alt="Permanent QR Code" class="qr-image" />
           </div>
 
@@ -222,7 +215,7 @@
             </button>
           </div>
 
-          <a href="index.html" class="btn-back">
+          <a href="/" class="btn-back">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="19" y1="12" x2="5" y2="12"></line>
               <polyline points="12 19 5 12 12 5"></polyline>
@@ -235,11 +228,10 @@
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        // Build direct URL back to index.html (the homepage of the site)
-        const portfolioUrl = window.location.origin + window.location.pathname.replace('share.html', 'index.html');
+        // Build direct URL back to the homepage
+        const portfolioUrl = window.location.origin;
 
         // 1. Set dynamic permanent QR Code image source using QR Server API
-        // Using dark slate color (#07111f -> 07111f) on secondary teal background (#7df9d0 -> 7df9d0)
         const qrImage = document.getElementById('qrImage');
         qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(portfolioUrl)}&color=07111f&bgcolor=7df9d0`;
 
@@ -272,7 +264,7 @@
             }
           });
         } else {
-          // If native share is not supported, hide or style it as fallback trigger
+          // If native share is not supported, hide
           nativeShareBtn.style.display = 'none';
         }
 
