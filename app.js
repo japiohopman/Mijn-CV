@@ -22,7 +22,7 @@ if (!prefersReducedMotion) {
         }
       });
     },
-    { threshold: 0.18, rootMargin: "0px 0px -4% 0px" }
+    { threshold: 0.02, rootMargin: "0px 0px -2% 0px" }
   );
 
   revealItems.forEach((item) => revealObserver.observe(item));
