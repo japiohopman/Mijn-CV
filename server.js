@@ -21,6 +21,20 @@ app.get('/share', (req, res) => {
   res.render('share');
 });
 
+// Explicit route to serve the github_action.png from the root directory if it resides there
+app.get('/github_action.png', (req, res) => {
+  res.sendFile(path.join(__dirname, 'github_action.png'), (err) => {
+    if (err) {
+      // Fallback: try to find it in public folder or send 404
+      res.sendFile(path.join(__dirname, 'public', 'github_action.png'), (err2) => {
+        if (err2) {
+          res.status(404).end();
+        }
+      });
+    }
+  });
+});
+
 // Start express server
 app.listen(PORT, () => {
   console.log(`Express server is running on port ${PORT}`);
