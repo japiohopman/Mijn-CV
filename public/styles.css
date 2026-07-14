@@ -1053,6 +1053,41 @@ img {
   color: var(--tertiary);
 }
 
+/* Artificer Site Promo specific branding (Purple / Lavender) */
+.projects .site-promo-card {
+  border: 1px solid rgba(125, 148, 255, 0.25);
+  background:
+    radial-gradient(circle at top left, rgba(125, 148, 255, 0.08), transparent 40%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03)),
+    rgba(8, 18, 34, 0.88);
+}
+
+.projects .site-promo-card::after {
+  background: radial-gradient(circle, rgba(125, 148, 255, 0.25), transparent 66%);
+  width: 18rem;
+  height: 18rem;
+}
+
+.projects .site-promo-card .thumb-btn.active {
+  border-color: var(--tertiary);
+  box-shadow: 0 0 10px rgba(125, 148, 255, 0.4);
+}
+
+.projects .site-promo-card:hover,
+.projects .site-promo-card:focus-within {
+  border-color: var(--tertiary);
+  box-shadow: 0 32px 80px rgba(125, 148, 255, 0.15);
+}
+
+.projects .site-promo-card .btn-project-link:not(.secondary-link) {
+  background: linear-gradient(135deg, var(--tertiary), #b3c2ff);
+  color: #07111f !important;
+}
+
+.projects .site-promo-card .feature-item strong {
+  color: var(--secondary);
+}
+
 .hero-project h3 {
   font-size: 2.2rem;
   font-family: "Syne", sans-serif;
