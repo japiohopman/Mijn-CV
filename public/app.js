@@ -1,7 +1,6 @@
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const revealItems = document.querySelectorAll(".reveal");
 const counters = document.querySelectorAll(".count");
-const heroTilt = document.querySelector("[data-tilt]");
 const projectGrid = document.getElementById("projectGrid");
 const staggerGroups = document.querySelectorAll(".stats, .skills-layout, .projects, .timeline, .proof-strip, .story-grid");
 
@@ -68,21 +67,6 @@ if (!prefersReducedMotion) {
 } else {
   counters.forEach((counter) => {
     counter.textContent = `${counter.dataset.target}+`;
-  });
-}
-
-if (heroTilt && !prefersReducedMotion) {
-  heroTilt.addEventListener("mousemove", (event) => {
-    const bounds = heroTilt.getBoundingClientRect();
-    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
-    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-
-    heroTilt.style.transform =
-      `perspective(1200px) rotateX(${-(y * 3)}deg) rotateY(${x * 4}deg) translate3d(0, -4px, 0)`;
-  });
-
-  heroTilt.addEventListener("mouseleave", () => {
-    heroTilt.style.transform = "perspective(1200px) rotateX(0deg) rotateY(0deg) translate3d(0, 0, 0)";
   });
 }
 
