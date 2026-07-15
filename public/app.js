@@ -162,3 +162,82 @@ const setupGalleryListeners = () => {
 };
 
 setupGalleryListeners();
+
+// Theme Toggle & Storage logic
+const setupThemeToggle = () => {
+  const themeToggle = document.getElementById("themeToggle");
+  if (!themeToggle) return;
+
+  // Retrieve existing preferences or default to system
+  const savedTheme = localStorage.getItem("theme");
+  const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+
+  const setTheme = (theme) => {
+    if (theme === "light") {
+      document.documentElement.setAttribute("data-theme", "light");
+      localStorage.setItem("theme", "light");
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+      localStorage.setItem("theme", "dark");
+    }
+  };
+
+  // Initial application
+  if (savedTheme === "light" || (!savedTheme && prefersLight)) {
+    setTheme("light");
+  } else {
+    setTheme("dark");
+  }
+
+  // Click Handler
+  themeToggle.addEventListener("click", () => {
+    const currentTheme = document.documentElement.getAttribute("data-theme");
+    if (currentTheme === "light") {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
+  });
+};
+
+// Mobile Hamburger Navigation
+const setupMobileNav = () => {
+  const navToggle = document.getElementById("navToggle");
+  const navMenu = document.getElementById("navMenu");
+  if (!navToggle || !navMenu) return;
+
+  const toggleMenu = () => {
+    const isActive = navToggle.classList.toggle("active");
+    navMenu.classList.toggle("active");
+    navToggle.setAttribute("aria-expanded", isActive);
+  };
+
+  const closeMenu = () => {
+    navToggle.classList.remove("active");
+    navMenu.classList.remove("active");
+    navToggle.setAttribute("aria-expanded", "false");
+  };
+
+  navToggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleMenu();
+  });
+
+  // Close when clicking an anchor link
+  const navLinks = navMenu.querySelectorAll("a");
+  navLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      closeMenu();
+    });
+  });
+
+  // Close when clicking outside of the menu
+  document.addEventListener("click", (e) => {
+    if (!navMenu.contains(e.target) && !navToggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+};
+
+setupThemeToggle();
+setupMobileNav();

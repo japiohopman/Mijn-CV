@@ -18,6 +18,30 @@
   --container: min(1160px, 92vw);
   --section-space: clamp(4.5rem, 8vw, 8rem);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --gradient-radial-1: rgba(125, 148, 255, 0.2);
+  --gradient-radial-2: rgba(255, 141, 92, 0.17);
+  --bg-gradient: linear-gradient(180deg, #07111f 0%, #07111f 35%, #0a1730 100%);
+  --nav-bg: linear-gradient(180deg, rgba(7, 17, 31, 0.88), rgba(7, 17, 31, 0.32));
+}
+
+[data-theme="light"] {
+  --bg: #faf9f6; /* High-end alabaster/linen background */
+  --bg-alt: #f3ede4; /* Warm neutral premium grey for soft depth */
+  --surface: rgba(255, 255, 255, 0.75); /* High transparency white glass card */
+  --surface-strong: rgba(255, 255, 255, 0.95);
+  --surface-border: rgba(139, 131, 114, 0.22); /* Soft linen-clay warm border */
+  --text: #191e24; /* Elegant charcoal-slate for maximum contrast and legibility */
+  --muted: #5e666e; /* Sophisticated silver-taupe */
+  --primary: #d65c27; /* Sophisticated terracotta (Hermès luxury orange vibe) */
+  --secondary: #0e7054; /* Rich sage/emerald for premium interactive states */
+  --tertiary: #3a4db5; /* Deeper indigo sapphire */
+  --shadow: 0 30px 80px rgba(139, 131, 114, 0.08); /* Dispersed light-ambient shadow */
+
+  --gradient-radial-1: rgba(58, 77, 181, 0.07);
+  --gradient-radial-2: rgba(214, 92, 39, 0.05);
+  --bg-gradient: linear-gradient(180deg, #faf9f6 0%, #faf9f6 35%, #f3ede4 100%);
+  --nav-bg: linear-gradient(180deg, rgba(250, 249, 246, 0.9), rgba(250, 249, 246, 0.4));
 }
 
 *,
@@ -26,9 +50,27 @@
   box-sizing: border-box;
 }
 
+/* Smooth transitions for high-end feel when switching theme */
+body,
+.glass-card,
+.project-card,
+.nav,
+.btn,
+.proof-strip article,
+.timeline-item,
+.footer-panel,
+.chips span {
+  transition:
+    background 0.35s ease,
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
 html,
 body {
-  overflow-x: hidden;
+  overflow-x: clip;
   width: 100%;
 }
 
@@ -42,9 +84,9 @@ body {
   font-family: "Space Grotesk", sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at 10% 10%, rgba(125, 148, 255, 0.2), transparent 32%),
-    radial-gradient(circle at 90% 8%, rgba(255, 141, 92, 0.17), transparent 30%),
-    linear-gradient(180deg, #07111f 0%, #07111f 35%, #0a1730 100%);
+    radial-gradient(circle at 10% 10%, var(--gradient-radial-1), transparent 32%),
+    radial-gradient(circle at 90% 8%, var(--gradient-radial-2), transparent 30%),
+    var(--bg-gradient);
 }
 
 a {
@@ -59,6 +101,8 @@ img {
 .page-shell {
   position: relative;
   isolation: isolate;
+  overflow-x: clip;
+  width: 100%;
 }
 
 .page-orb,
@@ -124,7 +168,7 @@ img {
   align-items: center;
   gap: 1rem;
   padding: 1.15rem 0;
-  background: linear-gradient(180deg, rgba(7, 17, 31, 0.88), rgba(7, 17, 31, 0.32));
+  background: var(--nav-bg);
   backdrop-filter: blur(14px);
 }
 
@@ -139,13 +183,92 @@ img {
   color: var(--secondary);
 }
 
-.nav ul {
+.nav-menu ul {
   display: flex;
   align-items: center;
   gap: 1rem;
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.theme-toggle {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--surface-border);
+  color: var(--text);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  padding: 0;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.08);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="light"] .theme-toggle:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .sun-icon {
+  display: none;
+}
+[data-theme="light"] .moon-icon {
+  display: block;
+}
+:root:not([data-theme="light"]) .sun-icon {
+  display: block;
+}
+:root:not([data-theme="light"]) .moon-icon {
+  display: none;
+}
+
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  z-index: 1001;
+}
+
+.hamburger-bar {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: var(--text);
+  border-radius: 99px;
+  transition: transform 0.3s var(--ease-out), opacity 0.3s var(--ease-out), background-color 0.3s;
+}
+
+.nav-toggle.active .hamburger-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle.active .hamburger-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle.active .hamburger-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
 }
 
 .nav a {
@@ -1252,11 +1375,11 @@ img {
   .stats,
   .proof-strip,
   .story-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .chess-card {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1.8rem;
     padding: 1.5rem !important;
   }
@@ -1266,7 +1389,7 @@ img {
   }
 
   .github-action-inner {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1.8rem;
   }
 
@@ -1275,13 +1398,13 @@ img {
   }
 
   .hero-project-inner {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 1.8rem;
     padding: 1.5rem;
   }
 
   .project-features {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .hero-copy h1,
@@ -1296,7 +1419,7 @@ img {
   }
 
   .timeline-item {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     padding-left: 2.6rem;
   }
 
@@ -1306,8 +1429,40 @@ img {
 }
 
 @media (max-width: 760px) {
-  .nav ul {
-    display: none;
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: min(300px, 80vw);
+    height: 100vh;
+    background: var(--surface-strong);
+    backdrop-filter: blur(20px);
+    border-left: 1px solid var(--surface-border);
+    padding: 6.5rem 2rem 3rem;
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4);
+    transition: right 0.4s var(--ease-out);
+    z-index: 1000;
+  }
+
+  .nav-menu.active {
+    right: 0;
+  }
+
+  .nav-menu ul {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.8rem;
+  }
+
+  .nav-menu a {
+    font-size: 1.25rem;
+    font-weight: 700;
+    width: 100%;
+    display: block;
   }
 
   .hero {
