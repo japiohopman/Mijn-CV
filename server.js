@@ -21,6 +21,16 @@ app.get('/share', (req, res) => {
   res.render('share');
 });
 
+// Dedicated Kitchen CV page route
+app.get('/keuken-cv', (req, res) => {
+  res.render('keuken_cv');
+});
+
+// Redirect old underscore route to clean hyphen route
+app.get('/keuken_cv', (req, res) => {
+  res.redirect(301, '/keuken-cv');
+});
+
 // Explicit route to serve the github_action.png from the root directory if it resides there
 app.get('/github_action.png', (req, res) => {
   res.sendFile(path.join(__dirname, 'github_action.png'), (err) => {

@@ -1233,6 +1233,41 @@ img {
   color: var(--secondary);
 }
 
+/* SuperMail specific branding (Amber / Gold) */
+.projects .supermail-card {
+  border: 1px solid rgba(255, 184, 77, 0.25);
+  background:
+    radial-gradient(circle at top left, rgba(255, 184, 77, 0.08), transparent 40%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03)),
+    rgba(8, 18, 34, 0.88);
+}
+
+.projects .supermail-card::after {
+  background: radial-gradient(circle, rgba(255, 184, 77, 0.25), transparent 66%);
+  width: 18rem;
+  height: 18rem;
+}
+
+.projects .supermail-card .thumb-btn.active {
+  border-color: #ffb84d;
+  box-shadow: 0 0 10px rgba(255, 184, 77, 0.4);
+}
+
+.projects .supermail-card:hover,
+.projects .supermail-card:focus-within {
+  border-color: #ffb84d;
+  box-shadow: 0 32px 80px rgba(255, 184, 77, 0.15);
+}
+
+.projects .supermail-card .btn-project-link:not(.secondary-link) {
+  background: linear-gradient(135deg, #ffb84d, #ffe6b3);
+  color: #07111f !important;
+}
+
+.projects .supermail-card .feature-item strong {
+  color: #ffb84d;
+}
+
 .hero-project h3 {
   font-size: 2.2rem;
   font-family: "Syne", sans-serif;
