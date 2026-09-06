@@ -67,7 +67,6 @@ export async function resolveDefaultBranch(repo = REPO, fetchFn = githubFetch, e
 
   const errors = [];
 
-  // Method 1: GitHub API
   if (repo) {
     try {
       const repoData = await fetchFn('');
@@ -80,14 +79,10 @@ export async function resolveDefaultBranch(repo = REPO, fetchFn = githubFetch, e
     }
   }
 
-  // Method 2: Git remote HEAD
   const repoUrl = repo ? `https://github.com/${repo}.git` : null;
   if (repoUrl) {
     try {
       const output = execFn(`git ls-remote --symref ${repoUrl} HEAD`, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] });
-      // Example output:
-      // ref: refs/heads/master\tHEAD
-      // 80bed6baa4c04e1e355a51464fbb2b435a8ed74c\tHEAD
       const match = output.match(/ref:\s+refs\/heads\/(\S+)\s+HEAD/);
       if (match && match[1]) {
         console.log(`Resolved default branch via git ls-remote for ${repoUrl}: ${match[1]}`);
@@ -116,32 +111,42 @@ function extractIssueNumber(taskText) {
   return match ? Number(match[1]) : null;
 }
 
-/** Finds top-level checkbox lines under a named level-3 heading inside "## Now". */
+/**
+ * Finds checkbox tasks in the section introduced by `### Ready`.
+ *
+ * The roadmap intentionally groups Ready tasks under `## Phase N` headings.
+ * Therefore a plain "stay inside the ### Ready heading" parser is incorrect:
+ * the phase headings are level-2 children of the Ready queue section.
+ *
+ * We start collecting after `### Ready`, continue through all phase headings,
+ * and stop at the next `###`/`##` section that is not a phase heading.
+ */
 function findTasksUnderHeading(text, headingName) {
   const lines = text.split('\n');
-  let inNow = false;
-  let inHeading = false;
+  let inReadyQueue = false;
   const tasks = [];
+  const wantedHeading = headingName.trim().toLowerCase();
 
   for (const line of lines) {
-    if (/^##\s+Now\b/i.test(line)) {
-      inNow = true;
-      inHeading = false;
-      continue;
-    }
-
-    if (inNow && /^##\s+[^#]/.test(line)) break;
-    if (!inNow) continue;
-
+    const h2 = line.match(/^##\s+(.+?)\s*$/);
     const h3 = line.match(/^###\s+(.+?)\s*$/);
-    if (h3) {
-      const actualHeading = h3[1].trim().toLowerCase();
-      const wantedHeading = headingName.trim().toLowerCase();
-      inHeading = actualHeading === wantedHeading || actualHeading.startsWith(`${wantedHeading} `);
+
+    if (!inReadyQueue) {
+      if (h3 && h3[1].trim().toLowerCase() === wantedHeading) {
+        inReadyQueue = true;
+      }
       continue;
     }
 
-    if (!inHeading) continue;
+    // A new top-level section ends the Ready queue. Phase headings are part of it.
+    if (h2 && !/^##\s+Phase\s+\d+\b/i.test(line)) {
+      break;
+    }
+
+    // A later level-3 section (for example `### Later`) also ends the queue.
+    if (h3 && h3[1].trim().toLowerCase() !== wantedHeading) {
+      break;
+    }
 
     const task = line.match(/^- \[( |x)\]\s*(.+)$/i);
     if (task) {
