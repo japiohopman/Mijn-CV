@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node scripts/test-default-branch.mjs && node scripts/test-server.mjs"
+    "test": "node scripts/test-default-branch.mjs && node test/server.test.js"
   },
   "dependencies": {
     "ejs": "^3.1.10",

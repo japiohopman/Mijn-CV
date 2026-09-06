@@ -32,7 +32,7 @@ Jules checks its own boxes: once it has personally verified a task (per AGENT_RU
 
 ### Ready
 
-- [ ] **CI & Test Suite Optimization — Automated Express Route & Asset Check**
+- [x] **CI & Test Suite Optimization — Automated Express Route & Asset Check**
   - **Problem:** CI needs a fast, reliable test script that verifies all Express routes (`/`, `/share`, `/keuken-cv`, `/github_action.png`) and essential static assets without blocking.
   - **Goal:** create `test/server.test.js` or `scripts/test-server.js` and configure `"test"` in `package.json` to perform automated HTTP route assertions.
   - **Acceptance:** `npm test` executes cleanly in local environment and CI, verifying HTTP status 200 for all core routes.
