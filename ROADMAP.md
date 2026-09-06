@@ -42,7 +42,7 @@ Jules checks its own boxes: once it has personally verified a task (per AGENT_RU
   - **Goal:** audit `views/partials/` for semantic tags (`<nav>`, `<main>`, `<header>`, `<footer>`), `aria-expanded` attributes, and `alt` text on images.
   - **Acceptance:** key interactive elements and images have appropriate alt and ARIA attributes; screen reader navigation passes validation.
 
-- [ ] **Performance & Asset Preloading Pass**
+- [x] **Performance & Asset Preloading Pass**
   - **Problem:** WebP avatar assets and font assets should load with minimal layout shift on mobile networks.
   - **Goal:** add `<link rel="preload">` hints for hero avatar images and optimize static asset caching headers in `server.js`.
   - **Acceptance:** page load time is crisp on mobile emulation; no unexpected layout shift on initial render.
