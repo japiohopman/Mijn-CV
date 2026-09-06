@@ -1,4 +1,6 @@
-# 🎯 Artificer: Master Project Goals & Architecture Blueprint
+# 🎯 Jaap Hopman Portfolio & Artificer: Master Goals & Architecture Blueprint
+
+> **NOTE:** Core positioning framework, messaging hierarchy, and professional branding guidelines are defined in [`POSITIONING.md`](./POSITIONING.md).
 
 > **IMPORTANT:** This is the central "Endpoint" document for the Artificer project. It defines the ultimate vision, architectural truth, and the final destination for all development efforts. All systems, features, and agents must align with the goals stated herein.
 
