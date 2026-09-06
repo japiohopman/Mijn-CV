@@ -8,6 +8,15 @@ const PORT = process.env.PORT || 3000;
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Middleware to expose site URL and path for dynamic meta tag resolution
+app.use((req, res, next) => {
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+  const host = req.get('host');
+  res.locals.siteUrl = `${protocol}://${host}`;
+  res.locals.currentPath = req.path;
+  next();
+});
+
 // Serve static assets from public folder with caching headers
 app.use(express.static(path.join(__dirname, 'public'), {
   maxAge: '1d',
@@ -16,17 +25,32 @@ app.use(express.static(path.join(__dirname, 'public'), {
 
 // Home route
 app.get('/', (req, res) => {
-  res.render('index');
+  res.render('index', {
+    title: 'Jaap Hopman | Creative Developer CV',
+    description: 'Visueel en interactief CV van Jaap Hopman: creative developer, freelance chef en maker met focus op code, design en uitvoering.',
+    ogUrl: '/',
+    ogImage: '/images/jaap-Hopman.jpg'
+  });
 });
 
 // Share and QR code page route
 app.get('/share', (req, res) => {
-  res.render('share');
+  res.render('share', {
+    title: 'Deel CV | Jaap Hopman',
+    description: 'Deel of bekijk het interactieve portfolio en CV van Jaap Hopman via QR-code, WhatsApp, e-mail of direct link.',
+    ogUrl: '/share',
+    ogImage: '/images/jaap-Hopman.jpg'
+  });
 });
 
 // Dedicated Kitchen CV page route
 app.get('/keuken-cv', (req, res) => {
-  res.render('keuken_cv');
+  res.render('keuken_cv', {
+    title: 'Keuken CV | Jaap Hopman',
+    description: 'Culinair profiel & Horeca-ervaring van Jaap Hopman - Zelfstandig Werkend Kok met meer dan 25 jaar ervaring.',
+    ogUrl: '/keuken-cv',
+    ogImage: '/images/jaap-Hopman.jpg'
+  });
 });
 
 // Redirect old underscore route to clean hyphen route

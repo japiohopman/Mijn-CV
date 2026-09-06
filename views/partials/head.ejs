@@ -1,10 +1,39 @@
+<%
+  const metaTitle = typeof title !== 'undefined' && title ? title : 'Jaap Hopman | Creative Developer CV';
+  const metaDescription = typeof description !== 'undefined' && description ? description : 'Visueel en interactief CV van Jaap Hopman: creative developer, freelance chef en maker met focus op code, design en uitvoering.';
+  const defaultSiteUrl = 'https://jaaphopman.com';
+  const baseUrl = typeof siteUrl !== 'undefined' && siteUrl ? siteUrl : defaultSiteUrl;
+  const rawOgUrl = typeof ogUrl !== 'undefined' && ogUrl ? ogUrl : (typeof currentPath !== 'undefined' ? `${baseUrl}${currentPath}` : baseUrl);
+  const metaUrl = rawOgUrl.startsWith('http') ? rawOgUrl : `${baseUrl}${rawOgUrl.startsWith('/') ? '' : '/'}${rawOgUrl}`;
+  const metaImageRelative = typeof ogImage !== 'undefined' && ogImage ? ogImage : '/images/jaap-Hopman.jpg';
+  const absoluteImage = metaImageRelative.startsWith('http') ? metaImageRelative : `${baseUrl}${metaImageRelative.startsWith('/') ? '' : '/'}${metaImageRelative}`;
+  const metaImageAlt = typeof ogImageAlt !== 'undefined' && ogImageAlt ? ogImageAlt : 'Portret van Jaap Hopman';
+  const metaType = typeof ogType !== 'undefined' && ogType ? ogType : 'website';
+%>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Jaap Hopman | Creative Developer CV</title>
-<meta
-  name="description"
-  content="Visueel en interactief CV van Jaap Hopman: creative developer, freelance chef en maker met focus op code, design en uitvoering."
-/>
+<title><%= metaTitle %></title>
+<meta name="description" content="<%= metaDescription %>" />
+<link rel="canonical" href="<%= metaUrl %>" />
+
+<!-- OpenGraph Meta Tags -->
+<meta property="og:site_name" content="Jaap Hopman Portfolio &amp; CV" />
+<meta property="og:type" content="<%= metaType %>" />
+<meta property="og:title" content="<%= metaTitle %>" />
+<meta property="og:description" content="<%= metaDescription %>" />
+<meta property="og:url" content="<%= metaUrl %>" />
+<meta property="og:image" content="<%= absoluteImage %>" />
+<meta property="og:image:alt" content="<%= metaImageAlt %>" />
+<meta property="og:locale" content="nl_NL" />
+
+<!-- Twitter Card Meta Tags -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="<%= metaTitle %>" />
+<meta name="twitter:description" content="<%= metaDescription %>" />
+<meta name="twitter:image" content="<%= absoluteImage %>" />
+<meta name="twitter:image:alt" content="<%= metaImageAlt %>" />
+
+<!-- Fonts & Styles -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
