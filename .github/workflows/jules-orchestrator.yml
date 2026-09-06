@@ -1,12 +1,16 @@
 name: Jules Queue Orchestrator
 
 # Event-driven ROADMAP dispatcher with a scheduled recovery heartbeat.
-# Any change to ROADMAP.md on the repository's default branch wakes the queue.
+# Changes to the queue definition or orchestrator itself on the repository's
+# default branch wake the queue. The workflow remains safe through the
+# orchestrator's existing active-session and queue-state checks.
 
 on:
   push:
     paths:
       - 'ROADMAP.md'
+      - '.github/workflows/jules-orchestrator.yml'
+      - 'scripts/jules-orchestrator.mjs'
   schedule:
     - cron: '7,22,37,52 * * * *'
   workflow_dispatch: {}
