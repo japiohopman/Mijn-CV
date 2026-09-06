@@ -1218,39 +1218,44 @@ img {
   color: var(--tertiary);
 }
 
-/* Artificer Site Promo specific branding (Purple / Lavender) */
-.projects .site-promo-card {
-  border: 1px solid rgba(125, 148, 255, 0.25);
+/* GitHub Activity & Live Feed specific branding (Emerald / GitHub Green) */
+.projects .github-feed-card {
+  border: 1px solid rgba(46, 160, 67, 0.3);
   background:
-    radial-gradient(circle at top left, rgba(125, 148, 255, 0.08), transparent 40%),
+    radial-gradient(circle at top left, rgba(46, 160, 67, 0.12), transparent 40%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03)),
     rgba(8, 18, 34, 0.88);
 }
 
-.projects .site-promo-card::after {
-  background: radial-gradient(circle, rgba(125, 148, 255, 0.25), transparent 66%);
+.projects .github-feed-card::after {
+  background: radial-gradient(circle, rgba(46, 160, 67, 0.25), transparent 66%);
   width: 18rem;
   height: 18rem;
 }
 
-.projects .site-promo-card .thumb-btn.active {
-  border-color: var(--tertiary);
-  box-shadow: 0 0 10px rgba(125, 148, 255, 0.4);
+.projects .github-feed-card .thumb-btn.active {
+  border-color: #3fb950;
+  box-shadow: 0 0 10px rgba(63, 185, 80, 0.4);
 }
 
-.projects .site-promo-card:hover,
-.projects .site-promo-card:focus-within {
-  border-color: var(--tertiary);
-  box-shadow: 0 32px 80px rgba(125, 148, 255, 0.15);
+.projects .github-feed-card:hover,
+.projects .github-feed-card:focus-within {
+  border-color: #3fb950;
+  box-shadow: 0 32px 80px rgba(46, 160, 67, 0.2);
 }
 
-.projects .site-promo-card .btn-project-link:not(.secondary-link) {
-  background: linear-gradient(135deg, var(--tertiary), #b3c2ff);
-  color: #07111f !important;
+.projects .github-feed-card .btn-project-link:not(.secondary-link) {
+  background: linear-gradient(135deg, #2ea043, #3fb950);
+  color: #ffffff !important;
 }
 
-.projects .site-promo-card .feature-item strong {
-  color: var(--secondary);
+.projects .github-feed-card .feature-item strong {
+  color: #3fb950;
+}
+
+.projects .github-feed-card .hero-project-desc,
+.projects .github-feed-card .feature-item span {
+  color: rgba(238, 247, 255, 0.85);
 }
 
 /* SuperMail specific branding (Amber / Gold) */
