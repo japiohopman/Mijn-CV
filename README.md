@@ -32,6 +32,7 @@ Het project is nu modulair en gestructureerd volgens professionele standaarden:
   - `styles.css`: De complete, geavanceerde responsive stylesheet.
   - `app.js`: De interactieve scripts (zoals de projecten-galerij en animaties).
   - `images/`: Horeca certificaten, logo's en sfeerbeelden.
+- `POSITIONING.md`: De definitieve merk- en positioneringsstrategie, kernboodschappen en tone-of-voice richtlijnen.
 - `views/`: De pagina-templates die door EJS worden gerenderd:
   - `index.ejs`: De home-pagina.
   - `share.ejs`: De speciale, mobielvriendelijke deelpagina met de QR-code.
