@@ -14,13 +14,10 @@ const JULES_API_KEY = process.env.JULES_API_KEY;
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const REPO = process.env.GITHUB_REPOSITORY;
 const JULES_SOURCE = process.env.JULES_SOURCE || (REPO ? `sources/github/${REPO}` : null);
+const EXPLICIT_STARTING_BRANCH = process.env.JULES_STARTING_BRANCH || process.env.TARGET_BRANCH || null;
 
 const STATE_PATH = '.github/jules-queue-state.json';
 const ROADMAP_PATH = 'ROADMAP.md';
-
-for (const [name, val] of Object.entries({ JULES_API_KEY, GITHUB_TOKEN, REPO, JULES_SOURCE })) {
-  if (!val) throw new Error(`${name} is not set`);
-}
 
 function loadState() {
   if (!existsSync(STATE_PATH)) return { activeSession: null };
@@ -44,11 +41,69 @@ async function julesFetch(path, options = {}) {
 }
 
 async function githubFetch(path) {
-  const res = await fetch(`https://api.github.com/repos/${REPO}/${path}`, {
-    headers: { Authorization: `Bearer ${GITHUB_TOKEN}`, Accept: 'application/vnd.github+json' },
-  });
+  const headers = { Accept: 'application/vnd.github+json' };
+  if (GITHUB_TOKEN) {
+    headers.Authorization = `Bearer ${GITHUB_TOKEN}`;
+  }
+  const res = await fetch(`https://api.github.com/repos/${REPO}/${path}`, { headers });
   if (!res.ok) throw new Error(`GitHub API ${path} failed: ${res.status} ${await res.text()}`);
   return res.json();
+}
+
+/**
+ * Resolves default branch of the repository without assuming 'main' or 'master'.
+ * Strategy:
+ * 1. If explicit branch requested in environment (e.g. JULES_STARTING_BRANCH), use that.
+ * 2. Resolve default branch from GitHub API metadata.
+ * 3. Fall back to resolving remote HEAD branch via `git ls-remote --symref`.
+ * 4. Throw detailed diagnostic if resolution fails.
+ */
+export async function resolveDefaultBranch(repo = REPO, fetchFn = githubFetch, execFn = execSync) {
+  const explicitBranch = process.env.JULES_STARTING_BRANCH || process.env.TARGET_BRANCH || null;
+  if (explicitBranch) {
+    console.log(`Using explicit starting branch override: ${explicitBranch}`);
+    return explicitBranch;
+  }
+
+  const errors = [];
+
+  // Method 1: GitHub API
+  if (repo) {
+    try {
+      const repoData = await fetchFn('');
+      if (repoData && repoData.default_branch) {
+        console.log(`Resolved default branch via GitHub API for ${repo}: ${repoData.default_branch}`);
+        return repoData.default_branch;
+      }
+    } catch (err) {
+      errors.push(`GitHub API metadata resolution failed: ${err.message}`);
+    }
+  }
+
+  // Method 2: Git remote HEAD
+  const repoUrl = repo ? `https://github.com/${repo}.git` : null;
+  if (repoUrl) {
+    try {
+      const output = execFn(`git ls-remote --symref ${repoUrl} HEAD`, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] });
+      // Example output:
+      // ref: refs/heads/master\tHEAD
+      // 80bed6baa4c04e1e355a51464fbb2b435a8ed74c\tHEAD
+      const match = output.match(/ref:\s+refs\/heads\/(\S+)\s+HEAD/);
+      if (match && match[1]) {
+        console.log(`Resolved default branch via git ls-remote for ${repoUrl}: ${match[1]}`);
+        return match[1];
+      }
+    } catch (err) {
+      errors.push(`git ls-remote resolution failed: ${err.message}`);
+    }
+  }
+
+  throw new Error(
+    `Failed to resolve default branch for repository: '${repo || 'unknown'}'.\n` +
+    `Repository URL: ${repoUrl || 'N/A'}\n` +
+    `Attempted methods: GitHub API metadata, git ls-remote --symref\n` +
+    `Errors encountered:\n${errors.map(e => ` - ${e}`).join('\n')}`
+  );
 }
 
 function extractPrNumber(prUrl) {
@@ -120,6 +175,10 @@ async function getIssueContext(taskText) {
 }
 
 async function main() {
+  for (const [name, val] of Object.entries({ JULES_API_KEY, GITHUB_TOKEN, REPO, JULES_SOURCE })) {
+    if (!val) throw new Error(`${name} is not set`);
+  }
+
   const state = loadState();
   const roadmapText = readFileSync(ROADMAP_PATH, 'utf8');
   const readyTasks = findTasksUnderHeading(roadmapText, 'Ready');
@@ -183,6 +242,9 @@ async function main() {
 
     console.log(`Dispatching next task: ${next.text}`);
 
+    const startingBranch = await resolveDefaultBranch();
+    console.log(`Starting branch for task execution set to: ${startingBranch}`);
+
     const issueContext = await getIssueContext(next.text);
     const promptParts = [
       'Read AGENT.MD, AGENT_RULES.md, and ROADMAP.md before starting.',
@@ -210,7 +272,7 @@ async function main() {
       method: 'POST',
       body: JSON.stringify({
         prompt: promptParts.join('\n\n'),
-        sourceContext: { source: JULES_SOURCE, githubRepoContext: { startingBranch: 'main' } },
+        sourceContext: { source: JULES_SOURCE, githubRepoContext: { startingBranch } },
         automationMode: 'AUTO_CREATE_PR',
         title: next.text.slice(0, 80),
       }),
@@ -243,4 +305,6 @@ function commitAndPush() {
   }
 }
 
-main().catch(err => { console.error(err); process.exit(1); });
+if (process.argv[1] && process.argv[1].endsWith('jules-orchestrator.mjs') && !process.env.JULES_TEST_RUN) {
+  main().catch(err => { console.error(err); process.exit(1); });
+}
