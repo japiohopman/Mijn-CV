@@ -1,8 +1,12 @@
 name: Jules Queue Orchestrator
 
-# The "heartbeat". Runs every 15 minutes via cron, or manually via workflow_dispatch.
+# Event-driven ROADMAP dispatcher with a scheduled recovery heartbeat.
+# Any change to ROADMAP.md on the repository's default branch wakes the queue.
 
 on:
+  push:
+    paths:
+      - 'ROADMAP.md'
   schedule:
     - cron: '7,22,37,52 * * * *'
   workflow_dispatch: {}
