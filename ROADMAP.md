@@ -47,7 +47,7 @@ Jules checks its own boxes: once it has personally verified a task (per AGENT_RU
   - **Goal:** add `<link rel="preload">` hints for hero avatar images and optimize static asset caching headers in `server.js`.
   - **Acceptance:** page load time is crisp on mobile emulation; no unexpected layout shift on initial render.
 
-- [ ] **SEO & OpenGraph Meta Tags Polish**
+- [x] **SEO & OpenGraph Meta Tags Polish**
   - **Problem:** sharing links on social media / WhatsApp needs rich OpenGraph preview image and descriptions.
   - **Goal:** enhance `views/partials/head.ejs` with OpenGraph (`og:title`, `og:description`, `og:image`, `og:url`) and Twitter Card metadata.
   - **Acceptance:** rich preview metadata renders correctly for both `/` and `/share` routes.
