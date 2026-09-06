@@ -37,7 +37,7 @@ Jules checks its own boxes: once it has personally verified a task (per AGENT_RU
   - **Goal:** create `test/server.test.js` or `scripts/test-server.js` and configure `"test"` in `package.json` to perform automated HTTP route assertions.
   - **Acceptance:** `npm test` executes cleanly in local environment and CI, verifying HTTP status 200 for all core routes.
 
-- [ ] **Accessibility & Semantic HTML Pass**
+- [x] **Accessibility & Semantic HTML Pass**
   - **Problem:** screen readers and navigation need ARIA labels and landmark audit across partials.
   - **Goal:** audit `views/partials/` for semantic tags (`<nav>`, `<main>`, `<header>`, `<footer>`), `aria-expanded` attributes, and `alt` text on images.
   - **Acceptance:** key interactive elements and images have appropriate alt and ARIA attributes; screen reader navigation passes validation.

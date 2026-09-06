@@ -193,13 +193,15 @@ const setupMobileNav = () => {
   const toggleMenu = () => {
     const isActive = navToggle.classList.toggle("active");
     navMenu.classList.toggle("active");
-    navToggle.setAttribute("aria-expanded", isActive);
+    navToggle.setAttribute("aria-expanded", isActive ? "true" : "false");
+    navToggle.setAttribute("aria-label", isActive ? "Sluit menu" : "Open menu");
   };
 
   const closeMenu = () => {
     navToggle.classList.remove("active");
     navMenu.classList.remove("active");
     navToggle.setAttribute("aria-expanded", "false");
+    navToggle.setAttribute("aria-label", "Open menu");
   };
 
   navToggle.addEventListener("click", (e) => {
