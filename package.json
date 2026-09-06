@@ -4,7 +4,8 @@
   "description": "Visual and interactive portfolio for Jaap Hopman built with Express and EJS",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node scripts/test-server.mjs"
   },
   "dependencies": {
     "ejs": "^3.1.10",
