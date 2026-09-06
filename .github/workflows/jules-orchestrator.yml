@@ -1,0 +1,35 @@
+name: Jules Queue Orchestrator
+
+# The "heartbeat". Runs every 15 minutes via cron, or manually via workflow_dispatch.
+
+on:
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: jules-orchestrator
+  cancel-in-progress: false
+
+jobs:
+  orchestrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run orchestrator
+        env:
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JULES_SOURCE: sources/github/${{ github.repository }}
+        run: node scripts/jules-orchestrator.mjs
