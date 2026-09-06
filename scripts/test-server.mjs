@@ -1,57 +1,16 @@
-import { spawn } from 'node:child_process';
-import http from 'node:http';
+import { spawnSync } from 'node:child_process';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-console.log('Testing Express server routes...');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const PORT = 3099;
+const testScriptPath = path.join(__dirname, '..', 'test', 'server.test.js');
 
-const serverProc = spawn('node', ['server.js'], {
-  env: { ...process.env, PORT: String(PORT) },
-  stdio: 'pipe',
+const result = spawnSync('node', [testScriptPath], {
+  stdio: 'inherit',
 });
 
-function fetchRoute(path) {
-  return new Promise((resolve, reject) => {
-    http.get(`http://127.0.0.1:${PORT}${path}`, (res) => {
-      resolve(res.statusCode);
-    }).on('error', (err) => {
-      reject(err);
-    });
-  });
+if (result.status !== 0) {
+  process.exit(result.status || 1);
 }
-
-async function runTests() {
-  await new Promise(r => setTimeout(r, 1000));
-
-  const routes = ['/', '/share', '/keuken-cv', '/github_action.png'];
-  let success = true;
-
-  for (const route of routes) {
-    try {
-      const status = await fetchRoute(route);
-      if (status === 200) {
-        console.log(`✓ GET ${route} -> Status 200`);
-      } else {
-        console.error(`✗ GET ${route} -> Status ${status}`);
-        success = false;
-      }
-    } catch (err) {
-      console.error(`✗ GET ${route} -> Error: ${err.message}`);
-      success = false;
-    }
-  }
-
-  serverProc.kill();
-
-  if (!success) {
-    process.exit(1);
-  } else {
-    console.log('All route tests passed!');
-  }
-}
-
-runTests().catch(err => {
-  serverProc.kill();
-  console.error(err);
-  process.exit(1);
-});
