@@ -4,6 +4,7 @@
     <%- include('partials/head') %>
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Ga naar hoofdinhoud</a>
     <div class="page-shell">
       <div class="noise-overlay" aria-hidden="true"></div>
       <div class="page-orb page-orb-a" aria-hidden="true"></div>
@@ -88,7 +89,7 @@
         </div>
       </header>
 
-      <main>
+      <main id="main-content" tabindex="-1">
         <%- include('partials/over') %>
         <%- include('partials/ervaring') %>
         <%- include('partials/skills') %>
