@@ -155,7 +155,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
 
 ## Phase 6 — Technical Quality, Discoverability & Trust
 
-- [ ] **SEO Foundation Expansion — Structured Metadata & Page Semantics**
+- [x] **SEO Foundation Expansion — Structured Metadata & Page Semantics**
   - **Problem:** basic OpenGraph metadata is not the same as a complete discoverability strategy.
   - **Goal:** audit titles, descriptions, canonical URLs, robots behavior, headings, image metadata, language declarations, structured data opportunities, and page-specific metadata. Only add structured data that is truthful and supported by the site.
   - **Acceptance:** every public page has intentional metadata and semantic structure; social previews remain correct; no duplicate or contradictory metadata is introduced.

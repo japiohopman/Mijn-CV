@@ -83,6 +83,8 @@ async function runTests() {
       { path: '/', expectedStatus: 200 },
       { path: '/share', expectedStatus: 200 },
       { path: '/keuken-cv', expectedStatus: 200 },
+      { path: '/robots.txt', expectedStatus: 200 },
+      { path: '/sitemap.xml', expectedStatus: 200 },
       { path: '/github_action.png', expectedStatus: 200 },
       { path: '/styles.css', expectedStatus: 200 },
       { path: '/app.js', expectedStatus: 200 },
@@ -106,7 +108,7 @@ async function runTests() {
       }
     }
 
-    // SEO & OpenGraph Meta Tags Assertions
+    // SEO, OpenGraph & Structured Data (JSON-LD) Meta Assertions
     const metaTestCases = [
       {
         path: '/',
@@ -117,7 +119,13 @@ async function runTests() {
           'property="og:image" content="http://127.0.0.1:3099/images/jaap-Hopman.jpg"',
           'property="og:url" content="http://127.0.0.1:3099/"',
           'name="twitter:card" content="summary_large_image"',
+          'name="robots" content="index, follow"',
           'rel="canonical" href="http://127.0.0.1:3099/"',
+          '"@type": "Person"',
+          '"name": "Jaap Hopman"',
+          '"jobTitle": "Developer & Creative Technologist"',
+          '"@type": "WebSite"',
+          '"@type": "ProfilePage"',
           'href="/keuken-cv"'
         ]
       },
@@ -130,7 +138,8 @@ async function runTests() {
           'property="og:image" content="http://127.0.0.1:3099/images/jaap-Hopman.jpg"',
           'property="og:url" content="http://127.0.0.1:3099/share"',
           'name="twitter:card" content="summary_large_image"',
-          'rel="canonical" href="http://127.0.0.1:3099/share"'
+          'rel="canonical" href="http://127.0.0.1:3099/share"',
+          '"@type": "Person"'
         ]
       },
       {
@@ -143,8 +152,25 @@ async function runTests() {
           'property="og:url" content="http://127.0.0.1:3099/keuken-cv"',
           'name="twitter:card" content="summary_large_image"',
           'rel="canonical" href="http://127.0.0.1:3099/keuken-cv"',
+          '"jobTitle": "Zelfstandig Werkend Kok & Chef"',
           'Twee Werelden, Eén Executiementaliteit',
           'Bekijk Developer Portfolio'
+        ]
+      },
+      {
+        path: '/robots.txt',
+        checks: [
+          'User-agent: *',
+          'Allow: /',
+          'Sitemap:'
+        ]
+      },
+      {
+        path: '/sitemap.xml',
+        checks: [
+          '<loc>https://jaaphopman.com/</loc>',
+          '<loc>https://jaaphopman.com/share</loc>',
+          '<loc>https://jaaphopman.com/keuken-cv</loc>'
         ]
       }
     ];
