@@ -1,8 +1,12 @@
 const express = require('express');
+const compression = require('compression');
 const path = require('path');
 const app = express();
 
 const PORT = process.env.PORT || 3000;
+
+// Enable HTTP response compression (gzip/deflate) for all text/html/json/css/js payloads
+app.use(compression());
 
 // Set EJS as view engine
 app.set('view engine', 'ejs');
