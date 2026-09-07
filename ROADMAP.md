@@ -82,7 +82,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** audit the existing copy and establish one clear positioning statement, supporting message hierarchy, target audiences, and tone. Distinguish core capability from experimentation without erasing the breadth of the profile.
   - **Acceptance:** a concise positioning hierarchy exists in the site copy; hero, about, skills, projects, and CTAs reinforce the same message; no invented claims are introduced.
 
-- [ ] **Hero Copy & First Impression — Make the Value Proposition Immediate**
+- [x] **Hero Copy & First Impression — Make the Value Proposition Immediate**
   - **Problem:** the first screen should communicate more than a job title and a list of interests.
   - **Goal:** rewrite the hero so a visitor can understand who Jaap is, what he builds, and what makes his approach distinctive within a few seconds. Preserve the authentic connection between software, creative work, and professional kitchen experience where it strengthens the story.
   - **Acceptance:** hero has a strong primary statement, concise supporting copy, and clear primary/secondary actions; copy is confident rather than generic; desktop and mobile remain balanced.
