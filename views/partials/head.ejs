@@ -14,6 +14,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title><%= metaTitle %></title>
 <meta name="description" content="<%= metaDescription %>" />
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="#0a101d" />
 <link rel="canonical" href="<%= metaUrl %>" />
 
 <!-- OpenGraph Meta Tags -->
@@ -43,3 +45,64 @@
 <link rel="preload" href="/images/jaap-Hopman.jpg" as="image" type="image/jpeg" />
 <link rel="preload" href="/images/jaap-Hopman-muppet.webp" as="image" type="image/webp" />
 <link rel="stylesheet" href="/styles.css" />
+
+<!-- Schema.org Structured Data (JSON-LD) -->
+<script type="application/ld+json">
+<%- JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${baseUrl}/#jaaphopman`,
+      "name": "Jaap Hopman",
+      "jobTitle": (typeof currentPath !== 'undefined' && currentPath === '/keuken-cv') ? "Zelfstandig Werkend Kok & Chef" : "Developer & Creative Technologist",
+      "url": baseUrl,
+      "image": absoluteImage,
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Amsterdam",
+        "addressCountry": "NL"
+      },
+      "sameAs": [
+        "https://github.com/japiohopman",
+        "https://www.chess.com/member/youknowno",
+        "https://japiohopman.github.io/DJ-page/"
+      ],
+      "knowsAbout": [
+        "Software Engineering",
+        "TypeScript",
+        "React",
+        "Node.js",
+        "Game Development",
+        "AI Integration",
+        "Culinary Arts",
+        "Kitchen Leadership"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${baseUrl}/#website`,
+      "url": baseUrl,
+      "name": "Jaap Hopman Portfolio & CV",
+      "description": metaDescription,
+      "publisher": {
+        "@id": `${baseUrl}/#jaaphopman`
+      },
+      "inLanguage": "nl-NL"
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": `${metaUrl}/#profilepage`,
+      "url": metaUrl,
+      "name": metaTitle,
+      "isPartOf": {
+        "@id": `${baseUrl}/#website`
+      },
+      "mainEntity": {
+        "@id": `${baseUrl}/#jaaphopman`
+      },
+      "inLanguage": "nl-NL"
+    }
+  ]
+}, null, 2) %>
+</script>
