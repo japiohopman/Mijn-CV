@@ -39,6 +39,19 @@
               <span>Ongestructureerde LLM-generaties in real-time parsen en koppelen aan voorspelbare UI-state, spelgebeurtenissen en visuele feedback voor de speler.</span>
             </div>
           </div>
+          <details class="tech-details">
+            <summary class="tech-details-summary">
+              <span>Technische Diepgang &amp; Architectuur Besluiten</span>
+              <span class="summary-chevron" aria-hidden="true">&darr;</span>
+            </summary>
+            <div class="tech-details-content">
+              <ul>
+                <li><strong>State Synchronization &amp; LLM Parsing:</strong> Implementatie van een robuuste parser die LLM JSON- payloads injecteert in een React/Phaser state machine met fallback-afhandeling voor invalide JSON.</li>
+                <li><strong>Spatial &amp; Map Engine:</strong> Grid-based wereldkaarten en submaps opgebouwd met Phaser.js Canvas en custom tile-arrays, met mist-of-war logica en collision detection.</li>
+                <li><strong>Combat &amp; Dice Rules Engine:</strong> Determiniseert D&amp;D 5e dobbelworpen, modifiers en beurtvolgorde lokaal in TypeScript om latency te minimaliseren voordat de narratieve uitkomst aan de LLM wordt meegegeven.</li>
+              </ul>
+            </div>
+          </details>
           <div class="project-tech-stack">
             <span class="tech-label">Technologie:</span>
             <div class="tech-chips">
@@ -93,6 +106,19 @@
               <span>Realtime berekening van territoriumtoestanden en gevechtsuitkomsten met vloeiende CSS/JS-animaties en directe UI-state updates.</span>
             </div>
           </div>
+          <details class="tech-details">
+            <summary class="tech-details-summary">
+              <span>Technische Diepgang &amp; Architectuur Besluiten</span>
+              <span class="summary-chevron" aria-hidden="true">&darr;</span>
+            </summary>
+            <div class="tech-details-content">
+              <ul>
+                <li><strong>SVG Vector Boundary Engine:</strong> Wereldkaart opgebouwd uit modulaire SVG path-elementen met direct event delegation voor realtime hover-, selectie- en gevechtsstaten.</li>
+                <li><strong>Turn-Based Logic &amp; AI Bots:</strong> Custom gevechts- en dobbelalgoritmes met instelbare AI-tegenstanders die territoriale expansie berekenen via min-max gewichtsfactoren.</li>
+                <li><strong>State &amp; Render Separation:</strong> Strikte scheiding tussen pure JavaScript game state (territoria, troepen, kaarten) en de UI render-loop voor 60fps prestaties op mobiel en desktop.</li>
+              </ul>
+            </div>
+          </details>
           <div class="project-tech-stack">
             <span class="tech-label">Technologie:</span>
             <div class="tech-chips">
@@ -144,6 +170,19 @@
               <span>Ongestructureerde e-mailtekst betrouwbaar omzetten in gestructureerde JSON-data (urgentie, actiepunten, voorgestelde antwoorden) met consistente API-responses.</span>
             </div>
           </div>
+          <details class="tech-details">
+            <summary class="tech-details-summary">
+              <span>Technische Diepgang &amp; Architectuur Besluiten</span>
+              <span class="summary-chevron" aria-hidden="true">&darr;</span>
+            </summary>
+            <div class="tech-details-content">
+              <ul>
+                <li><strong>Strict JSON Schema Enforcement:</strong> Gebruik van Structured Outputs / JSON Schema validation bij LLM-aanroepen om type-veilige categorisering en actiepunten te garanderen.</li>
+                <li><strong>Contextual Prompt Engineering:</strong> Meerfasige prompt-pijplijn die e-mail threads analyseert, prioriteit toekent op schaal van 1-5 en toonafstemming biedt op basis van ontvanger.</li>
+                <li><strong>Human-in-the-Loop Workflow:</strong> Ingebouwde concept-reviewfase waarin de gegenereerde reactie vooraf kan worden aangepast, goedgekeurd of herberekend met specifieke instructies.</li>
+              </ul>
+            </div>
+          </details>
           <div class="project-tech-stack">
             <span class="tech-label">Technologie:</span>
             <div class="tech-chips">
@@ -188,6 +227,19 @@
               <span>Korte iteratiecycli waarin abstracte concepten binnen uren worden omgezet in gestructureerde, gedocumenteerde repositories.</span>
             </div>
           </div>
+          <details class="tech-details">
+            <summary class="tech-details-summary">
+              <span>Technische Diepgang &amp; Architectuur Besluiten</span>
+              <span class="summary-chevron" aria-hidden="true">&darr;</span>
+            </summary>
+            <div class="tech-details-content">
+              <ul>
+                <li><strong>Automated CI/CD Workflows:</strong> GitHub Actions workflows ingesteld voor automatische route- en asset-validatie, linters en geautomatiseerde release packaging.</li>
+                <li><strong>Modular Multi-Repo Ecosystem:</strong> Strikte scheiding van concepten over losse, helder gedocumenteerde repositories met herbruikbare npm-pakketten en utilities.</li>
+                <li><strong>Rapid Prototyping Discipline:</strong> Test-driven en script-based verificatiescripts voor directe kwaliteitsbewaking bij elke commit.</li>
+              </ul>
+            </div>
+          </details>
           <div class="project-tech-stack">
             <span class="tech-label">Technologie:</span>
             <div class="tech-chips">
