@@ -160,7 +160,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** audit titles, descriptions, canonical URLs, robots behavior, headings, image metadata, language declarations, structured data opportunities, and page-specific metadata. Only add structured data that is truthful and supported by the site.
   - **Acceptance:** every public page has intentional metadata and semantic structure; social previews remain correct; no duplicate or contradictory metadata is introduced.
 
-- [ ] **Performance Audit — Measure Before Optimizing**
+- [x] **Performance Audit — Measure Before Optimizing**
   - **Problem:** preload hints and cache headers are useful but do not prove that the site is fast.
   - **Goal:** measure the real loading path and identify the largest remaining costs in images, fonts, CSS, JavaScript, server response, and rendering. Optimize the highest-impact issues first without degrading quality.
   - **Acceptance:** PR includes concrete measurements or repeatable checks, demonstrates improvement where possible, and avoids speculative micro-optimizations.
