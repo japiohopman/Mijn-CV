@@ -104,7 +104,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** establish a reusable project-card/detail structure covering what the project is, the problem or goal, Jaap's role, what was built, relevant technology, and the interesting technical or creative challenge.
   - **Acceptance:** featured projects use a consistent information hierarchy; each project communicates its value without requiring the visitor to understand the technology first.
 
-- [ ] **Featured Projects Copy Pass — Make the Best Work Stand Out**
+- [x] **Featured Projects Copy Pass — Make the Best Work Stand Out**
   - **Problem:** the strongest projects can be buried among broad descriptions and technology lists.
   - **Goal:** identify the most convincing existing projects and rewrite their descriptions for clarity, specificity, and evidence. Do not fabricate metrics or outcomes; where evidence is missing, describe the implementation honestly.
   - **Acceptance:** a visitor can understand the purpose and significance of every featured project quickly; the strongest work receives the strongest visual and editorial emphasis.
