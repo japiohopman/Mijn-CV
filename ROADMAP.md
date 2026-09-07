@@ -92,7 +92,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** rewrite the About section around the progression from professional kitchen work and creative disciplines into software development, emphasizing transferable strengths such as execution, systems thinking, preparation, adaptability, and making things real.
   - **Acceptance:** the section reads naturally, has a clear narrative arc, avoids repetition, and makes the unusual career path an advantage rather than an apology.
 
-- [ ] **Skills Architecture — Separate Core Strengths from Exploration**
+- [x] **Skills Architecture — Separate Core Strengths from Exploration**
   - **Problem:** a long technology list can make the profile look unfocused even when the underlying experience is broad.
   - **Goal:** restructure skills into meaningful groups such as core development, practical tools/platforms, and experimental/project-based technologies. Use only technologies supported by the existing repository and projects.
   - **Acceptance:** visitors can identify core competencies immediately; secondary and experimental technologies remain visible without competing with the core; no skill is overstated.
