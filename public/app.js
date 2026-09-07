@@ -195,15 +195,26 @@ const setupThemeToggle = () => {
   });
 };
 
-// Mobile Hamburger Navigation
+// Mobile Hamburger Navigation & Backdrop
 const setupMobileNav = () => {
   const navToggle = document.getElementById("navToggle");
   const navMenu = document.getElementById("navMenu");
   if (!navToggle || !navMenu) return;
 
+  // Create backdrop overlay dynamically if not already present
+  let navBackdrop = document.querySelector(".nav-backdrop");
+  if (!navBackdrop) {
+    navBackdrop = document.createElement("div");
+    navBackdrop.className = "nav-backdrop";
+    navBackdrop.setAttribute("aria-hidden", "true");
+    document.body.appendChild(navBackdrop);
+  }
+
   const toggleMenu = () => {
     const isActive = navToggle.classList.toggle("active");
     navMenu.classList.toggle("active");
+    navBackdrop.classList.toggle("active");
+    document.body.classList.toggle("menu-open", isActive);
     navToggle.setAttribute("aria-expanded", isActive ? "true" : "false");
     navToggle.setAttribute("aria-label", isActive ? "Sluit menu" : "Open menu");
   };
@@ -211,6 +222,8 @@ const setupMobileNav = () => {
   const closeMenu = () => {
     navToggle.classList.remove("active");
     navMenu.classList.remove("active");
+    navBackdrop.classList.remove("active");
+    document.body.classList.remove("menu-open");
     navToggle.setAttribute("aria-expanded", "false");
     navToggle.setAttribute("aria-label", "Open menu");
   };
@@ -218,6 +231,15 @@ const setupMobileNav = () => {
   navToggle.addEventListener("click", (e) => {
     e.stopPropagation();
     toggleMenu();
+  });
+
+  navBackdrop.addEventListener("click", closeMenu);
+
+  // Close on Escape key press
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && navMenu.classList.contains("active")) {
+      closeMenu();
+    }
   });
 
   // Close when clicking an anchor link

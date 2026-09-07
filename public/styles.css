@@ -64,6 +64,17 @@
   outline: 3px solid var(--secondary);
 }
 
+/* Universal Focus Ring Styling for Keyboard Navigation */
+:focus-visible {
+  outline: 2px solid var(--secondary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+[data-theme="light"] :focus-visible {
+  outline-color: var(--primary);
+}
+
 *,
 *::before,
 *::after {
@@ -229,13 +240,21 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  transition: transform 0.25s var(--ease-out), background-color 0.25s ease, border-color 0.25s ease;
   padding: 0;
 }
 
+.theme-toggle svg {
+  transition: transform 0.35s var(--ease-out), opacity 0.35s ease;
+}
+
 .theme-toggle:hover {
-  transform: scale(1.08);
+  transform: scale(1.1) rotate(12deg);
   background: rgba(255, 255, 255, 0.12);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95) rotate(-10deg);
 }
 
 [data-theme="light"] .theme-toggle:hover {
@@ -1278,23 +1297,29 @@ img {
   cursor: pointer;
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  opacity: 0.6;
-  transition: opacity 180ms ease, border-color 180ms ease, transform 180ms ease;
+  opacity: 0.65;
+  transition: opacity 220ms var(--ease-out), border-color 220ms ease, transform 220ms var(--ease-out), box-shadow 220ms ease;
 }
 
 .thumb-btn img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 220ms ease;
 }
 
 .thumb-btn:hover {
-  opacity: 0.9;
+  opacity: 0.92;
   transform: translateY(-2px);
+}
+
+.thumb-btn:hover img {
+  transform: scale(1.05);
 }
 
 .thumb-btn.active {
   opacity: 1;
+  transform: translateY(-1px);
 }
 
 /* Artificer specific branding (Orange) */
@@ -1481,7 +1506,11 @@ img {
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(0, 0, 0, 0.18);
   overflow: hidden;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.tech-details:hover {
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 [data-theme="light"] .tech-details {
@@ -2109,6 +2138,27 @@ img {
     right: 0;
   }
 
+  /* Navigation Drawer Backdrop Overlay */
+  .nav-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 9, 20, 0.65);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease-out);
+    z-index: 999;
+  }
+
+  .nav-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  body.menu-open {
+    overflow: hidden !important;
+  }
+
   .nav-menu ul {
     flex-direction: column;
     align-items: flex-start;
@@ -2164,5 +2214,16 @@ img {
   .stagger-item {
     opacity: 1;
     transform: none;
+  }
+
+  .page-orb {
+    animation: none !important;
+  }
+
+  .theme-toggle:hover,
+  .btn:hover,
+  .thumb-btn:hover,
+  .social-link:hover {
+    transform: none !important;
   }
 }

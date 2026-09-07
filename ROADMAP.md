@@ -138,7 +138,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** create a clear hierarchy for hero, proof, projects, skills, background, and contact. Use spacing, typography, scale, and contrast to guide attention rather than decorative effects.
   - **Acceptance:** a first-time visitor can scan the page and understand the intended order of information; no section competes unnecessarily with the hero or featured projects.
 
-- [ ] **Navigation & Interaction Polish — Make the Site Feel Finished**
+- [x] **Navigation & Interaction Polish — Make the Site Feel Finished**
   - **Problem:** functional interactions can still feel like prototype controls.
   - **Goal:** audit navigation, theme toggle, image/avatar interactions, buttons, links, focus states, hover states, transitions, and mobile menu behavior. Add motion only where it communicates state or improves orientation.
   - **Acceptance:** interactions have clear feedback, keyboard focus is visible, reduced-motion preferences are respected, and no interaction feels decorative at the expense of usability.
