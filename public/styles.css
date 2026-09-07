@@ -452,6 +452,17 @@ img {
   background: rgba(255, 255, 255, 0.04);
 }
 
+[data-theme="light"] .btn-ghost {
+  border-color: rgba(0, 0, 0, 0.18);
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="light"] .btn-ghost:hover {
+  background: rgba(0, 0, 0, 0.07);
+  border-color: rgba(0, 0, 0, 0.28);
+}
+
 .nav-share-highlight {
   color: var(--secondary) !important;
   border: 1px dashed rgba(125, 249, 208, 0.4);
@@ -1575,26 +1586,174 @@ img {
   color: rgba(238, 247, 255, 0.72);
 }
 
+/* Project CTA Banner */
+.project-cta-banner {
+  margin-top: 2.5rem;
+  padding: 2.2rem;
+  border-radius: var(--radius-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  border: 1px solid rgba(125, 249, 208, 0.25);
+  background:
+    radial-gradient(circle at top right, rgba(125, 249, 208, 0.08), transparent 45%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+}
+
+[data-theme="light"] .project-cta-banner {
+  border-color: rgba(14, 112, 84, 0.25);
+  background:
+    radial-gradient(circle at top right, rgba(14, 112, 84, 0.06), transparent 45%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(243, 237, 228, 0.8));
+}
+
+.project-cta-content {
+  max-width: 65ch;
+}
+
+.project-cta-content h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.6rem;
+  margin: 0.5rem 0 0.8rem;
+  line-height: 1.2;
+}
+
+.project-cta-content p {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0;
+}
+
+.project-cta-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 220px;
+}
+
+@media (max-width: 980px) {
+  .project-cta-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .project-cta-actions {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 600px) {
+  .contact-pathways {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .footer {
   padding-bottom: 5rem;
 }
 
 .footer-panel {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 2rem;
-  padding: 1.7rem;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+  gap: 2.5rem;
+  padding: 2.5rem;
   background:
     linear-gradient(130deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03)),
     rgba(6, 14, 28, 0.82);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.footer-links {
+[data-theme="light"] .footer-panel {
+  background:
+    linear-gradient(130deg, rgba(255, 255, 255, 0.95), rgba(243, 237, 228, 0.85)),
+    var(--surface-strong);
+  border-color: var(--surface-border);
+}
+
+.contact-pathways {
   display: grid;
-  align-content: center;
-  gap: 0.8rem;
-  justify-items: start;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.2rem;
+  margin-top: 1.8rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="light"] .contact-pathways {
+  border-top-color: var(--surface-border);
+}
+
+.pathway-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.pathway-item strong {
+  font-size: 0.92rem;
+  color: var(--secondary);
+}
+
+.pathway-item span {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.footer-actions-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn-footer-primary {
+  width: 100%;
+  padding: 0.95rem 1.4rem;
+  font-size: 1.05rem;
+  box-shadow: 0 10px 25px rgba(255, 141, 92, 0.25);
+}
+
+.footer-social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="light"] .footer-social-links {
+  border-top-color: var(--surface-border);
+}
+
+.social-link {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.social-link:hover {
+  color: var(--secondary);
+  transform: translateX(3px);
+}
+
+.social-email-link {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.88rem;
+  margin-top: 0.2rem;
+  transition: color 0.2s ease;
+}
+
+.social-email-link:hover {
+  color: var(--text);
 }
 
 .reveal {

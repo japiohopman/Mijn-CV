@@ -116,7 +116,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
 
 ## Phase 4 — Conversion & Contact
 
-- [ ] **CTA Strategy — Give Every Visitor a Clear Next Step**
+- [x] **CTA Strategy — Give Every Visitor a Clear Next Step**
   - **Problem:** a strong portfolio can still fail if the visitor does not know what to do next.
   - **Goal:** define a primary contact action and appropriate secondary actions for employment, collaboration, or project discussion. Make CTA language specific and human rather than generic boilerplate where possible.
   - **Acceptance:** primary CTA is visually and semantically obvious; CTAs are consistent across relevant sections; keyboard and mobile interaction work correctly.
