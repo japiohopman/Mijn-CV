@@ -363,7 +363,7 @@ img {
 .section-head h2,
 .footer h2 {
   font-family: "Syne", sans-serif;
-  line-height: 0.97;
+  line-height: 0.98;
   margin: 0;
 }
 
@@ -388,6 +388,7 @@ img {
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-size: 0.76rem;
+  font-weight: 700;
 }
 
 .eyebrow,
@@ -609,11 +610,27 @@ img {
   margin-bottom: 2rem;
 }
 
-.section-heading h2,
 .section-head h2,
+#projecten .section-head h2 {
+  font-size: clamp(2.2rem, 4.2vw, 3.5rem);
+  max-width: 14ch;
+}
+
+.section-heading h2 {
+  font-size: clamp(1.85rem, 3.6vw, 2.75rem);
+  max-width: 16ch;
+}
+
 .footer h2 {
-  font-size: clamp(2rem, 4vw, 3.35rem);
-  max-width: 13ch;
+  font-size: clamp(2rem, 4vw, 3.1rem);
+  max-width: 15ch;
+}
+
+.section-heading p,
+.section-head p {
+  font-size: clamp(1rem, 1.8vw, 1.12rem);
+  line-height: 1.65;
+  max-width: 65ch;
 }
 
 .split-heading {

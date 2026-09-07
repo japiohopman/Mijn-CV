@@ -133,7 +133,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
 
 ## Phase 5 — Visual System & UX
 
-- [ ] **Visual Hierarchy Pass — Establish a Deliberate Reading Rhythm**
+- [x] **Visual Hierarchy Pass — Establish a Deliberate Reading Rhythm**
   - **Problem:** content quality is weakened when every section has equal visual weight.
   - **Goal:** create a clear hierarchy for hero, proof, projects, skills, background, and contact. Use spacing, typography, scale, and contrast to guide attention rather than decorative effects.
   - **Acceptance:** a first-time visitor can scan the page and understand the intended order of information; no section competes unnecessarily with the hero or featured projects.
