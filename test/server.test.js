@@ -117,7 +117,8 @@ async function runTests() {
           'property="og:image" content="http://127.0.0.1:3099/images/jaap-Hopman.jpg"',
           'property="og:url" content="http://127.0.0.1:3099/"',
           'name="twitter:card" content="summary_large_image"',
-          'rel="canonical" href="http://127.0.0.1:3099/"'
+          'rel="canonical" href="http://127.0.0.1:3099/"',
+          'href="/keuken-cv"'
         ]
       },
       {
@@ -141,7 +142,9 @@ async function runTests() {
           'property="og:image" content="http://127.0.0.1:3099/images/jaap-Hopman.jpg"',
           'property="og:url" content="http://127.0.0.1:3099/keuken-cv"',
           'name="twitter:card" content="summary_large_image"',
-          'rel="canonical" href="http://127.0.0.1:3099/keuken-cv"'
+          'rel="canonical" href="http://127.0.0.1:3099/keuken-cv"',
+          'Twee Werelden, Eén Executiementaliteit',
+          'Bekijk Developer Portfolio'
         ]
       }
     ];

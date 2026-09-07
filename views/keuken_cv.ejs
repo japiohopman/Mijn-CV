@@ -151,6 +151,57 @@
         font-weight: 500;
       }
 
+      /* Bridge Callout Banner */
+      .keuken-bridge-banner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1.5rem;
+        background: radial-gradient(circle at top left, rgba(255, 141, 92, 0.12), transparent 50%),
+                    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+        border: 1px solid rgba(255, 141, 92, 0.3);
+        border-radius: var(--radius-lg);
+        padding: 1.25rem 1.75rem;
+        margin-bottom: 2rem;
+      }
+
+      [data-theme="light"] .keuken-bridge-banner {
+        background: radial-gradient(circle at top left, rgba(214, 92, 39, 0.08), transparent 50%),
+                    linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(243, 237, 228, 0.85));
+        border-color: rgba(214, 92, 39, 0.3);
+      }
+
+      .keuken-bridge-text strong {
+        display: block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 0.35rem;
+      }
+
+      .keuken-bridge-text p {
+        margin: 0;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        color: var(--muted);
+      }
+
+      .btn-bridge-nav {
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      @media (max-width: 760px) {
+        .keuken-bridge-banner {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .btn-bridge-nav {
+          width: 100%;
+        }
+      }
+
       /* Main Column */
       .keuken-content {
         width: 68%;
@@ -255,7 +306,8 @@
         .page-orb,
         .nav,
         .footer,
-        .keuken-cv-header {
+        .keuken-cv-header,
+        .keuken-bridge-banner {
           display: none !important;
         }
 
@@ -367,6 +419,18 @@
             Print / PDF Download
           </button>
         </header>
+
+        <div class="keuken-bridge-banner">
+          <div class="keuken-bridge-text">
+            <strong>Twee Werelden, Eén Executiementaliteit</strong>
+            <p>
+              Meer dan 25 jaar ervaring in professionele keukens vormt het fundament van mijn werkethiek als developer. De hectiek van een keuken vraagt om strakke voorbereiding (mise-en-place), razendsnel schakelen onder druk en absolute verantwoordelijkheid voor het eindresultaat.
+            </p>
+          </div>
+          <a href="/" class="btn btn-primary btn-bridge-nav">
+            Bekijk Developer Portfolio &rarr;
+          </a>
+        </div>
 
         <article class="keuken-cv-paper">
           <!-- Left Sidebar -->

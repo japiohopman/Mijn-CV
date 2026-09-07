@@ -126,7 +126,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** audit the current contact path and improve clarity, feedback, validation, error handling, spam resistance, and privacy. Reuse existing infrastructure where possible instead of adding unnecessary services.
   - **Acceptance:** successful and failed submissions have clear feedback; no sensitive data is unnecessarily exposed or logged; experience works on mobile and desktop.
 
-- [ ] **Kitchen CV Positioning — Connect Both Professional Worlds**
+- [x] **Kitchen CV Positioning — Connect Both Professional Worlds**
   - **Problem:** the kitchen CV currently exists as a separate route and can feel disconnected from the developer identity.
   - **Goal:** improve the relationship between the main portfolio and the kitchen/hospitality CV so the career history feels intentional. Present hospitality leadership as valuable professional experience and context, not unrelated legacy material.
   - **Acceptance:** navigation between the two profiles is clear; kitchen CV remains accurate and printable; main portfolio explains the relationship without forcing one career story onto every visitor.
