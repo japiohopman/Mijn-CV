@@ -99,7 +99,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
 
 ## Phase 3 — Evidence & Projects
 
-- [ ] **Project Portfolio Structure — Lead with Evidence, Not Technology Names**
+- [x] **Project Portfolio Structure — Lead with Evidence, Not Technology Names**
   - **Problem:** projects need to demonstrate capability rather than simply list what was used to build them.
   - **Goal:** establish a reusable project-card/detail structure covering what the project is, the problem or goal, Jaap's role, what was built, relevant technology, and the interesting technical or creative challenge.
   - **Acceptance:** featured projects use a consistent information hierarchy; each project communicates its value without requiring the visitor to understand the technology first.

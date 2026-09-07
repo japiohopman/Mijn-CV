@@ -74,14 +74,25 @@ const createRepoCard = (repo) => {
   const card = document.createElement("article");
   card.className = "project-card stagger-item visible";
 
+  const languageChip = repo.language ? `<span class="tech-chip">${repo.language}</span>` : "";
+
   card.innerHTML = `
     <div class="project-topline">
-      <span class="project-badge">GitHub</span>
-      <span class="project-type">${repo.language || "Code project"}</span>
+      <span class="project-badge">GitHub Repo</span>
+      <span class="project-type">${repo.language || "Open Source"}</span>
     </div>
     <h3>${repo.name}</h3>
-    <p>${repo.description}</p>
-    <a href="${repo.html_url}" target="_blank" rel="noreferrer">Code op GitHub &rarr;</a>
+    <p class="hero-project-desc" style="font-size: 0.95rem; margin-bottom: 1.2rem;">${repo.description}</p>
+    <div class="project-tech-stack" style="margin-bottom: 1.2rem; padding: 0.5rem 0.8rem;">
+      <span class="tech-label">Stack:</span>
+      <div class="tech-chips">
+        ${languageChip || '<span class="tech-chip">JavaScript</span>'}
+        <span class="tech-chip">Open Source</span>
+      </div>
+    </div>
+    <div class="project-links">
+      <a href="${repo.html_url}" target="_blank" rel="noreferrer" class="btn-project-link secondary-link" style="padding: 0.5rem 1rem; font-size: 0.88rem;">Code op GitHub &rarr;</a>
+    </div>
   `;
 
   return card;
