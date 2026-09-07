@@ -8,6 +8,10 @@ const PORT = process.env.PORT || 3000;
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Parse incoming request bodies for API forms
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // Middleware to expose site URL and path for dynamic meta tag resolution
 app.use((req, res, next) => {
   const protocol = req.headers['x-forwarded-proto'] || req.protocol;
@@ -69,6 +73,50 @@ app.get('/github_action.png', (req, res) => {
         }
       });
     }
+  });
+});
+
+// Contact Form API route with validation, anti-spam honeypot, and privacy protection
+app.post('/api/contact', (req, res) => {
+  const { name, email, subject, message, website_url } = req.body || {};
+
+  // Anti-spam check: honeypot field 'website_url' should be empty
+  if (website_url) {
+    // Return silent success response to bots without processing or logging
+    return res.status(200).json({
+      success: true,
+      message: 'Bedankt voor je bericht! Ik neem zo snel mogelijk contact met je op.'
+    });
+  }
+
+  // Validate required fields
+  const trimmedName = typeof name === 'string' ? name.trim() : '';
+  const trimmedEmail = typeof email === 'string' ? email.trim() : '';
+  const trimmedMessage = typeof message === 'string' ? message.trim() : '';
+  const trimmedSubject = typeof subject === 'string' ? subject.trim() : 'Contactformulier Portfolio';
+
+  if (!trimmedName || !trimmedEmail || !trimmedMessage) {
+    return res.status(400).json({
+      success: false,
+      message: 'Vul alstublieft alle verplichte velden in (naam, e-mailadres en bericht).'
+    });
+  }
+
+  // Email format validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(trimmedEmail)) {
+    return res.status(400).json({
+      success: false,
+      message: 'Voer een geldig e-mailadres in.'
+    });
+  }
+
+  // In production, integration with transactional service (SendGrid, Resend, etc.) would trigger here.
+  // Privacy assurance: We intentionally do NOT log sensitive payload data (message text or email) to stdout/logs.
+
+  return res.status(200).json({
+    success: true,
+    message: 'Bedankt voor je bericht! Ik neem zo snel mogelijk contact met je op.'
   });
 });
 

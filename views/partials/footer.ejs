@@ -7,6 +7,7 @@
         Beschikbaar vanuit Amsterdam voor creatieve front-end opdrachten, AI-prototypes,
         game systems en digitale producten met karakter.
       </p>
+
       <div class="contact-pathways">
         <div class="pathway-item">
           <strong>Vaste rol of freelance opdracht?</strong>
@@ -17,26 +18,80 @@
           <span>Van sparren over architectuur tot het bouwen van een werkend prototype.</span>
         </div>
       </div>
+
+      <div class="footer-direct-methods">
+        <div class="email-copy-wrapper">
+          <a href="mailto:japiehopman@gmail.com" class="social-email-link" aria-label="E-mail direct naar japiehopman@gmail.com">
+            japiehopman@gmail.com
+          </a>
+          <button id="copyEmailBtn" class="btn-copy-email" type="button" aria-label="Kopieer e-mailadres naar klembord">
+            <svg id="copyEmailIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <svg id="checkEmailIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" style="display: none;">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span id="copyEmailText">Kopieer</span>
+          </button>
+        </div>
+
+        <div class="footer-social-links">
+          <a href="https://www.linkedin.com/in/jaap-hopman-9117b619b/" target="_blank" rel="noreferrer" class="social-link" aria-label="LinkedIn Profiel van Jaap Hopman">
+            LinkedIn &rarr;
+          </a>
+          <a href="https://github.com/japiohopman" target="_blank" rel="noreferrer" class="social-link" aria-label="GitHub Profiel van Jaap Hopman">
+            GitHub &rarr;
+          </a>
+          <a href="/share" class="social-link share-link-highlight" aria-label="Deel dit CV of open QR code">
+            Deel CV &amp; QR-code &rarr;
+          </a>
+        </div>
+      </div>
     </div>
 
-    <div class="footer-actions-panel">
-      <a href="mailto:japiehopman@gmail.com" class="btn btn-primary btn-footer-primary" aria-label="Stuur direct een e-mail naar Jaap Hopman">
-        Stuur een e-mail &rarr;
-      </a>
-      <a href="/share" class="btn btn-ghost share-btn-accent" aria-label="Deel dit CV of open QR code">
-        Deel CV &amp; QR-code
-      </a>
-      <div class="footer-social-links">
-        <a href="https://www.linkedin.com/in/jaap-hopman-9117b619b/" target="_blank" rel="noreferrer" class="social-link" aria-label="LinkedIn Profiel van Jaap Hopman">
-          LinkedIn &rarr;
-        </a>
-        <a href="https://github.com/japiohopman" target="_blank" rel="noreferrer" class="social-link" aria-label="GitHub Profiel van Jaap Hopman">
-          GitHub &rarr;
-        </a>
-        <a href="mailto:japiehopman@gmail.com" class="social-email-link">
-          japiehopman@gmail.com
-        </a>
-      </div>
+    <div class="footer-form-wrapper">
+      <form id="contactForm" class="contact-form" action="/api/contact" method="POST" novalidate>
+        <h3 class="form-title">Direct bericht sturen</h3>
+
+        <!-- Anti-spam Honeypot field (hidden from real users) -->
+        <div class="honeypot-field" aria-hidden="true" style="display: none !important;">
+          <label for="website_url">Laat dit veld leeg</label>
+          <input type="text" id="website_url" name="website_url" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+          <label for="contact-name">Naam <span class="required-star">*</span></label>
+          <input type="text" id="contact-name" name="name" class="form-input" placeholder="Je naam of organisatie" required />
+        </div>
+
+        <div class="form-group">
+          <label for="contact-email">E-mailadres <span class="required-star">*</span></label>
+          <input type="email" id="contact-email" name="email" class="form-input" placeholder="naam@voorbeeld.nl" required />
+        </div>
+
+        <div class="form-group">
+          <label for="contact-subject">Onderwerp</label>
+          <select id="contact-subject" name="subject" class="form-select">
+            <option value="Freelance Opdracht / Project">Freelance Opdracht / Project</option>
+            <option value="Vaste Rol / Vacature">Vaste Rol / Vacature</option>
+            <option value="Samenwerking / AI Prototype">Samenwerking / AI Prototype</option>
+            <option value="Overig / Sparren">Overig / Sparren</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="contact-message">Bericht <span class="required-star">*</span></label>
+          <textarea id="contact-message" name="message" class="form-textarea" rows="4" placeholder="Waar kan ik je mee helpen?" required></textarea>
+        </div>
+
+        <div id="contactFeedback" class="form-feedback" aria-live="polite"></div>
+
+        <button type="submit" id="contactSubmitBtn" class="btn btn-primary btn-submit">
+          <span class="btn-text">Verstuur bericht &rarr;</span>
+          <span class="btn-spinner" aria-hidden="true" style="display: none;">Versturen...</span>
+        </button>
+      </form>
     </div>
   </div>
 </footer>

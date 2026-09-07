@@ -31,6 +31,36 @@ function fetchRoute(path) {
   });
 }
 
+function postJSON(path, payload) {
+  return new Promise((resolve, reject) => {
+    const data = JSON.stringify(payload);
+    const req = http.request(`http://127.0.0.1:${PORT}${path}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(data)
+      }
+    }, (res) => {
+      let body = '';
+      res.on('data', (chunk) => { body += chunk; });
+      res.on('end', () => {
+        try {
+          resolve({ statusCode: res.statusCode, json: JSON.parse(body) });
+        } catch {
+          resolve({ statusCode: res.statusCode, body });
+        }
+      });
+    });
+    req.on('error', reject);
+    req.setTimeout(2000, () => {
+      req.destroy();
+      reject(new Error('Request timeout'));
+    });
+    req.write(data);
+    req.end();
+  });
+}
+
 async function waitForServer(maxAttempts = 20, intervalMs = 200) {
   for (let i = 0; i < maxAttempts; i++) {
     try {
@@ -142,10 +172,53 @@ async function runTests() {
       }
     }
 
+    console.log('\nChecking Contact API endpoint (/api/contact)...');
+
+    // Test 1: Valid submission
+    const validRes = await postJSON('/api/contact', {
+      name: 'Test Afzender',
+      email: 'test@example.com',
+      subject: 'Freelance Opdracht / Project',
+      message: 'Dit is een testbericht voor de contact experience.'
+    });
+    if (validRes.statusCode === 200 && validRes.json && validRes.json.success === true) {
+      console.log('  ✓ Valid contact submission returned HTTP 200 with success JSON');
+    } else {
+      console.error(`  ✗ Valid contact submission failed: status ${validRes.statusCode}`);
+      success = false;
+    }
+
+    // Test 2: Missing fields
+    const invalidRes = await postJSON('/api/contact', {
+      name: '',
+      email: 'invalid-email',
+      message: ''
+    });
+    if (invalidRes.statusCode === 400 && invalidRes.json && invalidRes.json.success === false) {
+      console.log('  ✓ Invalid/missing fields contact submission returned HTTP 400 error JSON');
+    } else {
+      console.error(`  ✗ Invalid contact submission check failed: status ${invalidRes.statusCode}`);
+      success = false;
+    }
+
+    // Test 3: Anti-spam honeypot
+    const spamRes = await postJSON('/api/contact', {
+      name: 'Bot User',
+      email: 'spammer@bot.com',
+      message: 'Buy cheap watches',
+      website_url: 'http://spam.com'
+    });
+    if (spamRes.statusCode === 200 && spamRes.json && spamRes.json.success === true) {
+      console.log('  ✓ Honeypot spam submission handled silently with HTTP 200');
+    } else {
+      console.error(`  ✗ Honeypot spam submission check failed: status ${spamRes.statusCode}`);
+      success = false;
+    }
+
     if (!success) {
       exitCode = 1;
     } else {
-      console.log('\nAll Express route, asset, and SEO OpenGraph tests passed successfully!');
+      console.log('\nAll Express route, asset, SEO OpenGraph, and Contact API tests passed successfully!');
     }
   } catch (err) {
     console.error(`✗ Server health check failed: ${err.message}`);

@@ -236,5 +236,108 @@ const setupMobileNav = () => {
   });
 };
 
+// Setup Contact Form AJAX submission and Copy Email button logic
+const setupContactForm = () => {
+  const contactForm = document.getElementById("contactForm");
+  const copyEmailBtn = document.getElementById("copyEmailBtn");
+
+  if (copyEmailBtn) {
+    const copyEmailIcon = document.getElementById("copyEmailIcon");
+    const checkEmailIcon = document.getElementById("checkEmailIcon");
+    const copyEmailText = document.getElementById("copyEmailText");
+
+    copyEmailBtn.addEventListener("click", () => {
+      const emailAddress = "japiehopman@gmail.com";
+      navigator.clipboard.writeText(emailAddress).then(() => {
+        copyEmailBtn.classList.add("success");
+        if (copyEmailIcon) copyEmailIcon.style.display = "none";
+        if (checkEmailIcon) checkEmailIcon.style.display = "inline-block";
+        if (copyEmailText) copyEmailText.textContent = "Gekopieerd!";
+
+        setTimeout(() => {
+          copyEmailBtn.classList.remove("success");
+          if (copyEmailIcon) copyEmailIcon.style.display = "inline-block";
+          if (checkEmailIcon) checkEmailIcon.style.display = "none";
+          if (copyEmailText) copyEmailText.textContent = "Kopieer";
+        }, 2200);
+      }).catch((err) => {
+        console.error("Kon e-mailadres niet kopiëren:", err);
+      });
+    });
+  }
+
+  if (contactForm) {
+    const submitBtn = document.getElementById("contactSubmitBtn");
+    const feedbackDiv = document.getElementById("contactFeedback");
+    const btnText = submitBtn ? submitBtn.querySelector(".btn-text") : null;
+    const btnSpinner = submitBtn ? submitBtn.querySelector(".btn-spinner") : null;
+
+    contactForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if (!feedbackDiv) return;
+
+      // Clear previous feedback state
+      feedbackDiv.className = "form-feedback";
+      feedbackDiv.style.display = "none";
+      feedbackDiv.textContent = "";
+
+      const formData = new FormData(contactForm);
+      const data = {
+        name: formData.get("name"),
+        email: formData.get("email"),
+        subject: formData.get("subject"),
+        message: formData.get("message"),
+        website_url: formData.get("website_url") // Honeypot field
+      };
+
+      // Basic client-side validation
+      if (!data.name || !data.email || !data.message) {
+        feedbackDiv.textContent = "Vul alstublieft alle verplichte velden in.";
+        feedbackDiv.classList.add("error");
+        feedbackDiv.style.display = "block";
+        return;
+      }
+
+      // UI Loading state
+      if (submitBtn) submitBtn.disabled = true;
+      if (btnText) btnText.style.display = "none";
+      if (btnSpinner) btnSpinner.style.display = "inline-block";
+
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          feedbackDiv.textContent = result.message || "Bedankt voor je bericht!";
+          feedbackDiv.classList.add("success");
+          feedbackDiv.style.display = "block";
+          contactForm.reset();
+        } else {
+          feedbackDiv.textContent = result.message || "Er is een fout opgetreden. Probeer het opnieuw.";
+          feedbackDiv.classList.add("error");
+          feedbackDiv.style.display = "block";
+        }
+      } catch (err) {
+        feedbackDiv.textContent = "Netwerkfout: kon het bericht niet verzenden. Probeer het later nog eens.";
+        feedbackDiv.classList.add("error");
+        feedbackDiv.style.display = "block";
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+        if (btnText) btnText.style.display = "inline-block";
+        if (btnSpinner) btnSpinner.style.display = "none";
+      }
+    });
+  }
+};
+
 setupThemeToggle();
 setupMobileNav();
+setupContactForm();

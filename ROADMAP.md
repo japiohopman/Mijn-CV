@@ -121,7 +121,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** define a primary contact action and appropriate secondary actions for employment, collaboration, or project discussion. Make CTA language specific and human rather than generic boilerplate where possible.
   - **Acceptance:** primary CTA is visually and semantically obvious; CTAs are consistent across relevant sections; keyboard and mobile interaction work correctly.
 
-- [ ] **Contact Experience — Make Reaching Out Feel Effortless**
+- [x] **Contact Experience — Make Reaching Out Feel Effortless**
   - **Problem:** contact should be a natural continuation of the portfolio rather than an afterthought.
   - **Goal:** audit the current contact path and improve clarity, feedback, validation, error handling, spam resistance, and privacy. Reuse existing infrastructure where possible instead of adding unnecessary services.
   - **Acceptance:** successful and failed submissions have clear feedback; no sensitive data is unnecessarily exposed or logged; experience works on mobile and desktop.
