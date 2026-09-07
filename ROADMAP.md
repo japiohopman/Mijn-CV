@@ -143,7 +143,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** audit navigation, theme toggle, image/avatar interactions, buttons, links, focus states, hover states, transitions, and mobile menu behavior. Add motion only where it communicates state or improves orientation.
   - **Acceptance:** interactions have clear feedback, keyboard focus is visible, reduced-motion preferences are respected, and no interaction feels decorative at the expense of usability.
 
-- [ ] **Responsive Layout Audit — 375px to Large Desktop**
+- [x] **Responsive Layout Audit — 375px to Large Desktop**
   - **Problem:** a portfolio is often viewed first on mobile, while desktop needs to communicate polish and confidence.
   - **Goal:** systematically test 375px, 390px, tablet widths, 1280px+, and wide desktop layouts. Fix wrapping, overflow, image cropping, grid behavior, typography, spacing, and touch targets.
   - **Acceptance:** no horizontal scrolling or clipped essential content; grids use safe sizing; navigation and CTAs remain usable at all tested widths.

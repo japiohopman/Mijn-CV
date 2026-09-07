@@ -233,8 +233,10 @@ img {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--surface-border);
   color: var(--text);
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
@@ -283,8 +285,10 @@ img {
   justify-content: center;
   align-items: center;
   gap: 5px;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   padding: 0;
   z-index: 1001;
 }
@@ -1285,7 +1289,7 @@ img {
 
 .gallery-thumbs {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.6rem;
 }
 
@@ -1296,6 +1300,8 @@ img {
   padding: 0;
   cursor: pointer;
   aspect-ratio: 16 / 10;
+  min-height: 44px;
+  min-width: 44px;
   overflow: hidden;
   opacity: 0.65;
   transition: opacity 220ms var(--ease-out), border-color 220ms ease, transform 220ms var(--ease-out), box-shadow 220ms ease;
@@ -1533,6 +1539,7 @@ img {
   align-items: center;
   justify-content: space-between;
   padding: 0.7rem 1rem;
+  min-height: 44px;
   font-size: 0.88rem;
   font-weight: 600;
   color: var(--secondary);
@@ -1635,6 +1642,7 @@ img {
   align-items: center;
   justify-content: center;
   padding: 0.7rem 1.3rem;
+  min-height: 44px;
   border-radius: 999px;
   font-weight: 700;
   text-decoration: none;
@@ -1743,6 +1751,16 @@ img {
 @media (max-width: 600px) {
   .contact-pathways {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-project-inner,
+  .chess-card,
+  .github-action-card,
+  .footer-panel,
+  .glass-card {
+    padding: 1.25rem !important;
   }
 }
 
@@ -1933,8 +1951,13 @@ img {
   border-radius: var(--radius-sm);
   color: var(--text);
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.form-input,
+.form-select {
+  min-height: 44px;
 }
 
 [data-theme="light"] .form-input,
@@ -2109,7 +2132,7 @@ img {
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 880px) {
   .ervaring-bridge-callout {
     flex-direction: column;
     align-items: flex-start;
