@@ -87,7 +87,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** rewrite the hero so a visitor can understand who Jaap is, what he builds, and what makes his approach distinctive within a few seconds. Preserve the authentic connection between software, creative work, and professional kitchen experience where it strengthens the story.
   - **Acceptance:** hero has a strong primary statement, concise supporting copy, and clear primary/secondary actions; copy is confident rather than generic; desktop and mobile remain balanced.
 
-- [ ] **About Narrative — Turn a Biography into a Professional Story**
+- [x] **About Narrative — Turn a Biography into a Professional Story**
   - **Problem:** the current biography contains useful material but can read as a collection of background facts rather than a deliberate professional narrative.
   - **Goal:** rewrite the About section around the progression from professional kitchen work and creative disciplines into software development, emphasizing transferable strengths such as execution, systems thinking, preparation, adaptability, and making things real.
   - **Acceptance:** the section reads naturally, has a clear narrative arc, avoids repetition, and makes the unusual career path an advantage rather than an apology.
