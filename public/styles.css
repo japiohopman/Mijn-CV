@@ -1398,6 +1398,92 @@ img {
   color: var(--muted);
 }
 
+/* Progressive Technical Details (<details>) */
+.tech-details {
+  margin-bottom: 1.2rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+[data-theme="light"] .tech-details {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: var(--surface-border);
+}
+
+.tech-details[open] {
+  border-color: rgba(125, 249, 208, 0.3);
+  background: rgba(0, 0, 0, 0.28);
+}
+
+[data-theme="light"] .tech-details[open] {
+  border-color: rgba(14, 112, 84, 0.3);
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.tech-details-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--secondary);
+  cursor: pointer;
+  user-select: none;
+  list-style: none; /* Hide default webkit marker */
+}
+
+.tech-details-summary::-webkit-details-marker {
+  display: none;
+}
+
+.tech-details-summary:hover,
+.tech-details-summary:focus-visible {
+  color: var(--text);
+  outline: none;
+}
+
+.summary-chevron {
+  font-size: 0.95rem;
+  transition: transform 0.25s var(--ease-out);
+}
+
+.tech-details[open] .summary-chevron {
+  transform: rotate(180deg);
+}
+
+.tech-details-content {
+  padding: 0 1rem 0.9rem 1rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  margin-top: 0.2rem;
+  padding-top: 0.75rem;
+}
+
+[data-theme="light"] .tech-details-content {
+  border-top-color: var(--surface-border);
+}
+
+.tech-details-content ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.tech-details-content li {
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.tech-details-content li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
 .project-tech-stack {
   display: flex;
   align-items: center;

@@ -109,7 +109,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** identify the most convincing existing projects and rewrite their descriptions for clarity, specificity, and evidence. Do not fabricate metrics or outcomes; where evidence is missing, describe the implementation honestly.
   - **Acceptance:** a visitor can understand the purpose and significance of every featured project quickly; the strongest work receives the strongest visual and editorial emphasis.
 
-- [ ] **Project Detail & Technical Credibility Pass**
+- [x] **Project Detail & Technical Credibility Pass**
   - **Problem:** technically curious visitors need enough substance to trust the work without turning the portfolio into documentation.
   - **Goal:** add concise technical context where useful: architecture, implementation decisions, AI/tooling use, interaction design, or constraints. Keep detail progressive so non-technical visitors are not overwhelmed.
   - **Acceptance:** selected projects contain credible technical depth with clear hierarchy and no unnecessary implementation dump.
