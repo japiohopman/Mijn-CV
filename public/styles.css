@@ -1023,6 +1023,54 @@ img {
   padding-top: 0.15rem;
 }
 
+.story-link {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.story-link:hover,
+.story-link:focus-visible {
+  color: var(--secondary);
+  transform: translateX(3px);
+}
+
+.ervaring-bridge-callout {
+  margin-top: 2rem;
+  padding: 1.5rem 1.8rem;
+  border-radius: var(--radius-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  border: 1px dashed rgba(255, 141, 92, 0.3);
+  background: rgba(255, 141, 92, 0.05);
+}
+
+[data-theme="light"] .ervaring-bridge-callout {
+  border-color: rgba(214, 92, 39, 0.3);
+  background: rgba(214, 92, 39, 0.04);
+}
+
+.ervaring-bridge-info strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+
+.ervaring-bridge-info p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
 .skills-layout {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -2016,6 +2064,11 @@ img {
 }
 
 @media (max-width: 760px) {
+  .ervaring-bridge-callout {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .nav-toggle {
     display: flex;
   }
