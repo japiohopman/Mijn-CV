@@ -148,7 +148,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** systematically test 375px, 390px, tablet widths, 1280px+, and wide desktop layouts. Fix wrapping, overflow, image cropping, grid behavior, typography, spacing, and touch targets.
   - **Acceptance:** no horizontal scrolling or clipped essential content; grids use safe sizing; navigation and CTAs remain usable at all tested widths.
 
-- [ ] **Typography & Content Density Pass**
+- [x] **Typography & Content Density Pass**
   - **Problem:** strong copy loses impact when paragraphs, labels, and headings are poorly paced.
   - **Goal:** tune font sizes, line lengths, paragraph spacing, heading rhythm, labels, metadata, and content density. Keep the visual identity restrained and professional rather than turning the portfolio into a UI showcase.
   - **Acceptance:** long-form text is comfortable to read, headings establish clear hierarchy, and project information remains scannable.
