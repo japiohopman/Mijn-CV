@@ -165,7 +165,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** measure the real loading path and identify the largest remaining costs in images, fonts, CSS, JavaScript, server response, and rendering. Optimize the highest-impact issues first without degrading quality.
   - **Acceptance:** PR includes concrete measurements or repeatable checks, demonstrates improvement where possible, and avoids speculative micro-optimizations.
 
-- [ ] **Accessibility Verification — Move Beyond Markup**
+- [x] **Accessibility Verification — Move Beyond Markup**
   - **Problem:** semantic HTML and ARIA attributes alone do not prove an accessible experience.
   - **Goal:** perform a focused keyboard, focus-order, contrast, reduced-motion, form, image, and screen-reader-oriented audit of actual pages.
   - **Acceptance:** critical flows are keyboard usable, focus is understandable, interactive state is exposed correctly, and known accessibility issues are either fixed or documented.
