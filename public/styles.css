@@ -1016,10 +1016,57 @@ img {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.skill-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.skill-column h3 {
+  font-family: "Syne", sans-serif;
+  font-size: 1.5rem;
+  margin: 0.4rem 0 0.5rem;
+}
+
+.skill-column-desc {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  margin-bottom: 1.2rem;
+}
+
+.skill-column-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+}
+
+.primary-badge {
+  background: rgba(255, 141, 92, 0.15);
+  color: var(--primary);
+  border: 1px solid rgba(255, 141, 92, 0.3);
+}
+
+.secondary-badge {
+  background: rgba(125, 249, 208, 0.15);
+  color: var(--secondary);
+  border: 1px solid rgba(125, 249, 208, 0.3);
+}
+
+.tertiary-badge {
+  background: rgba(125, 148, 255, 0.15);
+  color: var(--tertiary);
+  border: 1px solid rgba(125, 148, 255, 0.3);
+}
+
 .chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0.7rem;
+  margin-top: auto;
 }
 
 .chips span {
@@ -1027,7 +1074,24 @@ img {
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.04);
+  font-size: 0.88rem;
   transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.chips span.chip-primary {
+  border-color: rgba(255, 141, 92, 0.35);
+  background: rgba(255, 141, 92, 0.08);
+  font-weight: 600;
+}
+
+[data-theme="light"] .chips span {
+  border-color: var(--surface-border);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="light"] .chips span.chip-primary {
+  border-color: rgba(214, 92, 39, 0.35);
+  background: rgba(214, 92, 39, 0.08);
 }
 
 .chips span:hover {
