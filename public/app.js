@@ -364,6 +364,119 @@ const setupContactForm = () => {
   }
 };
 
+// On-demand Project Demo Iframe Trigger & Escape Handler
+const setupProjectDemos = () => {
+  const demoTriggers = document.querySelectorAll(".btn-demo-trigger");
+  const closeBtns = document.querySelectorAll(".btn-close-demo");
+
+  demoTriggers.forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      const targetId = trigger.dataset.demoTarget;
+      const demoContainer = document.getElementById(targetId);
+
+      if (!demoContainer) return;
+
+      const iframe = demoContainer.querySelector(".demo-iframe");
+      const loading = demoContainer.querySelector(".demo-loading");
+
+      demoContainer.style.display = "block";
+      demoContainer.setAttribute("aria-hidden", "false");
+
+      // Set iframe src on-demand if not already loaded
+      if (iframe && iframe.dataset.src && (!iframe.src || iframe.src === "about:blank")) {
+        if (loading) loading.style.opacity = "1";
+
+        iframe.src = iframe.dataset.src;
+
+        iframe.onload = () => {
+          if (loading) {
+            loading.style.opacity = "0";
+            setTimeout(() => {
+              loading.style.display = "none";
+            }, 300);
+          }
+        };
+      }
+
+      // Scroll demo smoothly into view if on mobile
+      if (window.innerWidth < 880) {
+        demoContainer.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    });
+  });
+
+  closeBtns.forEach((closeBtn) => {
+    closeBtn.addEventListener("click", () => {
+      const targetId = closeBtn.dataset.demoTarget;
+      const demoContainer = document.getElementById(targetId);
+
+      if (demoContainer) {
+        demoContainer.style.display = "none";
+        demoContainer.setAttribute("aria-hidden", "true");
+      }
+    });
+  });
+};
+
+// Artificer Interactive Dice & LLM State Simulator
+const setupArtificerDiceSim = () => {
+  const rollBtn = document.getElementById("rollDiceBtn");
+  const checkSelect = document.getElementById("simCheckType");
+  const outputDiv = document.getElementById("simOutput");
+
+  if (!rollBtn || !checkSelect || !outputDiv) return;
+
+  const checks = {
+    perception: { name: "Perception Check (WIS)", dc: 14, mod: 3, stat: "Wisdom" },
+    stealth: { name: "Stealth Check (DEX)", dc: 12, mod: 4, stat: "Dexterity" },
+    attack: { name: "Longsword Attack (STR)", dc: 15, mod: 5, stat: "Strength" },
+    arcana: { name: "Arcana Knowledge (INT)", dc: 16, mod: 2, stat: "Intelligence" }
+  };
+
+  rollBtn.addEventListener("click", () => {
+    const selectedKey = checkSelect.value;
+    const config = checks[selectedKey] || checks.perception;
+
+    // Simulate 1d20
+    const rawRoll = Math.floor(Math.random() * 20) + 1;
+    const totalRoll = rawRoll + config.mod;
+    const isSuccess = totalRoll >= config.dc;
+    const isCrit = rawRoll === 20;
+
+    let resClass = isSuccess ? "sim-res-success" : "sim-res-fail";
+    let resLabel = isSuccess ? "✅ SLAGSLAAGD" : "❌ MISLUKT";
+
+    if (isCrit) {
+      resClass = "sim-res-crit";
+      resLabel = "💥 CRITICAL SUCCESS!";
+    }
+
+    const statePayload = {
+      event: "DICE_ROLL_RESOLVED",
+      timestamp: new Date().toISOString().split("T")[1].slice(0, 8),
+      check_type: config.name,
+      dc_threshold: config.dc,
+      dice_breakdown: {
+        raw_d20: rawRoll,
+        modifier: config.mod,
+        total: totalRoll
+      },
+      outcome: isSuccess ? "SUCCESS" : "FAILURE",
+      llm_narrative_prompt: `[ENGINE_EVENT]: Player attempted ${config.name}. Roll: ${totalRoll} vs DC ${config.dc}. Outcome: ${isSuccess ? 'PASS' : 'FAIL'}. Inject narrative continuation.`
+    };
+
+    outputDiv.innerHTML = `
+      <div class="sim-res-header">
+        <span>${config.name}: <strong>1d20 (${rawRoll}) + ${config.mod} = ${totalRoll}</strong> vs DC ${config.dc}</span>
+        <span class="${resClass}">${resLabel}</span>
+      </div>
+      <div class="sim-json-preview">${JSON.stringify(statePayload, null, 2)}</div>
+    `;
+  });
+};
+
 setupThemeToggle();
 setupMobileNav();
 setupContactForm();
+setupProjectDemos();
+setupArtificerDiceSim();

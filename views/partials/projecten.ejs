@@ -62,6 +62,29 @@
               <span class="tech-chip">LLM API Integration</span>
             </div>
           </div>
+          <!-- Interactive Engine Simulator for Artificer -->
+          <div class="dice-sim-widget" id="artificerSimWidget">
+            <div class="sim-header">
+              <span class="sim-title">🎲 Live Engine Test: D&amp;D 5e Roll &amp; State Parser</span>
+              <span class="sim-badge">Interactive Demo</span>
+            </div>
+            <div class="sim-controls">
+              <label for="simCheckType" class="sim-label">Type Check:</label>
+              <select id="simCheckType" class="sim-select" aria-label="Selecteer D&D check type">
+                <option value="perception">Perception (Wijsheid DC 14)</option>
+                <option value="stealth">Stealth (Bevalligheid DC 12)</option>
+                <option value="attack">Longsword Attack (Kracht AC 15)</option>
+                <option value="arcana">Arcana Knowledge (Intelligentie DC 16)</option>
+              </select>
+              <button type="button" id="rollDiceBtn" class="btn-roll-sim">
+                <span class="roll-icon">🎲</span> Roll 1d20
+              </button>
+            </div>
+            <div class="sim-output" id="simOutput" aria-live="polite">
+              <div class="sim-placeholder">Klik op "Roll 1d20" om de deterministische D&amp;D-regelevaluatie en LLM JSON-state-parsing te testen.</div>
+            </div>
+          </div>
+
           <div class="project-links">
             <a href="https://github.com/japiohopman/artificer" target="_blank" rel="noreferrer" class="btn-project-link">Bekijk GitHub &rarr;</a>
             <a href="https://artificer-promo-site.onrender.com/" target="_blank" rel="noreferrer" class="btn-project-link secondary-link">Promo Site &rarr;</a>
@@ -129,8 +152,30 @@
             </div>
           </div>
           <div class="project-links">
-            <a href="https://rainbow-peony-f0c791.netlify.app/" target="_blank" rel="noreferrer" class="btn-project-link">Bekijk app &rarr;</a>
+            <button type="button" class="btn-project-link btn-demo-trigger" data-demo-target="conquestDemo">🎮 Start Live Demo</button>
+            <a href="https://rainbow-peony-f0c791.netlify.app/" target="_blank" rel="noreferrer" class="btn-project-link secondary-link">Open in nieuw tabblad &rarr;</a>
             <a href="https://github.com/japiohopman/global_conquest" target="_blank" rel="noreferrer" class="btn-project-link secondary-link">GitHub Repo &rarr;</a>
+          </div>
+
+          <!-- On-demand Interactive Iframe Embed Container -->
+          <div class="project-demo-container" id="conquestDemo" style="display: none;" aria-hidden="true">
+            <div class="demo-toolbar">
+              <div class="demo-status">
+                <span class="status-dot"></span>
+                <span class="status-text">Global Conquest (Netlify Live App)</span>
+              </div>
+              <div class="demo-toolbar-actions">
+                <a href="https://rainbow-peony-f0c791.netlify.app/" target="_blank" rel="noreferrer" class="btn-demo-action" title="Open extern">↗ External</a>
+                <button type="button" class="btn-demo-action btn-close-demo" data-demo-target="conquestDemo" aria-label="Sluit live demo">✕ Sluiten</button>
+              </div>
+            </div>
+            <div class="demo-frame-wrapper">
+              <div class="demo-loading">
+                <div class="demo-spinner"></div>
+                <span>Global Conquest Game Engine laden...</span>
+              </div>
+              <iframe class="demo-iframe" data-src="https://rainbow-peony-f0c791.netlify.app/" title="Global Conquest Live Game Demo" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+            </div>
           </div>
         </div>
         <div class="hero-project-gallery">
