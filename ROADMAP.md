@@ -177,7 +177,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
 
 ## Phase 7 — Interactive Proof & Final Polish
 
-- [ ] **Interactive Project Demos — Add Proof Where It Strengthens the Portfolio**
+- [x] **Interactive Project Demos — Add Proof Where It Strengthens the Portfolio**
   - **Problem:** selected projects are stronger when visitors can experience the result instead of only reading about it.
   - **Goal:** identify projects that genuinely benefit from an interactive preview and add lightweight, resilient embeds or demos. Avoid embedding everything and avoid creating a performance problem.
   - **Acceptance:** only high-value projects receive demos; embeds have loading/error/fallback behavior; mobile usability and performance remain acceptable.
