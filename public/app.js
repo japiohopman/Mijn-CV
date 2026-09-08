@@ -171,9 +171,11 @@ const setupThemeToggle = () => {
     if (theme === "light") {
       document.documentElement.setAttribute("data-theme", "light");
       localStorage.setItem("theme", "light");
+      themeToggle.setAttribute("aria-pressed", "true");
     } else {
       document.documentElement.removeAttribute("data-theme");
       localStorage.setItem("theme", "dark");
+      themeToggle.setAttribute("aria-pressed", "false");
     }
   };
 
@@ -272,12 +274,14 @@ const setupContactForm = () => {
       const emailAddress = "japiehopman@gmail.com";
       navigator.clipboard.writeText(emailAddress).then(() => {
         copyEmailBtn.classList.add("success");
+        copyEmailBtn.setAttribute("aria-label", "E-mailadres gekopieerd naar klembord");
         if (copyEmailIcon) copyEmailIcon.style.display = "none";
         if (checkEmailIcon) checkEmailIcon.style.display = "inline-block";
         if (copyEmailText) copyEmailText.textContent = "Gekopieerd!";
 
         setTimeout(() => {
           copyEmailBtn.classList.remove("success");
+          copyEmailBtn.setAttribute("aria-label", "Kopieer e-mailadres naar klembord");
           if (copyEmailIcon) copyEmailIcon.style.display = "inline-block";
           if (checkEmailIcon) checkEmailIcon.style.display = "none";
           if (copyEmailText) copyEmailText.textContent = "Kopieer";
