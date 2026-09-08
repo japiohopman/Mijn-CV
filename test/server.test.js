@@ -244,10 +244,47 @@ async function runTests() {
       success = false;
     }
 
+    console.log('\nChecking Privacy & Zero Client-Side Tracking Assertions...');
+    const forbiddenTrackerDomains = [
+      'google-analytics.com',
+      'googletagmanager.com',
+      'hotjar.com',
+      'connect.facebook.net',
+      'mixpanel.com',
+      'segment.com'
+    ];
+
+    for (const routePath of ['/', '/share', '/keuken-cv']) {
+      try {
+        const { statusCode, body } = await fetchRoute(routePath);
+        if (statusCode !== 200) {
+          console.error(`  ✗ Privacy assertion check failed on ${routePath}: status ${statusCode}`);
+          success = false;
+          continue;
+        }
+
+        let trackerFound = false;
+        for (const domain of forbiddenTrackerDomains) {
+          if (body.includes(domain)) {
+            console.error(`  ✗ Forbidden tracking domain "${domain}" found in ${routePath}!`);
+            trackerFound = true;
+            success = false;
+          }
+        }
+
+        if (!trackerFound) {
+          console.log(`  ✓ ${routePath} confirmed clean of third-party tracking scripts`);
+        }
+      } catch (err) {
+        console.error(`  ✗ Privacy check error on ${routePath}: ${err.message}`);
+        success = false;
+      }
+    }
+
     if (!success) {
       exitCode = 1;
     } else {
-      console.log('\nAll Express route, asset, SEO OpenGraph, and Contact API tests passed successfully!');
+      console.log('\nAll Express route, asset, SEO OpenGraph, Contact API, and Privacy assertions passed successfully!');
     }
   } catch (err) {
     console.error(`✗ Server health check failed: ${err.message}`);
