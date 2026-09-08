@@ -170,7 +170,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** perform a focused keyboard, focus-order, contrast, reduced-motion, form, image, and screen-reader-oriented audit of actual pages.
   - **Acceptance:** critical flows are keyboard usable, focus is understandable, interactive state is exposed correctly, and known accessibility issues are either fixed or documented.
 
-- [ ] **Privacy & Analytics Decision — Measure Only What Is Justified**
+- [x] **Privacy & Analytics Decision — Measure Only What Is Justified**
   - **Problem:** analytics can add value but can also add complexity, privacy concerns, and unnecessary tracking.
   - **Goal:** determine whether analytics are actually useful for this portfolio. If implemented, choose the smallest privacy-conscious approach and document what is measured and why. If not justified, document the decision instead of adding tracking for its own sake.
   - **Acceptance:** repository contains a clear decision and, if analytics are implemented, no unnecessary personal tracking is introduced.

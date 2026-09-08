@@ -33,6 +33,7 @@ Het project is nu modulair en gestructureerd volgens professionele standaarden:
   - `app.js`: De interactieve scripts (zoals de projecten-galerij en animaties).
   - `images/`: Horeca certificaten, logo's en sfeerbeelden.
 - `POSITIONING.md`: De definitieve merk- en positioneringsstrategie, kernboodschappen en tone-of-voice richtlijnen.
+- `PRIVACY.md`: Het Privacy & Analytics Decision Record (ADR) met het beleid rondom zero client-side tracking, privacy en server-level statistieken.
 - `views/`: De pagina-templates die door EJS worden gerenderd:
   - `index.ejs`: De home-pagina.
   - `share.ejs`: De speciale, mobielvriendelijke deelpagina met de QR-code.
@@ -79,3 +80,13 @@ Binnen een minuut is je website live onder een gratis, beveiligde URL (zoals `ht
 - **`/share` Route**: Als je naar de `/share` pagina navigeert op je telefoon, zie je een permanente QR-code die direct naar je homepage linkt. Daaronder staan snelle deelknoppen voor WhatsApp, E-mail en een slimme "Kopieer Link"-knop met live feedback. Dit is perfect voor netwerken!
 - **Geen Horizontal Scroll**: De layout is 100% responsive en geoptimaliseerd voor Android- en iOS-apparaten. Geen vreemde lege ruimtes of scrollende zijkanten.
 - **Directe Activatie**: Door de vernieuwde Intersection Observer laden de projectkaarten en animaties direct in zodra je ze op mobiel in beeld scrollt.
+
+---
+
+## 🔒 Privacy & Analytics Policy
+
+Het portfolio hanteert een strikt **Privacy First**-principe (zie [`PRIVACY.md`](./PRIVACY.md)):
+- **Zero Client-Side Tracking**: Geen Google Analytics, Tag Manager, Hotjar of tracking-cookies.
+- **Geen Cookie-Banners Nodig**: Bezoekers ervaren een schone, snelle en privacyvriendelijke website zonder storende pop-ups.
+- **Privacy-Veilig Contactformulier**: Berichten en e-mailadressen worden in-memory verwerkt en niet opgeslagen in logs of PII-databases.
+- **Server-Level Statistieken**: Waar monitoring nodig is, wordt uitsluitend gebruikgemaakt van geaggregeerde, anonieme serverlogs van de hostingprovider (Render/Cloudflare).
