@@ -187,7 +187,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** audit `/share`, social preview imagery, page titles, descriptions, favicons/icons, and visual consistency when the site is opened from an external link.
   - **Acceptance:** shared links present an intentional identity and useful context; preview assets are correct and do not misrepresent the page.
 
-- [ ] **Final Portfolio QA — Content, UX, Accessibility, Performance & Technical Integrity**
+- [x] **Final Portfolio QA — Content, UX, Accessibility, Performance & Technical Integrity**
   - **Problem:** improvements made in isolation can introduce inconsistencies elsewhere.
   - **Goal:** perform a final end-to-end audit of every public route and important interaction, covering copy consistency, links, forms, responsive behavior, accessibility, console/runtime errors, tests, SEO metadata, performance regressions, and print output for the kitchen CV.
   - **Acceptance:** `npm test` passes; all public routes are checked; no known high-severity UX or runtime issue remains; PR documents what was tested and any intentionally deferred work.
