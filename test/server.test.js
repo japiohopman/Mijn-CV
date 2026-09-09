@@ -88,6 +88,10 @@ async function runTests() {
       { path: '/github_action.png', expectedStatus: 200 },
       { path: '/styles.css', expectedStatus: 200 },
       { path: '/app.js', expectedStatus: 200 },
+      { path: '/favicon.svg', expectedStatus: 200 },
+      { path: '/favicon.ico', expectedStatus: 200 },
+      { path: '/apple-touch-icon.png', expectedStatus: 200 },
+      { path: '/site.webmanifest', expectedStatus: 200 },
       { path: '/keuken_cv', expectedStatus: 301 },
     ];
 
@@ -117,6 +121,10 @@ async function runTests() {
           'property="og:title" content="Jaap Hopman | Creative Developer CV"',
           'property="og:description" content="Visueel en interactief CV van Jaap Hopman',
           'property="og:image" content="http://127.0.0.1:3099/images/jaap-Hopman.jpg"',
+          'property="og:image:width" content="1200"',
+          'property="og:image:height" content="630"',
+          'href="/favicon.svg"',
+          'href="/site.webmanifest"',
           'property="og:url" content="http://127.0.0.1:3099/"',
           'name="twitter:card" content="summary_large_image"',
           'name="robots" content="index, follow"',

@@ -182,7 +182,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** identify projects that genuinely benefit from an interactive preview and add lightweight, resilient embeds or demos. Avoid embedding everything and avoid creating a performance problem.
   - **Acceptance:** only high-value projects receive demos; embeds have loading/error/fallback behavior; mobile usability and performance remain acceptable.
 
-- [ ] **Share & Presentation Quality — Make the Portfolio Look Good Everywhere**
+- [x] **Share & Presentation Quality — Make the Portfolio Look Good Everywhere**
   - **Problem:** links are often encountered outside the site itself, through social platforms, messaging apps, or direct sharing.
   - **Goal:** audit `/share`, social preview imagery, page titles, descriptions, favicons/icons, and visual consistency when the site is opened from an external link.
   - **Acceptance:** shared links present an intentional identity and useful context; preview assets are correct and do not misrepresent the page.

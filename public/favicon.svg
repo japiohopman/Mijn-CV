@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <rect width="512" height="512" rx="128" fill="#07111f" />
+  <rect x="24" y="24" width="464" height="464" rx="104" fill="none" stroke="#7df9d0" stroke-width="12" opacity="0.3" />
+  <text x="50%" y="54%" dominant-baseline="central" text-anchor="middle" font-family="'Syne', 'Space Grotesk', system-ui, sans-serif" font-weight="800" font-size="210" fill="#7df9d0" letter-spacing="-6">
+    J<tspan fill="#ff8d5c">H</tspan>
+  </text>
+  <circle cx="400" cy="112" r="28" fill="#ff8d5c" />
+</svg>

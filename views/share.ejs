@@ -26,6 +26,15 @@
           radial-gradient(circle at top right, rgba(125, 249, 208, 0.05), transparent 40%),
           linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
         box-shadow: var(--shadow);
+        backdrop-filter: blur(18px);
+        transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+      }
+
+      [data-theme="light"] .share-card {
+        border-color: var(--surface-border);
+        background:
+          radial-gradient(circle at top right, rgba(14, 112, 84, 0.05), transparent 40%),
+          var(--surface-strong);
       }
 
       .share-header h1 {
@@ -33,6 +42,7 @@
         font-size: 2.2rem;
         margin: 0 0 0.5rem;
         line-height: 1.1;
+        color: var(--text);
       }
 
       .share-header p {
@@ -43,13 +53,20 @@
 
       .qr-wrapper {
         display: inline-flex;
-        background: var(--secondary);
-        padding: 1.25rem;
+        background: #07111f;
+        padding: 1.1rem;
         border-radius: var(--radius-lg);
         margin-bottom: 2rem;
-        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+        border: 2px solid var(--secondary);
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
         position: relative;
-        transition: transform 0.3s var(--ease-out);
+        transition: transform 0.3s var(--ease-out), border-color 0.3s ease;
+      }
+
+      [data-theme="light"] .qr-wrapper {
+        background: #ffffff;
+        border-color: var(--primary);
+        box-shadow: 0 16px 36px rgba(139, 131, 114, 0.15);
       }
 
       .qr-wrapper:hover {
@@ -84,7 +101,7 @@
         cursor: pointer;
         font-family: inherit;
         font-size: 1rem;
-        transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+        transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease;
       }
 
       .btn-share:hover {
@@ -96,9 +113,18 @@
         color: #07111f;
       }
 
+      [data-theme="light"] .btn-native {
+        background: linear-gradient(135deg, var(--primary), #ffbc70);
+        color: #07111f;
+      }
+
       .btn-whatsapp {
         background: #25d366;
         color: white;
+      }
+
+      .btn-whatsapp:hover {
+        background: #22c35e;
       }
 
       .btn-email {
@@ -107,10 +133,22 @@
         color: var(--text);
       }
 
+      [data-theme="light"] .btn-email {
+        background: rgba(0, 0, 0, 0.04);
+        border-color: rgba(0, 0, 0, 0.15);
+        color: var(--text);
+      }
+
       .btn-copy {
         background: rgba(125, 148, 255, 0.1);
         border: 1px solid rgba(125, 148, 255, 0.25);
         color: #a7b7ff;
+      }
+
+      [data-theme="light"] .btn-copy {
+        background: rgba(58, 77, 181, 0.08);
+        border-color: rgba(58, 77, 181, 0.28);
+        color: var(--tertiary);
       }
 
       .btn-copy.success {
@@ -126,13 +164,14 @@
         min-height: 44px;
         color: var(--muted);
         text-decoration: none;
-        font-weight: 500;
-        transition: color 180ms ease;
+        font-weight: 600;
+        transition: color 180ms ease, transform 180ms ease;
         margin-top: 1rem;
       }
 
       .btn-back:hover {
         color: var(--text);
+        transform: translateX(-3px);
       }
 
       /* Mobile optimization */
@@ -143,7 +182,7 @@
         }
 
         .qr-wrapper {
-          padding: 1rem;
+          padding: 0.85rem;
         }
 
         .qr-image {
@@ -165,13 +204,13 @@
 
         <article class="share-card glass-card" style="margin-top: 2rem;">
           <div class="share-header">
-            <h1>Deel dit CV</h1>
+            <h1>Deel dit Portfolio</h1>
             <p>Scan de QR-code om dit portfolio direct op je telefoon te openen of deel het via de opties hieronder.</p>
           </div>
 
           <div class="qr-wrapper">
             <!-- Dynamic QR Code pointing directly to homepage -->
-            <img id="qrImage" src="" alt="Permanent QR Code" class="qr-image" />
+            <img id="qrImage" src="" alt="Permanent QR Code naar Jaap Hopman Portfolio" class="qr-image" />
           </div>
 
           <div class="share-actions-grid">
@@ -238,8 +277,8 @@
         qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(portfolioUrl)}&color=07111f&bgcolor=7df9d0`;
 
         // 2. Setup standard messaging sharing options
-        const shareTitle = 'Jaap Hopman | Creative Developer CV';
-        const shareText = 'Bekijk het visuele en interactieve CV van Jaap Hopman (Creative Developer / Freelance Chef):';
+        const shareTitle = 'Jaap Hopman | Creative Developer & Technologist';
+        const shareText = 'Bekijk het interactieve portfolio van Jaap Hopman (Creative Developer & Technologist):';
 
         // WhatsApp link setup
         const whatsappLink = document.getElementById('whatsappShareLink');
