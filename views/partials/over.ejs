@@ -31,6 +31,29 @@
         <p>
           Mijn creatieve discipline uit zich in muziek en strategie. Als DJ draait alles om timing, dynamiek en het aanvoelen van de gebruiker; bij schaken draait het om patroonherkenning, stappen vooruitdenken en strategische positionering. Beide perspectieven versterken direct hoe ik UX-interacties ontwerp en software-architecturen structureer.
         </p>
+
+        <!-- Interactive Web Audio API & Beat Engine Experiment -->
+        <div class="dice-sim-widget audio-sim-widget" id="audioSimWidget">
+          <div class="sim-header">
+            <span class="sim-title">🎵 Live Audio Test: Web Audio API &amp; Beat Engine</span>
+            <span class="sim-badge">Interactive Demo</span>
+          </div>
+          <div class="sim-controls">
+            <label for="audioBpmRange" class="sim-label">Tempo (<span id="bpmDisplay">124</span> BPM):</label>
+            <input type="range" id="audioBpmRange" class="audio-range" min="80" max="160" value="124" aria-label="Stel tempo in op BPM" />
+
+            <button type="button" id="toggleAudioBtn" class="btn-roll-sim btn-audio-sim">
+              <span class="roll-icon" id="audioBtnIcon">▶</span> <span id="audioBtnText">Start Beat Generator</span>
+            </button>
+          </div>
+          <div class="audio-visualizer-wrapper">
+            <canvas id="audioCanvas" class="audio-canvas" width="320" height="48"></canvas>
+          </div>
+          <div class="sim-output" id="audioOutput" aria-live="polite">
+            <div class="sim-placeholder">Klik op "Start Beat Generator" om de real-time Web Audio API synthesizer, timing-clock en visualizer te testen.</div>
+          </div>
+        </div>
+
         <a href="https://www.chess.com/member/youknowno" target="_blank" rel="noreferrer" class="btn-chess-link">
           Schaakprofiel op Chess.com &rarr;
         </a>

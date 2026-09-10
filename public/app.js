@@ -543,9 +543,156 @@ const setupSuperMailSim = () => {
   });
 };
 
+// Interactive Web Audio API & BPM Beat Engine Simulator
+const setupAudioSimWidget = () => {
+  const toggleBtn = document.getElementById("toggleAudioBtn");
+  const bpmRange = document.getElementById("audioBpmRange");
+  const bpmDisplay = document.getElementById("bpmDisplay");
+  const btnIcon = document.getElementById("audioBtnIcon");
+  const btnText = document.getElementById("audioBtnText");
+  const canvas = document.getElementById("audioCanvas");
+  const outputDiv = document.getElementById("audioOutput");
+
+  if (!toggleBtn || !bpmRange || !canvas || !outputDiv) return;
+
+  let audioCtx = null;
+  let isPlaying = false;
+  let timerId = null;
+  let currentStep = 0;
+  let bpm = Number(bpmRange.value) || 124;
+  let canvasCtx = canvas.getContext("2d");
+  let freqData = new Uint8Array(16);
+
+  bpmRange.addEventListener("input", (e) => {
+    bpm = Number(e.target.value);
+    if (bpmDisplay) bpmDisplay.textContent = bpm;
+  });
+
+  const playSynthPulse = (freq, type, duration) => {
+    if (!audioCtx) return;
+    try {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    } catch {
+      // Audio fallback
+    }
+  };
+
+  const drawVisualizer = (step) => {
+    if (!canvasCtx) return;
+
+    const width = canvas.width;
+    const height = canvas.height;
+    canvasCtx.clearRect(0, 0, width, height);
+
+    const numBars = 16;
+    const barWidth = (width / numBars) - 2;
+
+    for (let i = 0; i < numBars; i++) {
+      let barHeight = 8 + Math.floor(Math.random() * 12);
+      let color = "rgba(125, 249, 208, 0.3)";
+
+      if (i === step) {
+        barHeight = height - 6;
+        color = "#7df9d0";
+      } else if (i % 4 === 0) {
+        barHeight += 10;
+        color = "rgba(255, 141, 92, 0.6)";
+      }
+
+      canvasCtx.fillStyle = color;
+      canvasCtx.fillRect(i * (barWidth + 2), height - barHeight, barWidth, barHeight);
+    }
+  };
+
+  const tick = () => {
+    currentStep = (currentStep + 1) % 16;
+
+    // 4-on-the-floor beat pattern simulation
+    if (currentStep % 4 === 0) {
+      // Kick drum simulation
+      playSynthPulse(110, "sine", 0.15);
+    } else if (currentStep % 4 === 2) {
+      // Snare / clap synth simulation
+      playSynthPulse(320, "triangle", 0.08);
+    } else {
+      // Hi-hat tick
+      playSynthPulse(800, "square", 0.03);
+    }
+
+    drawVisualizer(currentStep);
+
+    const payload = {
+      event: "AUDIO_BEAT_TICK",
+      timestamp: new Date().toISOString().split("T")[1].slice(0, 8),
+      engine: "Web Audio API (Synthesizer & Sequencer)",
+      current_bpm: bpm,
+      step_position: `${currentStep + 1}/16`,
+      audio_nodes: ["OscillatorNode", "GainNode", "AudioDestination"],
+      status: "PLAYING"
+    };
+
+    outputDiv.innerHTML = `
+      <div class="sim-res-header">
+        <span>Web Audio Sequencer: <strong>${bpm} BPM</strong> (Stap ${currentStep + 1}/16)</span>
+        <span class="sim-res-success">● LIVE SYNTH</span>
+      </div>
+      <div class="sim-json-preview">${JSON.stringify(payload, null, 2)}</div>
+    `;
+
+    const intervalMs = (60 / bpm / 4) * 1000;
+    timerId = setTimeout(tick, intervalMs);
+  };
+
+  toggleBtn.addEventListener("click", async () => {
+    if (isPlaying) {
+      isPlaying = false;
+      if (timerId) clearTimeout(timerId);
+      if (btnIcon) btnIcon.textContent = "▶";
+      if (btnText) btnText.textContent = "Start Beat Generator";
+      outputDiv.innerHTML = `
+        <div class="sim-placeholder">Beat generator gepauzeerd. Klik om opnieuw te starten.</div>
+      `;
+      drawVisualizer(-1);
+    } else {
+      if (!audioCtx) {
+        const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtxClass) {
+          audioCtx = new AudioCtxClass();
+        }
+      }
+
+      if (audioCtx && audioCtx.state === "suspended") {
+        await audioCtx.resume();
+      }
+
+      isPlaying = true;
+      if (btnIcon) btnIcon.textContent = "⏹";
+      if (btnText) btnText.textContent = "Stop Beat Generator";
+      tick();
+    }
+  });
+
+  // Initial draw
+  drawVisualizer(-1);
+};
+
 setupThemeToggle();
 setupMobileNav();
 setupContactForm();
 setupProjectDemos();
 setupArtificerDiceSim();
 setupSuperMailSim();
+setupAudioSimWidget();
