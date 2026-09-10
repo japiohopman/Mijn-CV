@@ -154,6 +154,131 @@ assert(
   'Arbitrary tool executeScript is strictly rejected'
 );
 
+// 4. Tool Execution Engine (executeToolCall) Unit Tests
+console.log('\nEvaluating Tool Execution Engine (executeToolCall)...');
+
+// Mock DOM elements & window environment
+let mockLocationHref = '/';
+let mockPushedState = null;
+let scrolledElements = [];
+let focusedElements = [];
+
+function createMockElement(selector) {
+  let isDetailsOpen = false;
+  let classes = new Set();
+
+  return {
+    selector,
+    scrollIntoView: function(opts) {
+      scrolledElements.push({ selector, opts });
+    },
+    focus: function(opts) {
+      focusedElements.push({ selector, opts });
+    },
+    get open() {
+      return isDetailsOpen;
+    },
+    set open(val) {
+      isDetailsOpen = val;
+    },
+    classList: {
+      add: (cls) => classes.add(cls),
+      remove: (cls) => classes.delete(cls),
+      contains: (cls) => classes.has(cls)
+    },
+    querySelector: function(subSelector) {
+      if (subSelector === 'details') {
+        return {
+          get open() { return isDetailsOpen; },
+          set open(val) { isDetailsOpen = val; }
+        };
+      }
+      return null;
+    }
+  };
+}
+
+const mockDoc = {
+  querySelector: function(selector) {
+    // If mock page is not '/', main portfolio section elements are not in DOM
+    if (mockLocationHref !== '/') {
+      return null;
+    }
+    if (['#over', '#projecten', '#skills', '#ervaring', '#contact', '.artificer-card', '.conquest-card', '.supermail-card'].includes(selector)) {
+      return createMockElement(selector);
+    }
+    return null;
+  }
+};
+
+const mockWin = {
+  location: {
+    get pathname() { return mockLocationHref; },
+    set href(val) { mockLocationHref = val; }
+  },
+  history: {
+    pushState: function(state, title, url) {
+      mockPushedState = { state, title, url };
+    }
+  },
+  matchMedia: function() {
+    return { matches: false };
+  }
+};
+
+// Test navigateToSection on current page
+mockLocationHref = '/';
+scrolledElements = [];
+const navSecRes = SecretaryEngine.executeToolCall(
+  { tool: 'navigateToSection', parameters: { anchor: '#skills' } },
+  { window: mockWin, document: mockDoc }
+);
+assert(navSecRes.success === true, 'executeToolCall navigateToSection returns success');
+assert(navSecRes.action === 'scrollToSection', 'executeToolCall navigateToSection performs scrollToSection');
+assert(scrolledElements.length === 1 && scrolledElements[0].selector === '#skills', 'Target element #skills scrolled into view');
+assert(mockPushedState && mockPushedState.url === '#skills', 'URL hash updated to #skills via pushState');
+
+// Test navigateToSection when on different route
+mockLocationHref = '/keuken-cv';
+const navSecCrossRes = SecretaryEngine.executeToolCall(
+  { tool: 'navigateToSection', parameters: { anchor: '#contact' } },
+  { window: mockWin, document: mockDoc }
+);
+assert(navSecCrossRes.success === true, 'executeToolCall navigateToSection from different route returns success');
+assert(navSecCrossRes.action === 'redirect', 'executeToolCall navigateToSection performs redirect');
+assert(mockLocationHref === '/#contact', 'Redirected window location to /#contact');
+
+// Test openProject (artificer)
+mockLocationHref = '/';
+scrolledElements = [];
+const openProjRes = SecretaryEngine.executeToolCall(
+  { tool: 'openProject', parameters: { projectId: 'artificer' } },
+  { window: mockWin, document: mockDoc }
+);
+assert(openProjRes.success === true, 'executeToolCall openProject returns success');
+assert(openProjRes.action === 'openProject', 'executeToolCall openProject action is openProject');
+assert(scrolledElements.length === 1 && scrolledElements[0].selector === '.artificer-card', 'Artificer project card scrolled into view');
+
+// Test openKitchenCV & openShare
+const openCVRes = SecretaryEngine.executeToolCall(
+  { tool: 'openKitchenCV' },
+  { window: mockWin, document: mockDoc }
+);
+assert(openCVRes.success === true && mockLocationHref === '/keuken-cv', 'openKitchenCV redirected to /keuken-cv');
+
+const openShareRes = SecretaryEngine.executeToolCall(
+  { tool: 'openShare' },
+  { window: mockWin, document: mockDoc }
+);
+assert(openShareRes.success === true && mockLocationHref === '/share', 'openShare redirected to /share');
+
+// Test rejection of invalid payload
+const invalidExecRes = SecretaryEngine.executeToolCall(
+  { tool: 'executeScript', parameters: { script: 'alert(1)' } },
+  { window: mockWin, document: mockDoc }
+);
+assert(invalidExecRes.success === false && invalidExecRes.action === 'none', 'Unauthorized tool call rejected cleanly with success: false');
+
 if (totalFailed > 0) {
   console.error(`\nSecretary Engine tests failed! ${totalFailed} failure(s).`);
   process.exit(1);
