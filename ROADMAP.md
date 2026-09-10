@@ -196,6 +196,37 @@ The portfolio should feel intentional, confident, technically credible, human, a
 
 ## Later
 
+- [ ] **Phase 8 — Portfolio Secretary: Product & Architecture Definition**
+  - **Problem:** visitors can navigate the portfolio, but they still have to understand the site's structure themselves. A lightweight conversational interface could act as a digital secretary that answers practical questions and takes visitors directly to the relevant content.
+  - **Goal:** define a deterministic, non-LLM assistant architecture before adding any AI service. The first version should understand a controlled set of intents/questions, answer only from repository-backed content, and expose explicit navigation/action tools.
+  - **Design direction:** treat the assistant as a small query engine rather than a chatbot that "pretends to think". Keep the knowledge base separate from UI rendering and make every available action explicit and testable.
+  - **Acceptance:** architecture is documented, supported intents are enumerated, answer sources are identified, navigation/tool contracts are defined, and there is a clear boundary between deterministic logic and any future LLM adapter. No external AI dependency is introduced in this phase.
+
+- [ ] **Phase 8 — Assistant Knowledge Registry & Intent Engine**
+  - **Problem:** free-form questions cannot be answered reliably unless the site has a canonical set of facts and mappings.
+  - **Goal:** create a small structured knowledge registry for professional identity, projects, skills, career/background, contact options, routes, and common visitor questions. Add deterministic intent matching for queries such as "wat doet Jaap?", "welke projecten heeft hij?", "heeft hij ook een keuken-cv?", "waar staat Project X?", and "hoe neem ik contact op?".
+  - **Acceptance:** answers come from structured site data rather than duplicated hard-coded prose; unsupported questions receive a transparent fallback; intent matching is predictable, small, and unit-testable.
+
+- [ ] **Phase 8 — Assistant Tool Calls & Navigation Actions**
+  - **Problem:** answering a question is less useful when the visitor still has to find the destination manually.
+  - **Goal:** implement explicit assistant actions such as `navigateToRoute`, `navigateToSection`, `openProject`, `openShare`, and `openKitchenCV`. Tool results should be structured and rendered by the UI; the assistant should never fabricate URLs or actions outside the allow-list.
+  - **Acceptance:** relevant questions can trigger a visible action such as “Bekijk project”, “Open keuken-CV”, or “Ga naar contact”; every action resolves to a known route/anchor; keyboard navigation and normal browser navigation remain fully functional without the assistant.
+
+- [ ] **Phase 8 — Secretary UI & Conversational UX**
+  - **Problem:** the assistant needs to feel like part of the portfolio rather than a generic floating chat widget.
+  - **Goal:** design a compact chat/secretary interface with an input, conversation history, suggested questions, clear action buttons, loading-free deterministic responses, and accessible focus/keyboard behavior. Positioning and wording should reinforce "site secretary" rather than imply human or AI consciousness.
+  - **Acceptance:** the interface is usable on mobile and desktop, does not obstruct core content, has clear empty/error states, respects reduced motion, and remains useful with JavaScript failure or when the assistant is unavailable.
+
+- [ ] **Phase 8 — Assistant Test Matrix & Content Governance**
+  - **Problem:** a conversational layer can silently become inaccurate as the portfolio changes.
+  - **Goal:** add automated tests for intent matching, answer selection, tool-call validation, route resolution, and fallback behavior. Document the knowledge registry as part of the site's content architecture so future portfolio edits update the secretary intentionally.
+  - **Acceptance:** core intents and every exposed tool have automated coverage; invalid tool targets are rejected; changing a project or route cannot leave stale assistant links without a failing test or explicit content update.
+
+- [ ] **Phase 9 — Optional LLM Adapter (Future, Not Part of MVP)**
+  - **Problem:** deterministic matching will eventually become limiting for natural-language questions and broader discovery.
+  - **Goal:** only after the deterministic secretary is proven useful, define an optional LLM adapter that maps natural language onto the same canonical knowledge registry and tool contracts. The LLM must not become the source of truth or gain unrestricted navigation capabilities.
+  - **Acceptance:** the deterministic assistant remains the fallback; LLM output is constrained to known intents/tools and repository-backed facts; provider credentials and privacy implications are explicitly handled before any production rollout.
+
 - [ ] **Ongoing Portfolio Content Iteration** — revisit project evidence, screenshots, demos, and case-study depth as real work is added.
 - [ ] **Additional Interactive Experiments** — add only experiments that strengthen the professional story rather than expanding the technology list for its own sake.
 
@@ -217,5 +248,6 @@ The portfolio is considered substantially complete when:
 - SEO and sharing metadata are intentional;
 - performance decisions are measurement-driven;
 - automated tests protect important behavior;
+- the secretary, when implemented, can answer supported questions from canonical site data and navigate through validated actions;
 - Jules has personally verified each completed task before checking it off;
 - and the final result feels like a finished professional portfolio rather than an evolving developer experiment.
