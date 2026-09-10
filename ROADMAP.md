@@ -217,7 +217,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** design a compact chat/secretary interface with an input, conversation history, suggested questions, clear action buttons, loading-free deterministic responses, and accessible focus/keyboard behavior. Positioning and wording should reinforce "site secretary" rather than imply human or AI consciousness.
   - **Acceptance:** the interface is usable on mobile and desktop, does not obstruct core content, has clear empty/error states, respects reduced motion, and remains useful with JavaScript failure or when the assistant is unavailable.
 
-- [ ] **Phase 8 — Assistant Test Matrix & Content Governance**
+- [x] **Phase 8 — Assistant Test Matrix & Content Governance**
   - **Problem:** a conversational layer can silently become inaccurate as the portfolio changes.
   - **Goal:** add automated tests for intent matching, answer selection, tool-call validation, route resolution, and fallback behavior. Document the knowledge registry as part of the site's content architecture so future portfolio edits update the secretary intentionally.
   - **Acceptance:** core intents and every exposed tool have automated coverage; invalid tool targets are rejected; changing a project or route cannot leave stale assistant links without a failing test or explicit content update.

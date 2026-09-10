@@ -33,7 +33,7 @@ Het project is nu modulair en gestructureerd volgens professionele standaarden:
   - `app.js`: De interactieve scripts (zoals de projecten-galerij en animaties).
   - `images/`: Horeca certificaten, logo's en sfeerbeelden.
 - `POSITIONING.md`: De definitieve merk- en positioneringsstrategie, kernboodschappen en tone-of-voice richtlijnen.
-- `SECRETARY_ARCHITECTURE.md`: De product- en architectuurdefinitie voor de Portfolio Secretary (deterministische assistent query engine, intent-catalogus, tool contracts en LLM boundary).
+- `SECRETARY_ARCHITECTURE.md`: De product- en architectuurdefinitie voor de Portfolio Secretary (deterministische assistent query engine, intent-catalogus, tool contracts, LLM boundary en content governance regels).
 - `PRIVACY.md`: Het Privacy & Analytics Decision Record (ADR) met het beleid rondom zero client-side tracking, privacy en server-level statistieken.
 - `views/`: De pagina-templates die door EJS worden gerenderd:
   - `index.ejs`: De home-pagina.

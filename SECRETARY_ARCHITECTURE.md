@@ -368,3 +368,15 @@ export interface SecretaryQueryResponse {
 - [x] **Navigation/Tool Contracts Defined**: Strict JSON schemas and parameter contracts established for all allow-listed actions.
 - [x] **LLM Boundary Specified**: Unambiguous separation enforced between deterministic fact/action engine and optional Phase 9 LLM parser.
 - [x] **Zero AI Dependencies**: System defined with 100% deterministic, local execution in Phase 8.
+
+---
+
+## 9. Content Governance & Maintenance Rules
+
+To ensure the Portfolio Secretary knowledge base (`public/data/secretary_knowledge.json`) remains accurate as the site evolves, the repository enforces automated content governance checks via `test/secretary.test.js`:
+
+1. **Intent & Anchor Alignment**: Any section anchor referenced in a tool call parameter (e.g., `#over`, `#projecten`, `#skills`, `#contact`) must exist as a valid DOM element ID in `views/` partial templates.
+2. **Route Resolution**: Any route referenced in a tool call parameter (e.g., `/`, `/share`, `/keuken-cv`) must exist as a registered GET route in `server.js`.
+3. **Project ID Validation**: Every `projectId` referenced by `openProject` tool calls (e.g., `artificer`, `global-conquest`, `supermail`) must correspond to an existing project card CSS selector in `views/partials/projecten.ejs`.
+4. **Source File Grounding**: All files listed under `knowledgeSource` must exist on disk in the repository.
+5. **CI Automated Check**: `npm test` automatically executes these governance assertions. If a developer renames an anchor, route, or project card without updating `secretary_knowledge.json`, CI will fail immediately.
