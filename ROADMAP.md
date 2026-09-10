@@ -196,7 +196,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
 
 ## Later
 
-- [ ] **Phase 8 — Portfolio Secretary: Product & Architecture Definition**
+- [x] **Phase 8 — Portfolio Secretary: Product & Architecture Definition**
   - **Problem:** visitors can navigate the portfolio, but they still have to understand the site's structure themselves. A lightweight conversational interface could act as a digital secretary that answers practical questions and takes visitors directly to the relevant content.
   - **Goal:** define a deterministic, non-LLM assistant architecture before adding any AI service. The first version should understand a controlled set of intents/questions, answer only from repository-backed content, and expose explicit navigation/action tools.
   - **Design direction:** treat the assistant as a small query engine rather than a chatbot that "pretends to think". Keep the knowledge base separate from UI rendering and make every available action explicit and testable.
