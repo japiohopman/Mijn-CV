@@ -87,6 +87,34 @@
       }
       this.knowledgeData = knowledgeData;
       this.confidenceThreshold = options.confidenceThreshold || 0.35;
+      this.llmAdapter = options.llmAdapter || null;
+    }
+
+    /**
+     * Retrieves grounded intent response by Intent ID directly from knowledge base.
+     * @param {string} intentId
+     * @returns {Object|null}
+     */
+    getIntentById(intentId) {
+      if (intentId === 'fallback.unknown') {
+        return this.getFallbackResponse();
+      }
+
+      const intent = this.knowledgeData.intents.find(i => i.intentId === intentId);
+      if (!intent) return null;
+
+      const validatedToolCall = (intent.toolCall && validateToolCall(intent.toolCall))
+        ? intent.toolCall
+        : undefined;
+
+      return {
+        matchedIntentId: intent.intentId,
+        confidenceScore: 0.95,
+        answerText: intent.answerText,
+        sourceFile: intent.knowledgeSource,
+        toolCall: validatedToolCall,
+        suggestedQuestions: intent.suggestedFollowUps || []
+      };
     }
 
     /**
@@ -158,6 +186,22 @@
         toolCall: validatedToolCall,
         suggestedQuestions: bestMatch.suggestedFollowUps || []
       };
+    }
+
+    /**
+     * Asynchronously processes input, checking optional LLM Adapter first before falling back to matchIntent.
+     * @param {string} rawInput
+     * @returns {Promise<Object>}
+     */
+    async processQuery(rawInput) {
+      if (this.llmAdapter && typeof this.llmAdapter.processQuery === 'function') {
+        try {
+          return await this.llmAdapter.processQuery(rawInput);
+        } catch (err) {
+          return this.matchIntent(rawInput);
+        }
+      }
+      return this.matchIntent(rawInput);
     }
 
     /**
