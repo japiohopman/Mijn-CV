@@ -229,7 +229,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
 
 - [x] **Ongoing Portfolio Content Iteration** — revisit project evidence, screenshots, demos, and case-study depth as real work is added.
 - [x] **Additional Interactive Experiments** — add only experiments that strengthen the professional story rather than expanding the technology list for its own sake.
-- [ ] **DJ & Music Identity Integration (`DJ-page`)** — integrate Jaap's music production and DJing profile (`https://github.com/japiohopman/DJ-page`) into the creative developer narrative and Portfolio Secretary knowledge base.
+- [x] **DJ & Music Identity Integration (`DJ-page`)** — integrate Jaap's music production and DJing profile (`https://github.com/japiohopman/DJ-page`) into the creative developer narrative and Portfolio Secretary knowledge base.
   - **Problem:** Jaap's creative background as a DJ/producer is mentioned in the About section and represented in the Web Audio experiment, but his dedicated DJ profile repo (`https://github.com/japiohopman/DJ-page`) is not yet explicitly connected as a referenced asset or secretary knowledge intent.
   - **Goal:** Connect the DJ profile repo link in `views/partials/over.ejs`, update `public/data/secretary_knowledge.json` with DJ/music intents, and highlight sound design & audio engineering capabilities in the portfolio.
   - **Acceptance:** `views/partials/over.ejs` includes a direct link to the DJ repo; the Portfolio Secretary recognizes queries like "draait Jaap ook als DJ?" or "waar vind ik zijn DJ-pagina?"; and `npm test` passes cleanly.
