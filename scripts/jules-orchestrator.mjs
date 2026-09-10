@@ -5,6 +5,12 @@
  * ROADMAP.md is the canonical dispatch queue. A Ready task may optionally
  * reference a GitHub Issue as "Issue #N"; the issue becomes the detailed
  * execution specification passed to Jules.
+ *
+ * Queue policy:
+ * 1. Dispatch the first unchecked task under `### Ready`.
+ * 2. When Ready is empty, continue with the first unchecked task under `## Later`.
+ * This lets the roadmap move naturally into the next phase without requiring
+ * manual queue surgery after the current Ready block is exhausted.
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
@@ -160,8 +166,60 @@ function findTasksUnderHeading(text, headingName) {
   return tasks;
 }
 
-function isTaskConfirmedDone(roadmapText, taskText) {
-  const tasks = findTasksUnderHeading(roadmapText, 'Ready');
+/**
+ * Finds checkbox tasks under a level-2 section such as `## Later`.
+ * The section ends at the next level-2 heading.
+ */
+function findTasksUnderSection(text, sectionName) {
+  const lines = text.split('\n');
+  let inSection = false;
+  const tasks = [];
+  const wantedSection = sectionName.trim().toLowerCase();
+
+  for (const line of lines) {
+    const h2 = line.match(/^##\s+(.+?)\s*$/);
+
+    if (!inSection) {
+      if (h2 && h2[1].trim().toLowerCase() === wantedSection) {
+        inSection = true;
+      }
+      continue;
+    }
+
+    if (h2) break;
+
+    const task = line.match(/^- \[( |x)\]\s*(.+)$/i);
+    if (task) {
+      tasks.push({
+        checked: task[1].toLowerCase() === 'x',
+        text: task[2].trim(),
+      });
+    }
+  }
+
+  return tasks;
+}
+
+function getQueue(roadmapText) {
+  const readyTasks = findTasksUnderHeading(roadmapText, 'Ready');
+  const readyNext = readyTasks.find(t => !t.checked);
+  if (readyNext) {
+    return { name: 'Ready', tasks: readyTasks, next: readyNext };
+  }
+
+  const laterTasks = findTasksUnderSection(roadmapText, 'Later');
+  const laterNext = laterTasks.find(t => !t.checked);
+  if (laterNext) {
+    return { name: 'Later', tasks: laterTasks, next: laterNext };
+  }
+
+  return { name: 'Ready', tasks: readyTasks, next: null };
+}
+
+function isTaskConfirmedDone(roadmapText, taskText, queueName = 'Ready') {
+  const tasks = queueName.toLowerCase() === 'later'
+    ? findTasksUnderSection(roadmapText, 'Later')
+    : findTasksUnderHeading(roadmapText, 'Ready');
   const match = tasks.find(t => t.text === taskText);
   return match ? match.checked : false;
 }
@@ -186,21 +244,29 @@ async function main() {
 
   const state = loadState();
   const roadmapText = readFileSync(ROADMAP_PATH, 'utf8');
-  const readyTasks = findTasksUnderHeading(roadmapText, 'Ready');
-  let next = readyTasks.find(t => !t.checked);
+  const queue = getQueue(roadmapText);
+  let next = queue.next;
+  let activeQueueName = queue.name;
   let stateChanged = false;
 
-  console.log(`Found ${readyTasks.length} task(s) under ### Ready.`);
+  console.log(`Found ${queue.tasks.length} task(s) in active queue '${queue.name}'.`);
+  if (queue.name === 'Later' && !findTasksUnderHeading(roadmapText, 'Ready').some(t => !t.checked)) {
+    console.log('### Ready is exhausted; continuing with the first unchecked task under ## Later.');
+  }
 
   if (state.activeSession) {
-    const activeTask = readyTasks.find(t => t.text === state.activeSession.task);
-    const activeIsCanonicalNext = activeTask && !activeTask.checked && (!next || activeTask.text === next.text);
+    const stateQueueName = state.activeSession.queueName || 'Ready';
+    const stateQueueTasks = stateQueueName.toLowerCase() === 'later'
+      ? findTasksUnderSection(roadmapText, 'Later')
+      : findTasksUnderHeading(roadmapText, 'Ready');
+    const activeTask = stateQueueTasks.find(t => t.text === state.activeSession.task);
+    const activeIsCanonicalNext = activeTask && !activeTask.checked && stateQueueName === activeQueueName && (!next || activeTask.text === next.text);
 
     if (!activeIsCanonicalNext) {
       console.warn(
         `Stale Jules queue state detected: active task "${state.activeSession.task}" ` +
-        `does not match the first unchecked task under ### Ready ("${next?.text ?? 'none'}"). ` +
-        'Clearing the stale session state so the canonical queue can advance.'
+        `in queue '${stateQueueName}' does not match the canonical next task "${next?.text ?? 'none'}" ` +
+        `in queue '${activeQueueName}'. Clearing the stale session state so the canonical queue can advance.`
       );
       state.activeSession = null;
       stateChanged = true;
@@ -227,7 +293,7 @@ async function main() {
       return;
     }
 
-    if (!isTaskConfirmedDone(roadmapText, state.activeSession.task)) {
+    if (!isTaskConfirmedDone(roadmapText, state.activeSession.task, state.activeSession.queueName || 'Ready')) {
       console.log(`PR #${prNumber} is merged, but "${state.activeSession.task}" is still unchecked in ROADMAP.md.`);
       return;
     }
@@ -235,17 +301,19 @@ async function main() {
     console.log(`"${state.activeSession.task}" is merged AND confirmed done. Advancing the queue.`);
     state.activeSession = null;
     stateChanged = true;
-    next = readyTasks.find(t => !t.checked);
+    const refreshedQueue = getQueue(roadmapText);
+    next = refreshedQueue.next;
+    activeQueueName = refreshedQueue.name;
   }
 
   if (!state.activeSession) {
     if (!next) {
-      console.log('Nothing left unchecked under ### Ready (queue empty).');
+      console.log('Nothing left unchecked under ### Ready or ## Later (queue empty).');
       if (stateChanged) { saveState(state); commitAndPush(); }
       return;
     }
 
-    console.log(`Dispatching next task: ${next.text}`);
+    console.log(`Dispatching next task from '${activeQueueName}': ${next.text}`);
 
     const startingBranch = await resolveDefaultBranch();
     console.log(`Starting branch for task execution set to: ${startingBranch}`);
@@ -253,7 +321,7 @@ async function main() {
     const issueContext = await getIssueContext(next.text);
     const promptParts = [
       'Read AGENT.MD, AGENT_RULES.md, and ROADMAP.md before starting.',
-      'Your task from ROADMAP.md\'s "### Ready" list:',
+      `Your task from ROADMAP.md's "${activeQueueName}" queue:`,
       next.text,
     ];
 
@@ -286,6 +354,7 @@ async function main() {
     state.activeSession = {
       name: session.name,
       task: next.text,
+      queueName: activeQueueName,
       issueNumber: issueContext?.number ?? null,
       startedAt: new Date().toISOString(),
     };
