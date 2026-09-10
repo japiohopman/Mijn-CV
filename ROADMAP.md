@@ -227,7 +227,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** only after the deterministic secretary is proven useful, define an optional LLM adapter that maps natural language onto the same canonical knowledge registry and tool contracts. The LLM must not become the source of truth or gain unrestricted navigation capabilities.
   - **Acceptance:** the deterministic assistant remains the fallback; LLM output is constrained to known intents/tools and repository-backed facts; provider credentials and privacy implications are explicitly handled before any production rollout.
 
-- [ ] **Ongoing Portfolio Content Iteration** — revisit project evidence, screenshots, demos, and case-study depth as real work is added.
+- [x] **Ongoing Portfolio Content Iteration** — revisit project evidence, screenshots, demos, and case-study depth as real work is added.
 - [ ] **Additional Interactive Experiments** — add only experiments that strengthen the professional story rather than expanding the technology list for its own sake.
 
 ---

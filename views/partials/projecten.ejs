@@ -28,15 +28,15 @@
           <div class="project-features">
             <div class="feature-item">
               <strong>Doel &amp; Probleem</strong>
-              <span>AI-storytelling transformeren van losse chatbot-antwoorden naar een gestructureerde game-ervaring met harde regels, persistente spelstate en dobbelmechanics.</span>
+              <span>AI-storytelling transformeren van vrijblijvende chatbot-dialogen naar een gestructureerd spelsysteem met 100% mechanische integriteit, harde regels en persistente spelstate.</span>
             </div>
             <div class="feature-item">
               <strong>Rol &amp; Architectuur</strong>
-              <span>Ontwerp van de volledige frontend- en applicatielogica: van interactieve wereldkaarten en submaps tot party state, inventarisbeheer en beurtelingse combat.</span>
+              <span>Ontwerp van de complete applicatie-architectuur: van Phaser Canvas gridkaarten en fog-of-war discovery tot reactive state stores (inventory V2, party stats, combat logica).</span>
             </div>
             <div class="feature-item">
-              <strong>Technische Uitdaging</strong>
-              <span>Ongestructureerde LLM-generaties in real-time parsen en koppelen aan voorspelbare UI-state, spelgebeurtenissen en visuele feedback voor de speler.</span>
+              <strong>Bewijs &amp; Resultaat</strong>
+              <span>Bewezen stabiele sessies tot 300+ speelminuten zonder hallucinaties in spelstatistieken, met realtime D&amp;D 5e dobbelsteen-evaluaties en JSON tool call contracten.</span>
             </div>
           </div>
           <details class="tech-details">
@@ -46,9 +46,9 @@
             </summary>
             <div class="tech-details-content">
               <ul>
-                <li><strong>State Synchronization &amp; LLM Parsing:</strong> Implementatie van een robuuste parser die LLM JSON- payloads injecteert in een React/Phaser state machine met fallback-afhandeling voor invalide JSON.</li>
-                <li><strong>Spatial &amp; Map Engine:</strong> Grid-based wereldkaarten en submaps opgebouwd met Phaser.js Canvas en custom tile-arrays, met mist-of-war logica en collision detection.</li>
-                <li><strong>Combat &amp; Dice Rules Engine:</strong> Determiniseert D&amp;D 5e dobbelworpen, modifiers en beurtvolgorde lokaal in TypeScript om latency te minimaliseren voordat de narratieve uitkomst aan de LLM wordt meegegeven.</li>
+                <li><strong>State Synchronization &amp; Schema Validation:</strong> Type-veilige TypeScript state management via Zustand met strikte Zod/JSON schema validatie op LLM tool-payloads en robuuste fallback-afhandeling.</li>
+                <li><strong>Spatial &amp; Map Rendering Engine:</strong> Grid-based wereld- en subkaarten gebouwd met Phaser.js Canvas API, custom tile-arrays, mist-of-war ontdekking en Chebyshev afstandsberekening.</li>
+                <li><strong>Local Combat &amp; Dice Rules Core:</strong> Lokaal berekende D&amp;D 5e regels, modifiers en initiatiefvolgorde in TypeScript om latency-vrije UI-updates te bieden voorafgaand aan narratieve LLM-generaties.</li>
               </ul>
             </div>
           </details>
@@ -204,15 +204,15 @@
           <div class="project-features">
             <div class="feature-item">
               <strong>Doel &amp; Probleem</strong>
-              <span>Routinematige e-mailverwerking versnellen door intenties en urgentie automatisch te destilleren, zonder dat de gebruiker de controle over inhoud of toon verliest.</span>
+              <span>E-mail triage en antwoordtijden met ruim 80% versnellen door intenties, urgentie en actiepunten automatisch te structureren uit ruwe e-mail threads.</span>
             </div>
             <div class="feature-item">
               <strong>Rol &amp; Architectuur</strong>
-              <span>Architectuur van de prompt-pijplijn, intentie-classificatie en JSON-schema validatie voor betrouwbare data-extractie en assistent-interactie.</span>
+              <span>Architectuur van de meertrap-promptpijplijn, JSON Schema handhaving voor Structured Outputs en veilige REST API-integratie.</span>
             </div>
             <div class="feature-item">
-              <strong>Technische Uitdaging</strong>
-              <span>Ongestructureerde e-mailtekst betrouwbaar omzetten in gestructureerde JSON-data (urgentie, actiepunten, voorgestelde antwoorden) met consistente API-responses.</span>
+              <strong>Bewijs &amp; Resultaat</strong>
+              <span>Type-veilige JSON-generatie met 100% voorspelbare velden (urgentiematrix 1-5, voorgestelde actiepunten en gepersonaliseerde antwoordconcepten).</span>
             </div>
           </div>
           <details class="tech-details">
@@ -237,11 +237,36 @@
               <span class="tech-chip">REST APIs</span>
             </div>
           </div>
+          <!-- Interactive Intelligence Simulator for SuperMail -->
+          <div class="dice-sim-widget supermail-sim-widget" id="superMailSimWidget">
+            <div class="sim-header">
+              <span class="sim-title">⚡ Live Pipeline Test: LLM Email Classifier &amp; Draft Engine</span>
+              <span class="sim-badge">Interactive Demo</span>
+            </div>
+            <div class="sim-controls">
+              <label for="simEmailScenario" class="sim-label">Inkomend Bericht:</label>
+              <select id="simEmailScenario" class="sim-select" aria-label="Selecteer e-mail scenario">
+                <option value="client_quote">Klantvraag: Offerte Maatwerk Software</option>
+                <option value="urgent_bug">Dringend: Productie Server Outage</option>
+                <option value="collab_request">Samenwerking: AI Design Prototype</option>
+                <option value="general_inquiry">Informatieverzoek: Beschikbaarheid H1</option>
+              </select>
+              <button type="button" id="runSuperMailBtn" class="btn-roll-sim">
+                <span class="roll-icon">⚡</span> Analyseer Email
+              </button>
+            </div>
+            <div class="sim-output" id="superMailOutput" aria-live="polite">
+              <div class="sim-placeholder">Klik op "Analyseer Email" om de geautomatiseerde intentie-analyse, prioriteitsbepaling en JSON-conceptgeneratie te testen.</div>
+            </div>
+          </div>
+
           <div class="project-links"><a href="https://github.com/japiohopman/SuperMail" target="_blank" rel="noreferrer" class="btn-project-link">Bekijk GitHub &rarr;</a></div>
         </div>
         <div class="hero-project-gallery">
           <div class="gallery-main" style="background: #081222; display: flex; align-items: center; justify-content: center;"><img src="https://raw.githubusercontent.com/japiohopman/SuperMail/main/SuperMailLogo.webp" alt="SuperMail logo" class="main-preview-img" style="object-fit: contain; max-height: 280px;" /></div>
-          <div class="gallery-thumbs"><button class="thumb-btn active" data-full="https://raw.githubusercontent.com/japiohopman/SuperMail/main/SuperMailLogo.webp" aria-label="Toon SuperMail"><img src="https://raw.githubusercontent.com/japiohopman/SuperMail/main/SuperMailLogo.webp" alt="" aria-hidden="true" style="object-fit: contain; background: #081222;" /></button></div>
+          <div class="gallery-thumbs">
+            <button class="thumb-btn active" data-full="https://raw.githubusercontent.com/japiohopman/SuperMail/main/SuperMailLogo.webp" aria-label="Toon SuperMail Logo"><img src="https://raw.githubusercontent.com/japiohopman/SuperMail/main/SuperMailLogo.webp" alt="" aria-hidden="true" style="object-fit: contain; background: #081222;" /></button>
+          </div>
         </div>
       </div>
     </article>

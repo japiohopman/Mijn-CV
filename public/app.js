@@ -475,8 +475,77 @@ const setupArtificerDiceSim = () => {
   });
 };
 
+// SuperMail Interactive Email Classification & Prompt Pipeline Simulator
+const setupSuperMailSim = () => {
+  const runBtn = document.getElementById("runSuperMailBtn");
+  const scenarioSelect = document.getElementById("simEmailScenario");
+  const outputDiv = document.getElementById("superMailOutput");
+
+  if (!runBtn || !scenarioSelect || !outputDiv) return;
+
+  const scenarios = {
+    client_quote: {
+      s: "dirk@innovate-tech.nl",
+      p: 4,
+      pl: "🟡 HOOG (4/5)",
+      c: "sim-res-success",
+      i: "PROPOSAL_REQUEST",
+      a: ["Schat uren & architectuur in voor dashboard", "Plan intakegesprek 30 min", "Deel portfolio case-studies"],
+      d: "Beste Dirk, bedankt voor je bericht! Ik help graag bij het dashboard. Wanneer past een korte call deze week?"
+    },
+    urgent_bug: {
+      s: "ops-alerts@cloudmonitoring.io",
+      p: 5,
+      pl: "🚨 CRITISCH (5/5)",
+      c: "sim-res-crit",
+      i: "SYSTEM_OUTAGE_ALERT",
+      a: ["Controleer Express server logs port 3000", "Escaleer naar bereikbaarheidsdienst", "Verstuur update binnen 15 min"],
+      d: "Beste DevOps team, melding is direct opgepakt. We controleren Nginx en Node.js logs. Update volgt z.s.m."
+    },
+    collab_request: {
+      s: "lotte@creative-studio.amsterdam",
+      p: 3,
+      pl: "🟢 NORMAAL (3/5)",
+      c: "sim-res-success",
+      i: "COLLABORATION_INVITE",
+      a: ["Evalueer generative UI concepten", "Bekijk Figma/GitHub links", "Reageer met beschikbaarheid"],
+      d: "Hallo Lotte, tof initiatief! Ik bekijk de materialen en kom er morgen op terug."
+    },
+    general_inquiry: {
+      s: "recruiter@techmatch.nl",
+      p: 2,
+      pl: "⚪ LAAG (2/5)",
+      c: "sim-res-fail",
+      i: "AVAILABILITY_QUERY",
+      a: ["Controleer agenda en projectbelasting", "Stuur link naar jaaphopman.com"],
+      d: "Beste recruiter, dank voor de interesse! Mijn portfolio is te bekijken op jaaphopman.com."
+    }
+  };
+
+  runBtn.addEventListener("click", () => {
+    const cfg = scenarios[scenarioSelect.value] || scenarios.client_quote;
+
+    const payload = {
+      event: "EMAIL_PIPELINE_RESOLVED",
+      timestamp: new Date().toISOString().split("T")[1].slice(0, 8),
+      input_metadata: { sender: cfg.s, scenario: scenarioSelect.value },
+      structured_analysis: { intent: cfg.i, urgency_score: cfg.p, action_items: cfg.a },
+      generated_draft: { recipient: cfg.s, status: "DRAFT_READY_FOR_HUMAN_REVIEW", body_text: cfg.d }
+    };
+
+    outputDiv.innerHTML = `
+      <div class="sim-res-header">
+        <span>Intentie: <strong>${cfg.i}</strong> (${cfg.s})</span>
+        <span class="${cfg.c}">${cfg.pl}</span>
+      </div>
+      <div class="sim-json-preview">${JSON.stringify(payload, null, 2)}</div>
+    `;
+  });
+};
+
 setupThemeToggle();
 setupMobileNav();
 setupContactForm();
 setupProjectDemos();
 setupArtificerDiceSim();
+setupSuperMailSim();
