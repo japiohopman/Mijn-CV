@@ -202,7 +202,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Design direction:** treat the assistant as a small query engine rather than a chatbot that "pretends to think". Keep the knowledge base separate from UI rendering and make every available action explicit and testable.
   - **Acceptance:** architecture is documented, supported intents are enumerated, answer sources are identified, navigation/tool contracts are defined, and there is a clear boundary between deterministic logic and any future LLM adapter. No external AI dependency is introduced in this phase.
 
-- [ ] **Phase 8 — Assistant Knowledge Registry & Intent Engine**
+- [x] **Phase 8 — Assistant Knowledge Registry & Intent Engine**
   - **Problem:** free-form questions cannot be answered reliably unless the site has a canonical set of facts and mappings.
   - **Goal:** create a small structured knowledge registry for professional identity, projects, skills, career/background, contact options, routes, and common visitor questions. Add deterministic intent matching for queries such as "wat doet Jaap?", "welke projecten heeft hij?", "heeft hij ook een keuken-cv?", "waar staat Project X?", and "hoe neem ik contact op?".
   - **Acceptance:** answers come from structured site data rather than duplicated hard-coded prose; unsupported questions receive a transparent fallback; intent matching is predictable, small, and unit-testable.
