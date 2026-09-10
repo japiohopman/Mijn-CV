@@ -46,6 +46,7 @@ Het project is nu modulair en gestructureerd volgens professionele standaarden:
   - `skills.ejs`: Development, creative en human skills.
   - `projecten.ejs`: De uitgewerkte featured projecten (*Artificer* en *Global Conquest*) en git-integraties.
   - `footer.ejs`: De footer en contact-sectie.
+  - `secretary.ejs`: De compacte, zwevende Portfolio Secretary assistent-widget.
 
 ---
 

@@ -92,6 +92,9 @@ async function runTests() {
       { path: '/favicon.ico', expectedStatus: 200 },
       { path: '/apple-touch-icon.png', expectedStatus: 200 },
       { path: '/site.webmanifest', expectedStatus: 200 },
+      { path: '/secretary-engine.js', expectedStatus: 200 },
+      { path: '/secretary-ui.js', expectedStatus: 200 },
+      { path: '/data/secretary_knowledge.json', expectedStatus: 200 },
       { path: '/keuken_cv', expectedStatus: 301 },
     ];
 
@@ -134,7 +137,9 @@ async function runTests() {
           '"jobTitle": "Developer & Creative Technologist"',
           '"@type": "WebSite"',
           '"@type": "ProfilePage"',
-          'href="/keuken-cv"'
+          'href="/keuken-cv"',
+          'id="secretaryWidget"',
+          'src="/secretary-ui.js"'
         ]
       },
       {
@@ -147,7 +152,8 @@ async function runTests() {
           'property="og:url" content="http://127.0.0.1:3099/share"',
           'name="twitter:card" content="summary_large_image"',
           'rel="canonical" href="http://127.0.0.1:3099/share"',
-          '"@type": "Person"'
+          '"@type": "Person"',
+          'id="secretaryWidget"'
         ]
       },
       {
@@ -162,7 +168,8 @@ async function runTests() {
           'rel="canonical" href="http://127.0.0.1:3099/keuken-cv"',
           '"jobTitle": "Zelfstandig Werkend Kok & Chef"',
           'Twee Werelden, Eén Executiementaliteit',
-          'Bekijk Developer Portfolio'
+          'Bekijk Developer Portfolio',
+          'id="secretaryWidget"'
         ]
       },
       {

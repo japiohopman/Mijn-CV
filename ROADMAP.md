@@ -212,7 +212,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** implement explicit assistant actions such as `navigateToRoute`, `navigateToSection`, `openProject`, `openShare`, and `openKitchenCV`. Tool results should be structured and rendered by the UI; the assistant should never fabricate URLs or actions outside the allow-list.
   - **Acceptance:** relevant questions can trigger a visible action such as “Bekijk project”, “Open keuken-CV”, or “Ga naar contact”; every action resolves to a known route/anchor; keyboard navigation and normal browser navigation remain fully functional without the assistant.
 
-- [ ] **Phase 8 — Secretary UI & Conversational UX**
+- [x] **Phase 8 — Secretary UI & Conversational UX**
   - **Problem:** the assistant needs to feel like part of the portfolio rather than a generic floating chat widget.
   - **Goal:** design a compact chat/secretary interface with an input, conversation history, suggested questions, clear action buttons, loading-free deterministic responses, and accessible focus/keyboard behavior. Positioning and wording should reinforce "site secretary" rather than imply human or AI consciousness.
   - **Acceptance:** the interface is usable on mobile and desktop, does not obstruct core content, has clear empty/error states, respects reduced motion, and remains useful with JavaScript failure or when the assistant is unavailable.
