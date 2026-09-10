@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const SecretaryEngine = require('../public/secretary-engine.js');
 
-console.log('Testing Secretary Engine & Knowledge Registry...');
+console.log('Testing Secretary Engine, Knowledge Registry & Content Governance...');
 
 // Load knowledge JSON
 const knowledgePath = path.join(__dirname, '../public/data/secretary_knowledge.json');
@@ -200,7 +200,6 @@ function createMockElement(selector) {
 
 const mockDoc = {
   querySelector: function(selector) {
-    // If mock page is not '/', main portfolio section elements are not in DOM
     if (mockLocationHref !== '/') {
       return null;
     }
@@ -279,10 +278,89 @@ const invalidExecRes = SecretaryEngine.executeToolCall(
 );
 assert(invalidExecRes.success === false && invalidExecRes.action === 'none', 'Unauthorized tool call rejected cleanly with success: false');
 
+
+// 5. Content Governance & Sync Assertions
+console.log('\nEvaluating Content Governance & Repository Sync Assertions...');
+
+// Read repository source files
+const rootDir = path.join(__dirname, '..');
+const serverJsContent = fs.readFileSync(path.join(rootDir, 'server.js'), 'utf8');
+const indexEjsContent = fs.readFileSync(path.join(rootDir, 'views/index.ejs'), 'utf8');
+const projectenEjsContent = fs.readFileSync(path.join(rootDir, 'views/partials/projecten.ejs'), 'utf8');
+const skillsEjsContent = fs.readFileSync(path.join(rootDir, 'views/partials/skills.ejs'), 'utf8');
+const overEjsContent = fs.readFileSync(path.join(rootDir, 'views/partials/over.ejs'), 'utf8');
+const ervaringEjsContent = fs.readFileSync(path.join(rootDir, 'views/partials/ervaring.ejs'), 'utf8');
+const footerEjsContent = fs.readFileSync(path.join(rootDir, 'views/partials/footer.ejs'), 'utf8');
+const allViewsContent = [indexEjsContent, projectenEjsContent, skillsEjsContent, overEjsContent, ervaringEjsContent, footerEjsContent].join('\n');
+
+// 5a. Intent Uniqueness & Mandatory Property Validation
+const seenIntentIds = new Set();
+for (const intent of knowledgeData.intents) {
+  assert(!seenIntentIds.has(intent.intentId), `Intent ID "${intent.intentId}" is unique`);
+  seenIntentIds.add(intent.intentId);
+
+  assert(Array.isArray(intent.keywords) && intent.keywords.length > 0, `Intent "${intent.intentId}" has non-empty keywords array`);
+  assert(Array.isArray(intent.patterns) && intent.patterns.length > 0, `Intent "${intent.intentId}" has non-empty patterns array`);
+  assert(typeof intent.answerText === 'string' && intent.answerText.length > 10, `Intent "${intent.intentId}" has valid answer text`);
+  assert(typeof intent.knowledgeSource === 'string' && intent.knowledgeSource.length > 0, `Intent "${intent.intentId}" specifies knowledge source`);
+}
+
+// 5b. Anchor Governance: All tool call anchors must exist in view files
+for (const intent of knowledgeData.intents) {
+  if (intent.toolCall && intent.toolCall.tool === 'navigateToSection') {
+    const anchor = intent.toolCall.parameters.anchor; // e.g. "#over"
+    const targetId = anchor.substring(1); // "over"
+    const hasId = allViewsContent.includes(`id="${targetId}"`);
+    assert(hasId, `Governance: Section anchor "${anchor}" referenced by intent "${intent.intentId}" exists in template views`);
+  }
+}
+
+// 5c. Route Governance: All tool call routes must exist in Express server.js
+for (const intent of knowledgeData.intents) {
+  if (intent.toolCall && intent.toolCall.tool === 'navigateToRoute') {
+    const route = intent.toolCall.parameters.route; // e.g. "/share"
+    const routePattern = route === '/' ? "app.get('/'" : `app.get('${route}'`;
+    const hasRoute = serverJsContent.includes(routePattern);
+    assert(hasRoute, `Governance: Route "${route}" referenced by intent "${intent.intentId}" exists in server.js`);
+  }
+}
+
+// 5d. Project ID Governance: All project IDs must exist in projecten.ejs
+const projectMap = {
+  'artificer': '.artificer-card',
+  'global-conquest': '.conquest-card',
+  'supermail': '.supermail-card'
+};
+
+for (const intent of knowledgeData.intents) {
+  if (intent.toolCall && intent.toolCall.tool === 'openProject') {
+    const projId = intent.toolCall.parameters.projectId;
+    const targetClass = projectMap[projId] ? projectMap[projId].substring(1) : projId;
+    const hasProjectClass = projectenEjsContent.includes(targetClass);
+    assert(hasProjectClass, `Governance: Project ID "${projId}" referenced by intent "${intent.intentId}" exists in projecten.ejs (class "${targetClass}")`);
+  }
+}
+
+// 5e. Source File Governance: Primary files referenced in knowledgeSource must exist on disk
+for (const intent of knowledgeData.intents) {
+  if (intent.knowledgeSource) {
+    // Extract file paths from knowledgeSource string (e.g., "POSITIONING.md (§1), views/partials/head.ejs")
+    const rawSources = intent.knowledgeSource.split(/,\s*/);
+    for (const rawSrc of rawSources) {
+      const cleanPath = rawSrc.split(/\s*\(|\s*$/)[0].trim();
+      if (cleanPath.endsWith('.md') || cleanPath.endsWith('.ejs') || cleanPath.endsWith('.js') || cleanPath.endsWith('.json')) {
+        const fullPath = path.join(rootDir, cleanPath);
+        const fileExists = fs.existsSync(fullPath);
+        assert(fileExists, `Governance: Knowledge source file "${cleanPath}" referenced by intent "${intent.intentId}" exists on disk`);
+      }
+    }
+  }
+}
+
 if (totalFailed > 0) {
-  console.error(`\nSecretary Engine tests failed! ${totalFailed} failure(s).`);
+  console.error(`\nSecretary Engine & Governance tests failed! ${totalFailed} failure(s).`);
   process.exit(1);
 } else {
-  console.log(`\nAll ${totalPassed} Secretary Engine assertions passed successfully!`);
+  console.log(`\nAll ${totalPassed} Secretary Engine & Content Governance assertions passed successfully!`);
   process.exit(0);
 }
