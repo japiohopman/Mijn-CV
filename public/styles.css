@@ -2533,6 +2533,499 @@ img {
   }
 }
 
+/* Assistant Highlight Animation for Tool Call Target Cards */
+.assistant-highlight {
+  animation: secretaryPulse 2.5s var(--ease-out);
+  border-color: var(--secondary) !important;
+  box-shadow: 0 0 35px var(--secondary) !important;
+}
+
+[data-theme="light"] .assistant-highlight {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 35px rgba(214, 92, 39, 0.4) !important;
+}
+
+@keyframes secretaryPulse {
+  0% { transform: scale(1); }
+  15% { transform: scale(1.02); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.015); }
+  60% { transform: scale(1); }
+}
+
+/* ==========================================================================
+   Portfolio Secretary Floating Widget Styling
+   ========================================================================== */
+.secretary-widget {
+  position: fixed;
+  bottom: 1.8rem;
+  right: 1.8rem;
+  z-index: 9990;
+  font-family: 'Space Grotesk', sans-serif;
+  isolation: isolate;
+}
+
+/* Floating Trigger Button */
+.secretary-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1.25rem;
+  min-height: 48px;
+  border-radius: 999px;
+  border: 1px solid rgba(125, 249, 208, 0.35);
+  background:
+    radial-gradient(circle at top left, rgba(125, 249, 208, 0.15), transparent 60%),
+    rgba(7, 17, 31, 0.92);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(14px);
+  transition: transform 0.25s var(--ease-out), border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.secretary-toggle-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  border-color: var(--secondary);
+  box-shadow: 0 16px 45px rgba(125, 249, 208, 0.25);
+}
+
+[data-theme="light"] .secretary-toggle-btn {
+  border-color: rgba(214, 92, 39, 0.35);
+  background:
+    radial-gradient(circle at top left, rgba(214, 92, 39, 0.1), transparent 60%),
+    rgba(255, 255, 255, 0.96);
+  color: var(--text);
+  box-shadow: 0 12px 36px rgba(139, 131, 114, 0.22);
+}
+
+[data-theme="light"] .secretary-toggle-btn:hover {
+  border-color: var(--primary);
+  box-shadow: 0 16px 45px rgba(214, 92, 39, 0.25);
+}
+
+.secretary-toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--secondary);
+}
+
+[data-theme="light"] .secretary-toggle-icon {
+  color: var(--primary);
+}
+
+/* Floating Panel Card Drawer */
+.secretary-panel {
+  position: absolute;
+  bottom: 4rem;
+  right: 0;
+  width: min(390px, 90vw);
+  height: 520px;
+  max-height: calc(100vh - 6rem);
+  background:
+    radial-gradient(circle at top right, rgba(125, 249, 208, 0.08), transparent 45%),
+    linear-gradient(180deg, rgba(11, 22, 48, 0.98), rgba(7, 17, 31, 0.96));
+  border: 1px solid rgba(125, 249, 208, 0.25);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.95);
+  transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out), visibility 0.3s ease;
+  pointer-events: none;
+}
+
+.secretary-panel.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+[data-theme="light"] .secretary-panel {
+  background:
+    radial-gradient(circle at top right, rgba(214, 92, 39, 0.06), transparent 45%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 241, 235, 0.96));
+  border-color: rgba(214, 92, 39, 0.25);
+  box-shadow: 0 24px 70px rgba(139, 131, 114, 0.25);
+}
+
+/* Secretary Panel Header */
+.secretary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.3rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .secretary-header {
+  border-bottom-color: var(--surface-border);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.secretary-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.secretary-avatar-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
+  color: #07111f;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(125, 249, 208, 0.3);
+}
+
+.secretary-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.secretary-subtitle {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin: 0.15rem 0 0;
+}
+
+.secretary-close-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--muted);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.secretary-close-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--text);
+}
+
+[data-theme="light"] .secretary-close-btn {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: var(--muted);
+}
+
+[data-theme="light"] .secretary-close-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--text);
+}
+
+/* Suggested Questions Bar */
+.secretary-suggestions {
+  padding: 0.6rem 1rem;
+  background: rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+[data-theme="light"] .secretary-suggestions {
+  background: rgba(0, 0, 0, 0.015);
+  border-bottom-color: var(--surface-border);
+}
+
+.suggestions-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.chips-scroll-container {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 0.2rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chips-scroll-container::-webkit-scrollbar {
+  height: 3px;
+}
+.chips-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 99px;
+}
+
+.secretary-chip {
+  white-space: nowrap;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(125, 249, 208, 0.08);
+  border: 1px solid rgba(125, 249, 208, 0.25);
+  color: var(--secondary);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s ease, transform 0.15s ease, border-color 0.2s ease;
+}
+
+.secretary-chip:hover {
+  background: rgba(125, 249, 208, 0.18);
+  transform: translateY(-1px);
+}
+
+[data-theme="light"] .secretary-chip {
+  background: rgba(214, 92, 39, 0.08);
+  border-color: rgba(214, 92, 39, 0.25);
+  color: var(--primary);
+}
+
+[data-theme="light"] .secretary-chip:hover {
+  background: rgba(214, 92, 39, 0.18);
+}
+
+/* Chat History Window */
+.secretary-chat-history {
+  flex: 1;
+  padding: 1rem 1.1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  scroll-behavior: smooth;
+}
+
+.secretary-chat-history::-webkit-scrollbar {
+  width: 5px;
+}
+.secretary-chat-history::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 99px;
+}
+
+/* Messages */
+.secretary-msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 88%;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  animation: msgFadeIn 0.25s var(--ease-out);
+}
+
+@keyframes msgFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.assistant-msg {
+  align-self: flex-start;
+}
+
+.assistant-msg .msg-content {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md) var(--radius-md) var(--radius-md) 0.25rem;
+  padding: 0.75rem 0.95rem;
+  color: var(--text);
+}
+
+[data-theme="light"] .assistant-msg .msg-content {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: var(--surface-border);
+  color: var(--text);
+}
+
+.user-msg {
+  align-self: flex-end;
+}
+
+.user-msg .msg-content {
+  background: linear-gradient(135deg, var(--secondary), #a4fff1);
+  color: #07111f;
+  font-weight: 600;
+  border-radius: var(--radius-md) var(--radius-md) 0.25rem var(--radius-md);
+  padding: 0.65rem 0.9rem;
+  box-shadow: 0 4px 12px rgba(125, 249, 208, 0.2);
+}
+
+[data-theme="light"] .user-msg .msg-content {
+  background: linear-gradient(135deg, var(--primary), #ffbc70);
+  color: #07111f;
+  box-shadow: 0 4px 12px rgba(214, 92, 39, 0.2);
+}
+
+.msg-sub {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 0.4rem 0 0;
+}
+
+.msg-source {
+  font-size: 0.72rem;
+  color: var(--secondary);
+  opacity: 0.85;
+  margin-top: 0.4rem;
+  font-style: italic;
+}
+
+[data-theme="light"] .msg-source {
+  color: var(--primary);
+}
+
+/* Assistant Action Button inside message */
+.secretary-action-btn {
+  align-self: flex-start;
+  margin-top: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  min-height: 36px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary), #ffbc70);
+  color: #07111f;
+  font-weight: 700;
+  font-size: 0.82rem;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.secretary-action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 141, 92, 0.35);
+}
+
+/* Query Form Input */
+.secretary-form {
+  padding: 0.8rem 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="light"] .secretary-form {
+  border-top-color: var(--surface-border);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.secretary-input {
+  flex: 1;
+  padding: 0.6rem 0.9rem;
+  min-height: 42px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+[data-theme="light"] .secretary-input {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(0, 0, 0, 0.18);
+  color: var(--text);
+}
+
+.secretary-input:focus {
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 2px rgba(125, 249, 208, 0.25);
+}
+
+[data-theme="light"] .secretary-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(214, 92, 39, 0.25);
+}
+
+.secretary-send-btn {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--secondary), #a4fff1);
+  color: #07111f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 0;
+}
+
+.secretary-send-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 4px 14px rgba(125, 249, 208, 0.35);
+}
+
+[data-theme="light"] .secretary-send-btn {
+  background: linear-gradient(135deg, var(--primary), #ffbc70);
+  color: #07111f;
+}
+
+/* Mobile responsive tuning for Secretary Widget */
+@media (max-width: 480px) {
+  .secretary-widget {
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  .secretary-panel {
+    bottom: 3.8rem;
+    right: 0;
+    width: calc(100vw - 2rem);
+    height: min(480px, 80vh);
+  }
+
+  .secretary-toggle-label {
+    display: none;
+  }
+
+  .secretary-toggle-btn {
+    padding: 0;
+    width: 48px;
+    height: 48px;
+    justify-content: center;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
