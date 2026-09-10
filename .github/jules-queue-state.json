@@ -1,9 +1,3 @@
 {
-  "activeSession": {
-    "name": "sessions/12249702656119556679",
-    "task": "**DJ & Music Identity Integration (`DJ-page`)** — integrate Jaap's music production and DJing profile (`https://github.com/japiohopman/DJ-page`) into the creative developer narrative and Portfolio Secretary knowledge base.",
-    "queueName": "Later",
-    "issueNumber": null,
-    "startedAt": "2026-09-10T13:10:00.399Z"
-  }
+  "activeSession": null
 }
