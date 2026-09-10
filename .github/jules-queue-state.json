@@ -1,3 +1,9 @@
 {
-  "activeSession": null
+  "activeSession": {
+    "name": "sessions/14668687528131200634",
+    "task": "**Phase 8 — Portfolio Secretary: Product & Architecture Definition**",
+    "queueName": "Later",
+    "issueNumber": null,
+    "startedAt": "2026-09-10T04:35:04.755Z"
+  }
 }
