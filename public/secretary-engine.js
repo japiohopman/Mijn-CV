@@ -181,7 +181,120 @@
     }
   }
 
+  /**
+   * Executes a validated tool call action against the DOM / browser environment.
+   * @param {Object} toolCall The validated tool call payload
+   * @param {Object} [options] Optional context overrides (e.g. for testing)
+   * @returns {Object} Execution result status { success: boolean, action: string, details?: string }
+   */
+  function executeToolCall(toolCall, options = {}) {
+    if (!validateToolCall(toolCall)) {
+      return { success: false, action: 'none', details: 'Invalid tool call payload' };
+    }
+
+    const win = options.window || (typeof window !== 'undefined' ? window : null);
+    const doc = options.document || (typeof document !== 'undefined' ? document : null);
+
+    if (!win || !doc) {
+      return { success: false, action: 'none', details: 'No DOM window context available' };
+    }
+
+    const params = toolCall.parameters || {};
+
+    switch (toolCall.tool) {
+      case 'navigateToSection': {
+        const anchor = params.anchor;
+        const targetEl = doc.querySelector(anchor);
+
+        // If on a different route than '/', perform navigation to '/' with anchor
+        if (!targetEl && win.location && win.location.pathname !== '/') {
+          win.location.href = '/' + anchor;
+          return { success: true, action: 'redirect', details: `Redirecting to /${anchor}` };
+        }
+
+        if (targetEl) {
+          const prefersReducedMotion = win.matchMedia && win.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          targetEl.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
+          if (win.history && win.history.pushState) {
+            win.history.pushState(null, '', anchor);
+          }
+          targetEl.focus && targetEl.focus({ preventScroll: true });
+          return { success: true, action: 'scrollToSection', details: `Scrolled to ${anchor}` };
+        }
+
+        return { success: false, action: 'navigateToSection', details: `Element ${anchor} not found` };
+      }
+
+      case 'navigateToRoute': {
+        const route = params.route;
+        if (win.location) {
+          win.location.href = route;
+          return { success: true, action: 'navigateToRoute', details: `Navigated to ${route}` };
+        }
+        return { success: false, action: 'navigateToRoute', details: 'Location context unavailable' };
+      }
+
+      case 'openProject': {
+        const projectId = params.projectId;
+        const selectorMap = {
+          'artificer': '.artificer-card',
+          'global-conquest': '.conquest-card',
+          'supermail': '.supermail-card'
+        };
+
+        const targetSelector = selectorMap[projectId] || `#${projectId}`;
+        const cardEl = doc.querySelector(targetSelector);
+
+        if (!cardEl && win.location && win.location.pathname !== '/') {
+          win.location.href = `/#projecten`;
+          return { success: true, action: 'redirect', details: `Redirecting to main portfolio project section` };
+        }
+
+        if (cardEl) {
+          const prefersReducedMotion = win.matchMedia && win.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          cardEl.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
+
+          // Expand details if available and collapsed
+          const detailsEl = cardEl.querySelector('details');
+          if (detailsEl && !detailsEl.open) {
+            detailsEl.open = true;
+          }
+
+          // Visual highlight
+          cardEl.classList.add('assistant-highlight');
+          setTimeout(() => {
+            cardEl.classList.remove('assistant-highlight');
+          }, 2500);
+
+          return { success: true, action: 'openProject', details: `Focused project card ${projectId}` };
+        }
+
+        return { success: false, action: 'openProject', details: `Project ${projectId} element not found` };
+      }
+
+      case 'openKitchenCV': {
+        if (win.location) {
+          win.location.href = '/keuken-cv';
+          return { success: true, action: 'openKitchenCV', details: 'Navigated to /keuken-cv' };
+        }
+        return { success: false, action: 'openKitchenCV', details: 'Location context unavailable' };
+      }
+
+      case 'openShare': {
+        if (win.location) {
+          win.location.href = '/share';
+          return { success: true, action: 'openShare', details: 'Navigated to /share' };
+        }
+        return { success: false, action: 'openShare', details: 'Location context unavailable' };
+      }
+
+      default:
+        return { success: false, action: 'none', details: 'Unknown tool' };
+    }
+  }
+
   SecretaryEngine.validateToolCall = validateToolCall;
+  SecretaryEngine.executeToolCall = executeToolCall;
 
   return SecretaryEngine;
 }));

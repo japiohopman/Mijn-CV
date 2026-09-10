@@ -207,7 +207,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** create a small structured knowledge registry for professional identity, projects, skills, career/background, contact options, routes, and common visitor questions. Add deterministic intent matching for queries such as "wat doet Jaap?", "welke projecten heeft hij?", "heeft hij ook een keuken-cv?", "waar staat Project X?", and "hoe neem ik contact op?".
   - **Acceptance:** answers come from structured site data rather than duplicated hard-coded prose; unsupported questions receive a transparent fallback; intent matching is predictable, small, and unit-testable.
 
-- [ ] **Phase 8 — Assistant Tool Calls & Navigation Actions**
+- [x] **Phase 8 — Assistant Tool Calls & Navigation Actions**
   - **Problem:** answering a question is less useful when the visitor still has to find the destination manually.
   - **Goal:** implement explicit assistant actions such as `navigateToRoute`, `navigateToSection`, `openProject`, `openShare`, and `openKitchenCV`. Tool results should be structured and rendered by the UI; the assistant should never fabricate URLs or actions outside the allow-list.
   - **Acceptance:** relevant questions can trigger a visible action such as “Bekijk project”, “Open keuken-CV”, or “Ga naar contact”; every action resolves to a known route/anchor; keyboard navigation and normal browser navigation remain fully functional without the assistant.
