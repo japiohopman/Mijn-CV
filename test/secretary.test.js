@@ -57,6 +57,12 @@ const testCases = [
     expectedParam: 'global-conquest'
   },
   {
+    query: 'Vertel over SuperMail e-mail assistent',
+    expectedIntent: 'projects.supermail',
+    expectedTool: 'openProject',
+    expectedParam: 'supermail'
+  },
+  {
     query: 'welke skills en tech stack gebruikt hij?',
     expectedIntent: 'skills.overview',
     expectedTool: 'navigateToSection',
