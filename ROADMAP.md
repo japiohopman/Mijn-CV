@@ -222,7 +222,7 @@ The portfolio should feel intentional, confident, technically credible, human, a
   - **Goal:** add automated tests for intent matching, answer selection, tool-call validation, route resolution, and fallback behavior. Document the knowledge registry as part of the site's content architecture so future portfolio edits update the secretary intentionally.
   - **Acceptance:** core intents and every exposed tool have automated coverage; invalid tool targets are rejected; changing a project or route cannot leave stale assistant links without a failing test or explicit content update.
 
-- [ ] **Phase 9 — Optional LLM Adapter (Future, Not Part of MVP)**
+- [x] **Phase 9 — Optional LLM Adapter (Future, Not Part of MVP)**
   - **Problem:** deterministic matching will eventually become limiting for natural-language questions and broader discovery.
   - **Goal:** only after the deterministic secretary is proven useful, define an optional LLM adapter that maps natural language onto the same canonical knowledge registry and tool contracts. The LLM must not become the source of truth or gain unrestricted navigation capabilities.
   - **Acceptance:** the deterministic assistant remains the fallback; LLM output is constrained to known intents/tools and repository-backed facts; provider credentials and privacy implications are explicitly handled before any production rollout.

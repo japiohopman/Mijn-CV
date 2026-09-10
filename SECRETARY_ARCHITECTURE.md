@@ -1,8 +1,8 @@
 # 🏛️ Portfolio Secretary — Product & Architecture Definition
 
-> **Phase 8 Specification Document**
-> **Status:** Canonical Architecture Specification (Deterministic Non-LLM Core)
-> **Scope:** Product Vision, Architectural Layers, Knowledge Registry Model, Intent Catalog, Action Tool Contracts, and LLM Boundary.
+> **Phase 8 & Phase 9 Specification Document**
+> **Status:** Canonical Architecture Specification (Deterministic Non-LLM Core with Optional Phase 9 LLM Adapter)
+> **Scope:** Product Vision, Architectural Layers, Knowledge Registry Model, Intent Catalog, Action Tool Contracts, LLM Adapter Specification, and Privacy/Security Rules.
 
 ---
 
@@ -14,19 +14,19 @@ Visitors to Jaap Hopman's portfolio (recruiters, engineering leads, clients, and
 While the site features a clear visual hierarchy and responsive navigation, visitors must manually browse sections to find specific answers or trigger actions.
 
 ### 1.2 Product Vision: The "Site Secretary"
-The **Portfolio Secretary** is a lightweight, responsive digital assistant embedded in the portfolio. Rather than acting as a generic conversational chatbot or "pretending to think" via ungrounded LLM stream generation, the Secretary operates as a **fast, deterministic query engine**.
+The **Portfolio Secretary** is a lightweight, responsive digital assistant embedded in the portfolio. Rather than acting as a generic conversational chatbot or "pretending to think" via ungrounded LLM stream generation, the Secretary operates as a **fast, deterministic query engine** with an optional LLM natural language classification adapter.
 
 Key principles:
 1. **Deterministic First**: Answers are retrieved strictly from canonical repository data (e.g., `POSITIONING.md`, EJS view templates, route definitions).
 2. **Action-Oriented**: Answers are paired with explicit tool calls (e.g., navigating to sections, opening project modals, opening the Kitchen CV, or jumping to contact).
-3. **Zero External AI Dependencies**: The core system runs locally in the browser/client without external LLM API keys or network latency.
+3. **Zero External AI Dependencies by Default**: The core system runs locally in the browser/client without external LLM API keys or network latency.
 4. **Predictable & Testable**: Every intent, query match, answer template, and tool call signature is fully unit-testable and schema-validated.
 
 ---
 
 ## 2. System Architecture & Component Layers
 
-The Secretary architecture decouples knowledge storage, intent evaluation, action execution, rendering, and future natural language processing into five isolated layers:
+The Secretary architecture decouples knowledge storage, intent evaluation, action execution, rendering, and natural language processing into five isolated layers:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
@@ -61,9 +61,9 @@ The Secretary architecture decouples knowledge storage, intent evaluation, actio
 │  - Accessible Conversation History, Action Button Chips, Focus Management      │
 └─────────────────────────────────────────────────────────────────────────────────┘
                          ▲
-                         │ (Optional Future Extension - Phase 9)
+                         │ (Optional Extension - Phase 9 Module)
 ┌────────────────────────┴────────────────────────────────────────────────────────┐
-│                   LAYER 5: LLM ADAPTER BOUNDARY (PHASE 9)                        │
+│                   LAYER 5: LLM ADAPTER BOUNDARY (`SecretaryLLMAdapter`)         │
 │  - Maps complex natural language to Layer 1 Intent IDs and Layer 3 Tool Calls   │
 │  - STRICT RULE: LLM cannot bypass Knowledge Registry or invent unverified actions│
 └─────────────────────────────────────────────────────────────────────────────────┘
@@ -268,9 +268,9 @@ Navigates directly to the `/share` route.
 
 ---
 
-## 6. Deterministic Logic vs. LLM Adapter Boundary (Phase 9 Boundary)
+## 6. Optional Phase 9 LLM Adapter Specification
 
-While Phase 8 specifies a 100% deterministic, non-LLM core, the architecture provides a clean adapter boundary for optional future Phase 9 natural language enhancement:
+The Phase 9 Optional LLM Adapter module (`public/secretary-llm-adapter.js`) provides natural language intent classification while maintaining strict boundary separation and zero ungrounded output.
 
 ```
                             ┌──────────────────────────────────────────────┐
@@ -279,37 +279,37 @@ While Phase 8 specifies a 100% deterministic, non-LLM core, the architecture pro
                                                    │
                                                    ▼
                                ┌────────────────────────────────────────┐
-                               │   OPTIONAL PHASE 9 LLM ADAPTER LAYER   │
+                               │       PHASE 9 LLM ADAPTER LAYER        │
+                               │  (`public/secretary-llm-adapter.js`)   │
                                │  - Parses natural language phrasing    │
-                               │  - Maps input to known Intent ID       │
-                               │  - Formats Tool Call payload           │
+                               │  - Enforces prompt system constraints  │
+                               │  - Emits JSON: {"intentId": "<ID>"}    │
                                └───────────────────┬────────────────────┘
                                                    │
-                                                   │ Must emit strictly valid
-                                                   │ Intent Result JSON
+                                                   │ Validated Intent ID
                                                    ▼
 ┌─────────────────────────────────────────────────────────────────────────────────────────┐
 │                          DETERMINISTIC KNOWLEDGE & TOOL ENGINE                          │
 │                                                                                         │
-│  - Verifies Intent ID against Canonical Knowledge Registry                              │
-│  - Validates Tool Call Payload against Tool JSON Schemas                                │
-│  - Retrieves grounded answer text directly from repository data                        │
-│  - Executes UI Action via Tool Allow-List                                              │
+│  - Verifies Intent ID against Canonical Allow-List                                      │
+│  - Retrieves grounded answer text & source mapping from `secretary_knowledge.json`      │
+│  - Validates & executes Tool Call Payload against Tool JSON Schemas                     │
 │                                                                                         │
 │  * CRITICAL GUARANTEE: The LLM NEVER generates answer facts or unverified URLs directly. │
 └─────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 6.1 Strict Architectural Constraints for Future LLM Adapters
-1. **Fact Authorization**: The LLM is **never** permitted to generate biographical, project, or contact claims outside the knowledge registry.
-2. **Action Allow-List**: The LLM can only emit tool calls defined in §5. Any unrecognized tool call signature is rejected instantly by the Tool Execution Engine.
-3. **Graceful Fallback**: If the LLM provider experiences latency, rate limits, or failure, the system falls back seamlessly to the Layer 1 deterministic matcher without interrupting UI availability.
+### 6.1 Strict Architectural Constraints for LLM Adapters
+1. **Fact Authorization**: The LLM is **never** permitted to generate biographical, project, or contact claims directly. It outputs only an `intentId` that resolves against `SecretaryEngine` canonical knowledge.
+2. **Action Allow-List**: The LLM output is strictly validated against `ALLOWED_INTENT_IDS`. Any unrecognized or hallucinated intent ID is rejected instantly and falls back cleanly to `fallback.unknown`.
+3. **Timeout Protection**: All provider calls are wrapped with configurable timeout protection (default `3000ms`). Requests exceeding this limit abort and fall back seamlessly to the deterministic engine.
+4. **Credential & Privacy Protection**: API credentials must be configured explicitly via opt-in (`window.SECRETARY_LLM_CONFIG`). No user inputs or chat histories are stored or logged.
 
 ---
 
 ## 7. Data Models & Interface Contracts (TypeScript Specifications)
 
-For future implementation steps (Knowledge Registry and Intent Engine), the system relies on the following TypeScript interfaces:
+The system relies on the following TypeScript interfaces:
 
 ```typescript
 /**
@@ -355,6 +355,7 @@ export interface SecretaryQueryResponse {
   sourceFile: string;
   toolCall?: ToolCallPayload;
   suggestedQuestions: string[];
+  adapterSource?: 'deterministic' | 'llm_adapter';
 }
 ```
 
@@ -366,8 +367,8 @@ export interface SecretaryQueryResponse {
 - [x] **Supported Intents Enumerated**: 9 distinct intents defined with triggers, patterns, answer sources, and tools.
 - [x] **Answer Sources Identified**: Every intent mapped explicitly to canonical repository files (`POSITIONING.md`, EJS partials, routes).
 - [x] **Navigation/Tool Contracts Defined**: Strict JSON schemas and parameter contracts established for all allow-listed actions.
-- [x] **LLM Boundary Specified**: Unambiguous separation enforced between deterministic fact/action engine and optional Phase 9 LLM parser.
-- [x] **Zero AI Dependencies**: System defined with 100% deterministic, local execution in Phase 8.
+- [x] **LLM Boundary & Adapter Implemented**: LLM adapter module implemented in `public/secretary-llm-adapter.js` with full test coverage.
+- [x] **Zero AI Dependencies Default**: System defaults to 100% deterministic local execution when LLM adapter is disabled or unconfigured.
 
 ---
 

@@ -1,8 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const SecretaryEngine = require('../public/secretary-engine.js');
+const SecretaryLLMAdapter = require('../public/secretary-llm-adapter.js');
 
-console.log('Testing Secretary Engine, Knowledge Registry & Content Governance...');
+console.log('Testing Secretary Engine, Knowledge Registry, LLM Adapter & Content Governance...');
 
 // Load knowledge JSON
 const knowledgePath = path.join(__dirname, '../public/data/secretary_knowledge.json');
@@ -279,88 +280,171 @@ const invalidExecRes = SecretaryEngine.executeToolCall(
 assert(invalidExecRes.success === false && invalidExecRes.action === 'none', 'Unauthorized tool call rejected cleanly with success: false');
 
 
-// 5. Content Governance & Sync Assertions
-console.log('\nEvaluating Content Governance & Repository Sync Assertions...');
+// 5. Phase 9 Optional LLM Adapter Unit Tests
+console.log('\nEvaluating Phase 9 Optional LLM Adapter...');
 
-// Read repository source files
-const rootDir = path.join(__dirname, '..');
-const serverJsContent = fs.readFileSync(path.join(rootDir, 'server.js'), 'utf8');
-const indexEjsContent = fs.readFileSync(path.join(rootDir, 'views/index.ejs'), 'utf8');
-const projectenEjsContent = fs.readFileSync(path.join(rootDir, 'views/partials/projecten.ejs'), 'utf8');
-const skillsEjsContent = fs.readFileSync(path.join(rootDir, 'views/partials/skills.ejs'), 'utf8');
-const overEjsContent = fs.readFileSync(path.join(rootDir, 'views/partials/over.ejs'), 'utf8');
-const ervaringEjsContent = fs.readFileSync(path.join(rootDir, 'views/partials/ervaring.ejs'), 'utf8');
-const footerEjsContent = fs.readFileSync(path.join(rootDir, 'views/partials/footer.ejs'), 'utf8');
-const allViewsContent = [indexEjsContent, projectenEjsContent, skillsEjsContent, overEjsContent, ervaringEjsContent, footerEjsContent].join('\n');
+// 5a. Check disabled by default
+const defaultAdapter = new SecretaryLLMAdapter({ secretaryEngine: engine });
+assert(defaultAdapter.enabled === false, 'LLM Adapter is disabled by default');
 
-// 5a. Intent Uniqueness & Mandatory Property Validation
-const seenIntentIds = new Set();
-for (const intent of knowledgeData.intents) {
-  assert(!seenIntentIds.has(intent.intentId), `Intent ID "${intent.intentId}" is unique`);
-  seenIntentIds.add(intent.intentId);
+(async () => {
+  const disabledRes = await defaultAdapter.processQuery('Kan ik contact opnemen?');
+  assert(disabledRes.matchedIntentId === 'contact.options', 'Disabled LLM Adapter falls back seamlessly to deterministic matcher');
 
-  assert(Array.isArray(intent.keywords) && intent.keywords.length > 0, `Intent "${intent.intentId}" has non-empty keywords array`);
-  assert(Array.isArray(intent.patterns) && intent.patterns.length > 0, `Intent "${intent.intentId}" has non-empty patterns array`);
-  assert(typeof intent.answerText === 'string' && intent.answerText.length > 10, `Intent "${intent.intentId}" has valid answer text`);
-  assert(typeof intent.knowledgeSource === 'string' && intent.knowledgeSource.length > 0, `Intent "${intent.intentId}" specifies knowledge source`);
-}
+  // 5b. Custom mock provider returning valid intent ID
+  const mockLLMProvider = async ({ userInput }) => {
+    const lower = String(userInput).toLowerCase();
+    if (lower.includes('dnd') || lower.includes('artificer')) {
+      return JSON.stringify({ intentId: 'projects.artificer' });
+    }
+    return JSON.stringify({ intentId: 'identity.overview' });
+  };
 
-// 5b. Anchor Governance: All tool call anchors must exist in view files
-for (const intent of knowledgeData.intents) {
-  if (intent.toolCall && intent.toolCall.tool === 'navigateToSection') {
-    const anchor = intent.toolCall.parameters.anchor; // e.g. "#over"
-    const targetId = anchor.substring(1); // "over"
-    const hasId = allViewsContent.includes(`id="${targetId}"`);
-    assert(hasId, `Governance: Section anchor "${anchor}" referenced by intent "${intent.intentId}" exists in template views`);
+  const enabledAdapter = new SecretaryLLMAdapter({
+    secretaryEngine: engine,
+    llmProvider: mockLLMProvider,
+    enabled: true
+  });
+
+  const validLLMRes = await enabledAdapter.processQuery('Tell me about the DnD project');
+  assert(validLLMRes.matchedIntentId === 'projects.artificer', 'LLM Adapter maps natural language phrasing to allowed intent ID');
+  assert(validLLMRes.adapterSource === 'llm_adapter', 'LLM Adapter response flagged with adapterSource llm_adapter');
+  assert(validLLMRes.toolCall && validLLMRes.toolCall.tool === 'openProject', 'LLM Adapter retrieves grounded tool call from SecretaryEngine');
+  assert(validLLMRes.answerText && validLLMRes.answerText.includes('Artificer'), 'LLM Adapter response grounds answer text in canonical knowledge registry');
+
+  // 5c. Hallucinated / unauthorized intent ID rejection
+  const hallucinatingProvider = async () => {
+    return JSON.stringify({ intentId: 'unauthorized.hallucination_intent', answerText: 'Invented facts!' });
+  };
+
+  const hallucinationAdapter = new SecretaryLLMAdapter({
+    secretaryEngine: engine,
+    llmProvider: hallucinatingProvider,
+    enabled: true
+  });
+
+  const rejectedLLMRes = await hallucinationAdapter.processQuery('Tell me secret info');
+  assert(rejectedLLMRes.matchedIntentId !== 'unauthorized.hallucination_intent', 'LLM Adapter strictly rejects unauthorized intent IDs');
+  assert(rejectedLLMRes.matchedIntentId === 'fallback.unknown', 'Unauthorized LLM output falls back cleanly to fallback handler');
+
+  // 5d. Malformed JSON / parsing error fallback
+  const malformedProvider = async () => 'Not JSON output';
+  const malformedAdapter = new SecretaryLLMAdapter({
+    secretaryEngine: engine,
+    llmProvider: malformedProvider,
+    enabled: true
+  });
+
+  const malformedRes = await malformedAdapter.processQuery('Hello');
+  assert(malformedRes.matchedIntentId === 'identity.overview' || malformedRes.matchedIntentId === 'fallback.unknown', 'Malformed LLM JSON falls back safely');
+
+  // 5e. Timeout protection
+  const slowProvider = async () => {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return JSON.stringify({ intentId: 'identity.overview' });
+  };
+
+  const timeoutAdapter = new SecretaryLLMAdapter({
+    secretaryEngine: engine,
+    llmProvider: slowProvider,
+    timeoutMs: 50,
+    enabled: true
+  });
+
+  const timeoutRes = await timeoutAdapter.processQuery('Wie is Jaap?');
+  assert(timeoutRes.matchedIntentId === 'identity.overview', 'Timed out LLM request falls back transparently to deterministic matcher');
+
+  // 5f. SecretaryEngine processQuery integration test
+  const integratedEngine = new SecretaryEngine(knowledgeData, { llmAdapter: enabledAdapter });
+  enabledAdapter.secretaryEngine = integratedEngine;
+
+  const asyncEngineRes = await integratedEngine.processQuery('Vertel over Artificer D&D engine');
+  assert(asyncEngineRes.matchedIntentId === 'projects.artificer', 'SecretaryEngine.processQuery delegates correctly to enabled LLM Adapter');
+
+
+  // 6. Content Governance & Sync Assertions
+  console.log('\nEvaluating Content Governance & Repository Sync Assertions...');
+
+  // Read repository source files
+  const rootDir = path.join(__dirname, '..');
+  const serverJsContent = fs.readFileSync(path.join(rootDir, 'server.js'), 'utf8');
+  const indexEjsContent = fs.readFileSync(path.join(rootDir, 'views/index.ejs'), 'utf8');
+  const projectenEjsContent = fs.readFileSync(path.join(rootDir, 'views/partials/projecten.ejs'), 'utf8');
+  const skillsEjsContent = fs.readFileSync(path.join(rootDir, 'views/partials/skills.ejs'), 'utf8');
+  const overEjsContent = fs.readFileSync(path.join(rootDir, 'views/partials/over.ejs'), 'utf8');
+  const ervaringEjsContent = fs.readFileSync(path.join(rootDir, 'views/partials/ervaring.ejs'), 'utf8');
+  const footerEjsContent = fs.readFileSync(path.join(rootDir, 'views/partials/footer.ejs'), 'utf8');
+  const allViewsContent = [indexEjsContent, projectenEjsContent, skillsEjsContent, overEjsContent, ervaringEjsContent, footerEjsContent].join('\n');
+
+  // 6a. Intent Uniqueness & Mandatory Property Validation
+  const seenIntentIds = new Set();
+  for (const intent of knowledgeData.intents) {
+    assert(!seenIntentIds.has(intent.intentId), `Intent ID "${intent.intentId}" is unique`);
+    seenIntentIds.add(intent.intentId);
+
+    assert(Array.isArray(intent.keywords) && intent.keywords.length > 0, `Intent "${intent.intentId}" has non-empty keywords array`);
+    assert(Array.isArray(intent.patterns) && intent.patterns.length > 0, `Intent "${intent.intentId}" has non-empty patterns array`);
+    assert(typeof intent.answerText === 'string' && intent.answerText.length > 10, `Intent "${intent.intentId}" has valid answer text`);
+    assert(typeof intent.knowledgeSource === 'string' && intent.knowledgeSource.length > 0, `Intent "${intent.intentId}" specifies knowledge source`);
   }
-}
 
-// 5c. Route Governance: All tool call routes must exist in Express server.js
-for (const intent of knowledgeData.intents) {
-  if (intent.toolCall && intent.toolCall.tool === 'navigateToRoute') {
-    const route = intent.toolCall.parameters.route; // e.g. "/share"
-    const routePattern = route === '/' ? "app.get('/'" : `app.get('${route}'`;
-    const hasRoute = serverJsContent.includes(routePattern);
-    assert(hasRoute, `Governance: Route "${route}" referenced by intent "${intent.intentId}" exists in server.js`);
+  // 6b. Anchor Governance: All tool call anchors must exist in view files
+  for (const intent of knowledgeData.intents) {
+    if (intent.toolCall && intent.toolCall.tool === 'navigateToSection') {
+      const anchor = intent.toolCall.parameters.anchor; // e.g. "#over"
+      const targetId = anchor.substring(1); // "over"
+      const hasId = allViewsContent.includes(`id="${targetId}"`);
+      assert(hasId, `Governance: Section anchor "${anchor}" referenced by intent "${intent.intentId}" exists in template views`);
+    }
   }
-}
 
-// 5d. Project ID Governance: All project IDs must exist in projecten.ejs
-const projectMap = {
-  'artificer': '.artificer-card',
-  'global-conquest': '.conquest-card',
-  'supermail': '.supermail-card'
-};
-
-for (const intent of knowledgeData.intents) {
-  if (intent.toolCall && intent.toolCall.tool === 'openProject') {
-    const projId = intent.toolCall.parameters.projectId;
-    const targetClass = projectMap[projId] ? projectMap[projId].substring(1) : projId;
-    const hasProjectClass = projectenEjsContent.includes(targetClass);
-    assert(hasProjectClass, `Governance: Project ID "${projId}" referenced by intent "${intent.intentId}" exists in projecten.ejs (class "${targetClass}")`);
+  // 6c. Route Governance: All tool call routes must exist in Express server.js
+  for (const intent of knowledgeData.intents) {
+    if (intent.toolCall && intent.toolCall.tool === 'navigateToRoute') {
+      const route = intent.toolCall.parameters.route; // e.g. "/share"
+      const routePattern = route === '/' ? "app.get('/'" : `app.get('${route}'`;
+      const hasRoute = serverJsContent.includes(routePattern);
+      assert(hasRoute, `Governance: Route "${route}" referenced by intent "${intent.intentId}" exists in server.js`);
+    }
   }
-}
 
-// 5e. Source File Governance: Primary files referenced in knowledgeSource must exist on disk
-for (const intent of knowledgeData.intents) {
-  if (intent.knowledgeSource) {
-    // Extract file paths from knowledgeSource string (e.g., "POSITIONING.md (§1), views/partials/head.ejs")
-    const rawSources = intent.knowledgeSource.split(/,\s*/);
-    for (const rawSrc of rawSources) {
-      const cleanPath = rawSrc.split(/\s*\(|\s*$/)[0].trim();
-      if (cleanPath.endsWith('.md') || cleanPath.endsWith('.ejs') || cleanPath.endsWith('.js') || cleanPath.endsWith('.json')) {
-        const fullPath = path.join(rootDir, cleanPath);
-        const fileExists = fs.existsSync(fullPath);
-        assert(fileExists, `Governance: Knowledge source file "${cleanPath}" referenced by intent "${intent.intentId}" exists on disk`);
+  // 6d. Project ID Governance: All project IDs must exist in projecten.ejs
+  const projectMap = {
+    'artificer': '.artificer-card',
+    'global-conquest': '.conquest-card',
+    'supermail': '.supermail-card'
+  };
+
+  for (const intent of knowledgeData.intents) {
+    if (intent.toolCall && intent.toolCall.tool === 'openProject') {
+      const projId = intent.toolCall.parameters.projectId;
+      const targetClass = projectMap[projId] ? projectMap[projId].substring(1) : projId;
+      const hasProjectClass = projectenEjsContent.includes(targetClass);
+      assert(hasProjectClass, `Governance: Project ID "${projId}" referenced by intent "${intent.intentId}" exists in projecten.ejs (class "${targetClass}")`);
+    }
+  }
+
+  // 6e. Source File Governance: Primary files referenced in knowledgeSource must exist on disk
+  for (const intent of knowledgeData.intents) {
+    if (intent.knowledgeSource) {
+      // Extract file paths from knowledgeSource string (e.g., "POSITIONING.md (§1), views/partials/head.ejs")
+      const rawSources = intent.knowledgeSource.split(/,\s*/);
+      for (const rawSrc of rawSources) {
+        const cleanPath = rawSrc.split(/\s*\(|\s*$/)[0].trim();
+        if (cleanPath.endsWith('.md') || cleanPath.endsWith('.ejs') || cleanPath.endsWith('.js') || cleanPath.endsWith('.json')) {
+          const fullPath = path.join(rootDir, cleanPath);
+          const fileExists = fs.existsSync(fullPath);
+          assert(fileExists, `Governance: Knowledge source file "${cleanPath}" referenced by intent "${intent.intentId}" exists on disk`);
+        }
       }
     }
   }
-}
 
-if (totalFailed > 0) {
-  console.error(`\nSecretary Engine & Governance tests failed! ${totalFailed} failure(s).`);
-  process.exit(1);
-} else {
-  console.log(`\nAll ${totalPassed} Secretary Engine & Content Governance assertions passed successfully!`);
-  process.exit(0);
-}
+  if (totalFailed > 0) {
+    console.error(`\nSecretary Engine & Governance tests failed! ${totalFailed} failure(s).`);
+    process.exit(1);
+  } else {
+    console.log(`\nAll ${totalPassed} Secretary Engine, LLM Adapter & Content Governance assertions passed successfully!`);
+    process.exit(0);
+  }
+})();

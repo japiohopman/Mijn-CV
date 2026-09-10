@@ -21,7 +21,15 @@
       .then(res => res.json())
       .then(data => {
         if (typeof window.SecretaryEngine === 'function') {
-          engineInstance = new window.SecretaryEngine(data);
+          let llmAdapter = null;
+          if (typeof window.SecretaryLLMAdapter === 'function' && window.SECRETARY_LLM_CONFIG) {
+            llmAdapter = new window.SecretaryLLMAdapter(window.SECRETARY_LLM_CONFIG);
+          }
+
+          engineInstance = new window.SecretaryEngine(data, { llmAdapter });
+          if (llmAdapter) {
+            llmAdapter.secretaryEngine = engineInstance;
+          }
         }
       })
       .catch(err => {
@@ -125,14 +133,20 @@
       }
     };
 
-    const processQuery = (rawQuery) => {
+    const processQuery = async (rawQuery) => {
       const trimmed = rawQuery.trim();
       if (!trimmed) return;
 
       appendUserMessage(trimmed);
 
       if (engineInstance) {
-        const res = engineInstance.matchIntent(trimmed);
+        let res;
+        if (typeof engineInstance.processQuery === 'function') {
+          res = await engineInstance.processQuery(trimmed);
+        } else {
+          res = engineInstance.matchIntent(trimmed);
+        }
+
         appendAssistantMessage(res);
 
         // Auto execute tool call if confidence is high and user explicitly asked for navigation or action
