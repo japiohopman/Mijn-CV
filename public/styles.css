@@ -1017,6 +1017,59 @@ img {
   font-size: 0.78rem;
 }
 
+/* Audio Simulation Widget specific styling */
+.audio-sim-widget {
+  border-color: rgba(125, 249, 208, 0.3);
+  margin: 1.5rem 0;
+}
+
+[data-theme="light"] .audio-sim-widget {
+  border-color: rgba(14, 112, 84, 0.35);
+}
+
+.audio-range {
+  accent-color: var(--secondary);
+  cursor: pointer;
+  height: 6px;
+  border-radius: 3px;
+  flex: 1;
+  min-width: 120px;
+}
+
+[data-theme="light"] .audio-range {
+  accent-color: var(--primary);
+}
+
+.btn-audio-sim {
+  background: linear-gradient(135deg, var(--secondary), #a4fff1);
+  color: #07111f;
+}
+
+[data-theme="light"] .btn-audio-sim {
+  background: linear-gradient(135deg, var(--primary), #ffbc70);
+}
+
+.audio-visualizer-wrapper {
+  margin: 0.8rem 0;
+  padding: 0.4rem;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+[data-theme="light"] .audio-visualizer-wrapper {
+  background: #081222;
+}
+
+.audio-canvas {
+  width: 100%;
+  height: 48px;
+  display: block;
+}
+
 /* On-demand Interactive Iframe Demo Container */
 .project-demo-container {
   margin-top: 1.5rem;

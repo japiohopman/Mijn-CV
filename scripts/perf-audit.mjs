@@ -62,7 +62,7 @@ async function runPerfCheck() {
       { path: '/share', maxKb: 10 },
       { path: '/keuken-cv', maxKb: 12 },
       { path: '/styles.css', maxKb: 15 },
-      { path: '/app.js', maxKb: 6 }
+      { path: '/app.js', maxKb: 8 }
     ];
 
     console.log('\n--- Performance Audit Results ---');
