@@ -7,9 +7,6 @@
     "start": "node server.js",
     "dev": "node server.js",
     "test": "node scripts/test-default-branch.mjs && node test/secretary.test.js && node test/server.test.js && node scripts/perf-audit.mjs"
-=======
-    "test": "node scripts/test-default-branch.mjs && node test/secretary.test.js && node test/orchestrator.test.mjs && node test/server.test.js && node scripts/perf-audit.mjs"
->>>>>>> 7df8783d23533c12c8579bfa0cafdd9700f326a1
   },
   "dependencies": {
     "compression": "^1.8.1",
