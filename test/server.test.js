@@ -5,10 +5,23 @@ console.log('Testing Express server routes, static assets, and SEO OpenGraph met
 
 const PORT = process.env.TEST_PORT || 3099;
 
+let serverErrLogs = '';
+const path = require('path');
+const repoRoot = path.join(__dirname, '..');
 const serverProc = spawn('node', ['server.js'], {
-  env: { ...process.env, PORT: String(PORT) },
+  cwd: repoRoot,
+  env: {
+    ...process.env,
+    PORT: String(PORT),
+    NODE_PATH: [path.join(repoRoot, 'node_modules'), process.env.NODE_PATH].filter(Boolean).join(':')
+  },
   stdio: ['ignore', 'pipe', 'pipe'],
 });
+if (serverProc.stderr) {
+  serverProc.stderr.on('data', (data) => {
+    serverErrLogs += data.toString();
+  });
+}
 
 function fetchRoute(path) {
   return new Promise((resolve, reject) => {
@@ -61,7 +74,7 @@ function postJSON(path, payload) {
   });
 }
 
-async function waitForServer(maxAttempts = 20, intervalMs = 200) {
+async function waitForServer(maxAttempts = 35, intervalMs = 200) {
   for (let i = 0; i < maxAttempts; i++) {
     try {
       const res = await fetchRoute('/');
@@ -70,7 +83,7 @@ async function waitForServer(maxAttempts = 20, intervalMs = 200) {
       await new Promise((r) => setTimeout(r, intervalMs));
     }
   }
-  throw new Error(`Server failed to start on port ${PORT} after ${maxAttempts * intervalMs}ms`);
+  throw new Error(`Server failed to start on port ${PORT} after ${maxAttempts * intervalMs}ms. Logs: ${serverErrLogs}`);
 }
 
 async function runTests() {
