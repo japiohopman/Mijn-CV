@@ -12,6 +12,7 @@ on:
     paths:
       - '.github/workflows/jules-orchestrator.yml'
       - 'scripts/jules-orchestrator.mjs'
+      - 'scripts/jules-single-flight-guard.mjs'
       - 'JULES_ORCHESTRATOR_V2.md'
   schedule:
     - cron: '7,22,37,52 * * * *'
@@ -39,10 +40,32 @@ jobs:
         with:
           node-version: 22
 
+      - name: Check Jules single-flight guard
+        id: jules-guard
+        env:
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          JULES_SOURCE: sources/github/${{ github.repository }}
+        run: |
+          output="$(node scripts/jules-single-flight-guard.mjs)"
+          printf '%s\n' "$output"
+          skip="$(printf '%s\n' "$output" | sed -n 's/^skip=//p' | tail -n 1)"
+          printf 'skip=%s\n' "${skip:-false}" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-node@v4
+        if: steps.jules-guard.outputs.skip != 'true'
+        with:
+          node-version: 22
+
       - name: Run orchestrator v2
+        if: steps.jules-guard.outputs.skip != 'true'
         env:
           JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           JULES_SOURCE: sources/github/${{ github.repository }}
         run: node scripts/jules-orchestrator.mjs
+
+      - name: Report blocked dispatch
+        if: steps.jules-guard.outputs.skip == 'true'
+        run: echo 'Jules dispatch skipped: another active Jules session owns the repository.'
