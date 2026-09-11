@@ -183,7 +183,62 @@ export function parseTaskMetadata(body = '') {
   if (match) {
     parentPhaseNumber = Number(match[1]);
   }
-  return { parentPhaseNumber };
+
+  let agent = null;
+  const agentMatch = body.match(/Agent:?\s*([a-zA-Z0-9_\-]+)/i);
+  if (agentMatch) {
+    agent = agentMatch[1].trim();
+  }
+
+  return { parentPhaseNumber, agent };
+}
+
+export function loadAgentProfile(agentName, agentsDir = '.github/agents') {
+  if (!agentName) return null;
+  const filePath = `${agentsDir}/${agentName}.agent.md`;
+  if (!existsSync(filePath)) {
+    throw new Error(`Agent profile '${filePath}' not found for agent '${agentName}'.`);
+  }
+  return readFileSync(filePath, 'utf8');
+}
+
+export async function ensurePhaseBranch(
+  phaseBranch,
+  defaultBranch = 'master',
+  token = GITHUB_TOKEN,
+  repo = REPO,
+  fetchFn = githubFetch,
+  postFn = githubPost
+) {
+  try {
+    await fetchFn(`git/ref/heads/${phaseBranch}`, token, repo);
+    return { created: false, branch: phaseBranch };
+  } catch (err) {
+    if (!err.message.includes('404')) {
+      throw err;
+    }
+  }
+
+  let sha = null;
+  try {
+    const defaultRef = await fetchFn(`git/ref/heads/${defaultBranch}`, token, repo);
+    sha = defaultRef.object ? defaultRef.object.sha : defaultRef.sha;
+  } catch {
+    const defaultBranchData = await fetchFn(`branches/${defaultBranch}`, token, repo);
+    sha = defaultBranchData.commit.sha;
+  }
+
+  await postFn(
+    'git/refs',
+    {
+      ref: `refs/heads/${phaseBranch}`,
+      sha,
+    },
+    token,
+    repo
+  );
+
+  return { created: true, branch: phaseBranch };
 }
 
 export function selectEligiblePhase(phaseIssues = []) {
@@ -332,8 +387,8 @@ export async function main() {
   console.log(`Resolving issues from repository ${REPO} on default branch ${defaultBranch}...`);
 
   // Fetch open issues labeled type:phase and type:task
-  const phaseIssues = await githubFetch('issues?labels=type:phase,jules&state=open');
-  const taskIssues = await githubFetch('issues?labels=type:task,jules&state=open');
+  const phaseIssues = await githubFetch('issues?labels=type:phase&state=open');
+  const taskIssues = await githubFetch('issues?labels=type:task&state=open');
 
   const activePhase = selectEligiblePhase(phaseIssues);
   if (!activePhase) {
@@ -436,7 +491,17 @@ export async function main() {
     case 'DISPATCH_TASK': {
       console.log(`Dispatching Task #${action.taskIssueNumber}: "${action.taskTitle}" on branch ${action.phaseBranch}...`);
 
-      // Update task issue label to status:active and phase label to status:active if needed
+      // 1. Ensure phase branch exists or is created
+      await ensurePhaseBranch(action.phaseBranch, defaultBranch);
+
+      // 2. Load specialist agent profile if specified
+      const taskMeta = parseTaskMetadata(action.taskBody);
+      const agentProfile = loadAgentProfile(taskMeta.agent);
+      if (taskMeta.agent) {
+        console.log(`Loaded specialist agent profile: ${taskMeta.agent}`);
+      }
+
+      // 3. Update task issue label to status:active and phase label to status:active if needed
       await githubPatch(`issues/${action.taskIssueNumber}`, {
         labels: ['type:task', 'status:active', 'jules'],
       });
@@ -450,9 +515,11 @@ export async function main() {
         'Read AGENT.MD, AGENT_RULES.md, and JULES_ORCHESTRATOR_V2.md before starting.',
         `Executing Task #${action.taskIssueNumber} on Phase Branch: ${action.phaseBranch}`,
         `Task Issue Title: ${action.taskTitle}`,
+        taskMeta.agent ? `Assigned Specialist Agent: ${taskMeta.agent}` : null,
+        agentProfile ? `--- SPECIALIST PROFILE (${taskMeta.agent}) ---\n${agentProfile}\n--- END SPECIALIST PROFILE ---` : null,
         `Task Details:\n${action.taskBody}`,
         'Follow AGENT_RULES.md strictly. Run and verify all relevant tests before completing work.',
-      ];
+      ].filter(Boolean);
 
       const session = await julesFetch('sessions', {
         method: 'POST',

@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import {
   parsePhaseMetadata,
   parseTaskMetadata,
+  loadAgentProfile,
+  ensurePhaseBranch,
   hasLabel,
   getStatusLabel,
   selectEligiblePhase,
@@ -318,6 +320,126 @@ await runAsyncTest('resolveDefaultBranch resolves branch via mock GitHub API fet
   const mockFetch = async () => ({ default_branch: 'master' });
   const branch = await resolveDefaultBranch('japiohopman/Mijn-CV', mockFetch);
   assert.equal(branch, 'master');
+});
+
+// 7. Agent Metadata & Profile Loading Tests
+runTest('parseTaskMetadata extracts Agent metadata from issue body', () => {
+  const body1 = `
+Parent Phase
+#63
+Agent
+architecture-specialist
+
+Context & Problem
+  `;
+  const meta1 = parseTaskMetadata(body1);
+  assert.equal(meta1.parentPhaseNumber, 63);
+  assert.equal(meta1.agent, 'architecture-specialist');
+
+  const body2 = `
+Parent: #63
+Agent: testing-specialist
+  `;
+  const meta2 = parseTaskMetadata(body2);
+  assert.equal(meta2.parentPhaseNumber, 63);
+  assert.equal(meta2.agent, 'testing-specialist');
+});
+
+runTest('loadAgentProfile reads valid agent profile from disk', () => {
+  const profile = loadAgentProfile('architecture-specialist');
+  assert.ok(profile.includes('You are the Architecture Specialist for Mijn-CV.'));
+});
+
+runTest('loadAgentProfile throws error for missing specialist profile', () => {
+  assert.throws(
+    () => loadAgentProfile('nonexistent-specialist'),
+    /Agent profile '.*nonexistent-specialist\.agent\.md' not found/
+  );
+});
+
+// 8. Phase Branch Management Tests
+await runAsyncTest('ensurePhaseBranch reuses existing phase branch', async () => {
+  let postCalled = false;
+  const mockFetch = async (path) => {
+    if (path.includes('git/ref/heads/phase/09-test')) {
+      return { ref: 'refs/heads/phase/09-test', object: { sha: '123' } };
+    }
+    throw new Error('404 Not Found');
+  };
+  const mockPost = async () => { postCalled = true; };
+
+  const result = await ensurePhaseBranch('phase/09-test', 'master', 'token', 'repo', mockFetch, mockPost);
+  assert.equal(result.created, false);
+  assert.equal(postCalled, false);
+});
+
+await runAsyncTest('ensurePhaseBranch creates phase branch off default branch if missing', async () => {
+  let createdRef = null;
+  const mockFetch = async (path) => {
+    if (path.includes('git/ref/heads/phase/09-test')) {
+      throw new Error('404 Not Found');
+    }
+    if (path.includes('git/ref/heads/master')) {
+      return { ref: 'refs/heads/master', object: { sha: 'master-sha-123' } };
+    }
+    throw new Error('404 Not Found');
+  };
+  const mockPost = async (path, body) => {
+    createdRef = body;
+    return { ref: body.ref };
+  };
+
+  const result = await ensurePhaseBranch('phase/09-test', 'master', 'token', 'repo', mockFetch, mockPost);
+  assert.equal(result.created, true);
+  assert.equal(createdRef.ref, 'refs/heads/phase/09-test');
+  assert.equal(createdRef.sha, 'master-sha-123');
+});
+
+// 9. Mocked Dispatch Verification Test
+await runAsyncTest('Mocked task dispatch constructs valid Jules API payload and ensures phase branch', async () => {
+  const activePhase = {
+    number: 63,
+    title: 'Phase 63 — Issue Driven Architecture',
+    labels: ['type:phase', 'status:planned'],
+    body: '## Phase Branch\n`phase/63-orchestrator-dispatch`',
+  };
+
+  const taskIssue = {
+    number: 105,
+    title: 'Task: Make Jules Orchestrator dispatch issue-driven tasks',
+    labels: ['type:task', 'status:planned'],
+    body: 'Parent Phase\n#63\nAgent\narchitecture-specialist\n\nTask details...',
+  };
+
+  const action = determineOrchestratorAction({
+    activePhase,
+    taskIssues: [taskIssue],
+  });
+
+  assert.equal(action.type, 'DISPATCH_TASK');
+  assert.equal(action.phaseIssueNumber, 63);
+  assert.equal(action.taskIssueNumber, 105);
+  assert.equal(action.phaseBranch, 'phase/63-orchestrator-dispatch');
+
+  // Verify profile loading for dispatched task
+  const taskMeta = parseTaskMetadata(action.taskBody);
+  assert.equal(taskMeta.agent, 'architecture-specialist');
+  const agentProfile = loadAgentProfile(taskMeta.agent);
+
+  const promptParts = [
+    'Read AGENT.MD, AGENT_RULES.md, and JULES_ORCHESTRATOR_V2.md before starting.',
+    `Executing Task #${action.taskIssueNumber} on Phase Branch: ${action.phaseBranch}`,
+    `Task Issue Title: ${action.taskTitle}`,
+    `Assigned Specialist Agent: ${taskMeta.agent}`,
+    `--- SPECIALIST PROFILE (${taskMeta.agent}) ---\n${agentProfile}\n--- END SPECIALIST PROFILE ---`,
+    `Task Details:\n${action.taskBody}`,
+    'Follow AGENT_RULES.md strictly. Run and verify all relevant tests before completing work.',
+  ];
+
+  const fullPrompt = promptParts.join('\n\n');
+  assert.ok(fullPrompt.includes('Executing Task #105 on Phase Branch: phase/63-orchestrator-dispatch'));
+  assert.ok(fullPrompt.includes('Assigned Specialist Agent: architecture-specialist'));
+  assert.ok(fullPrompt.includes('You are the Architecture Specialist for Mijn-CV.'));
 });
 
 if (process.exitCode && process.exitCode !== 0) {
