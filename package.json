@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "test": "node scripts/test-default-branch.mjs && node test/secretary.test.js && node test/orchestrator.test.mjs && node test/agent-metadata.test.mjs && node test/phase-metadata.test.mjs && node test/server.test.js && node scripts/perf-audit.mjs"
+    "test": "node scripts/test-default-branch.mjs && node test/secretary.test.js && node test/orchestrator.test.mjs && node test/agent-metadata.test.mjs && node test/phase-metadata.test.mjs && node test/jules-single-flight-guard.test.mjs && node test/server.test.js && node scripts/perf-audit.mjs"
   },
   "dependencies": {
     "compression": "^1.8.1",
