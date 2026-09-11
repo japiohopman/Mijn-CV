@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node scripts/test-default-branch.mjs && node test/secretary.test.js && node test/server.test.js && node scripts/perf-audit.mjs"
+    "test": "node scripts/test-default-branch.mjs && node test/secretary.test.js && node test/orchestrator.test.mjs && node test/server.test.js && node scripts/perf-audit.mjs"
   },
   "dependencies": {
     "compression": "^1.8.1",
