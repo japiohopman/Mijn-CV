@@ -16,6 +16,8 @@ const JULES_SOURCE = process.env.JULES_SOURCE || (REPO ? `sources/github/${REPO}
 
 const STATE_PATH = '.github/jules-queue-state.json';
 
+export const JULES_TERMINAL_STATES = new Set(['FAILED', 'COMPLETED']);
+
 export function loadState(path = STATE_PATH) {
   if (!existsSync(path)) return { activeSession: null, activePhase: null };
   try {
@@ -66,6 +68,22 @@ export async function githubPost(path, body, token = GITHUB_TOKEN, repo = REPO) 
     body: JSON.stringify(body),
   });
   if (!res.ok) throw new Error(`GitHub POST ${path} failed: ${res.status} ${await res.text()}`);
+  return res.json();
+}
+
+export async function githubPut(path, body, token = GITHUB_TOKEN, repo = REPO) {
+  const headers = {
+    Accept: 'application/vnd.github+json',
+    'Content-Type': 'application/json',
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const url = path.startsWith('http') ? path : `https://api.github.com/repos/${repo}/${path}`;
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers,
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`GitHub PUT ${path} failed: ${res.status} ${await res.text()}`);
   return res.json();
 }
 
@@ -289,6 +307,8 @@ export function determineOrchestratorAction({
   activePhase,
   taskIssues = [],
   activeSession = null,
+  sessionState = null,
+  sessionPrNumber = null,
   sessionPrMerged = false,
   phasePr = null,
   defaultBranch = 'master',
@@ -319,6 +339,34 @@ export function determineOrchestratorAction({
   }
 
   if (activeSession) {
+    if (sessionState === 'FAILED') {
+      return {
+        type: 'FAIL_SESSION_TASK',
+        taskIssueNumber: activeSession.issueNumber,
+        sessionName: activeSession.name,
+        reason: 'Jules session failed; task is blocked for human investigation.',
+      };
+    }
+
+    if (sessionState === 'COMPLETED') {
+      if (sessionPrNumber && !sessionPrMerged) {
+        return {
+          type: 'MERGE_SESSION_PR',
+          taskIssueNumber: activeSession.issueNumber,
+          sessionName: activeSession.name,
+          prNumber: sessionPrNumber,
+          phaseBranch: activeSession.phaseBranch || phaseBranch,
+        };
+      }
+
+      return {
+        type: 'ADVANCE_SESSION_TASK',
+        taskIssueNumber: activeSession.issueNumber,
+        sessionName: activeSession.name,
+      };
+    }
+
+    // Backward-compatible fallback for older state snapshots or API responses that do not expose state.
     if (sessionPrMerged) {
       return {
         type: 'ADVANCE_SESSION_TASK',
@@ -330,7 +378,7 @@ export function determineOrchestratorAction({
       type: 'WAIT_ACTIVE_SESSION',
       sessionName: activeSession.name,
       taskIssueNumber: activeSession.issueNumber,
-      reason: 'Jules session active or awaiting PR merge.',
+      reason: 'Jules session active or awaiting completion.',
     };
   }
 
@@ -400,19 +448,23 @@ export async function main() {
     phasePr = null;
   }
 
+  let sessionState = null;
+  let sessionPrNumber = null;
   let sessionPrMerged = false;
   if (state.activeSession) {
     console.log(`Polling status of active session ${state.activeSession.name}...`);
     try {
       const session = await julesFetch(state.activeSession.name);
+      sessionState = session.state || null;
       const prOutput = (session.outputs || []).find(o => o.pullRequest)?.pullRequest;
       if (prOutput) {
-        const prNum = extractPrNumber(prOutput.url);
-        if (prNum) {
-          const prData = await githubFetch(`pulls/${prNum}`);
-          sessionPrMerged = prData.merged;
+        sessionPrNumber = extractPrNumber(prOutput.url);
+        if (sessionPrNumber) {
+          const prData = await githubFetch(`pulls/${sessionPrNumber}`);
+          sessionPrMerged = Boolean(prData.merged);
         }
       }
+      console.log(`Jules session state: ${sessionState || 'unknown'}${sessionPrNumber ? `; PR #${sessionPrNumber}; merged=${sessionPrMerged}` : ''}`);
     } catch (err) {
       console.warn(`Failed to poll active session ${state.activeSession.name}: ${err.message}`);
     }
@@ -422,6 +474,8 @@ export async function main() {
     activePhase,
     taskIssues,
     activeSession: state.activeSession,
+    sessionState,
+    sessionPrNumber,
     sessionPrMerged,
     phasePr,
     defaultBranch,
@@ -450,11 +504,40 @@ export async function main() {
       commitAndPushState();
       break;
 
-    case 'ADVANCE_SESSION_TASK':
-      console.log(`Task #${action.taskIssueNumber} PR merged. Advancing phase state.`);
+    case 'MERGE_SESSION_PR': {
+      console.log(`Jules session ${action.sessionName} completed. Merging Task #${action.taskIssueNumber} PR #${action.prNumber} into ${action.phaseBranch}...`);
+      const mergeResult = await githubPut(`pulls/${action.prNumber}/merge`, {
+        merge_method: 'squash',
+      });
+      if (!mergeResult.merged) {
+        throw new Error(`Task PR #${action.prNumber} was not merged: ${mergeResult.message || 'unknown merge result'}`);
+      }
+      console.log(`Task PR #${action.prNumber} merged into ${action.phaseBranch}. Advancing task.`);
       await githubPatch(`issues/${action.taskIssueNumber}`, {
         state: 'closed',
         labels: ['type:task', 'status:complete', 'jules'],
+      });
+      state.activeSession = null;
+      saveState(state);
+      commitAndPushState();
+      break;
+    }
+
+    case 'ADVANCE_SESSION_TASK':
+      console.log(`Jules session ${action.sessionName} completed with no outstanding PR merge. Advancing Task #${action.taskIssueNumber}.`);
+      await githubPatch(`issues/${action.taskIssueNumber}`, {
+        state: 'closed',
+        labels: ['type:task', 'status:complete', 'jules'],
+      });
+      state.activeSession = null;
+      saveState(state);
+      commitAndPushState();
+      break;
+
+    case 'FAIL_SESSION_TASK':
+      console.warn(`Jules session ${action.sessionName} failed. Blocking Task #${action.taskIssueNumber} for human investigation.`);
+      await githubPatch(`issues/${action.taskIssueNumber}`, {
+        labels: ['type:task', 'status:blocked', 'jules'],
       });
       state.activeSession = null;
       saveState(state);
