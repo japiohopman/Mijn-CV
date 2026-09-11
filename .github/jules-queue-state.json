@@ -1,3 +1,9 @@
 {
-  "activeSession": null
+  "activeSession": {
+    "name": "sessions/12479215145590657602",
+    "issueNumber": 68,
+    "phaseNumber": 67,
+    "phaseBranch": "phase/10-jules-dispatch-validation",
+    "startedAt": "2026-09-11T06:25:05.151Z"
+  }
 }
