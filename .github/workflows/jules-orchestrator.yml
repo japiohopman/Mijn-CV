@@ -1,9 +1,11 @@
 name: Jules Queue Orchestrator v2
 
-# Issue-Driven Jules Orchestrator workflow with scheduled recovery heartbeat.
-# Runs on push to orchestrator files, scheduled cron, or manual dispatch.
+# Issue-driven Jules orchestrator with scheduled recovery heartbeat.
+# Issue events provide immediate dispatch; schedule/manual runs provide recovery.
 
 on:
+  issues:
+    types: [opened, reopened, labeled, unlabeled, edited, closed]
   push:
     branches:
       - master
@@ -17,7 +19,7 @@ on:
 
 permissions:
   contents: write
-  pull-requests: read
+  pull-requests: write
   issues: write
 
 concurrency:
