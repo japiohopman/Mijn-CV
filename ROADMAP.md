@@ -54,9 +54,13 @@ The site answers, within seconds:
 - Dynamic tool call execution (`navigateToSection`, `openKitchenCV`, `openShare`, `openProject`).
 - Accessible floating UI widget included across all public routes.
 
-### Phase 9 — Optional LLM Adapter & Orchestrator v2 Architecture (Active)
+### Phase 9 — Optional LLM Adapter & Orchestrator v2 Architecture (Complete)
 - Optional UMD LLM Adapter for natural language query parsing constrained strictly to canonical intent IDs and facts.
 - Issue-driven Jules Orchestrator v2 supporting Phase Issues, Task Issues, dedicated Phase Branches, and human review gates (`JULES_ORCHESTRATOR_V2.md`).
+
+### Phase 10 — Autonomous Jules Dispatch Validation (Active)
+- End-to-end validation of issue-driven Jules automation with immediate issue-event triggering and dedicated phase branch (`phase/10-jules-dispatch-validation`).
+- Automatic selection of Phase and Task issues, explicit specialist agent profile loading, session deduplication, and enforcement of human review gates.
 
 ---
 
