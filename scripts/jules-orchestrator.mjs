@@ -149,7 +149,6 @@ export function getStatusLabel(issue) {
 export function parsePhaseMetadata(body = '', phaseNumber = null) {
   let phaseBranch = null;
 
-  // Search for explicit branch format e.g. `phase/09-short-name` or Phase Branch: phase/...
   const branchMatch = body.match(/`?(phase\/[a-zA-Z0-9_\-\.]+)/i) ||
                       body.match(/Phase\s+Branch:\s*`?([a-zA-Z0-9_\-\.\/]+)`?/i);
   if (branchMatch) {
@@ -160,7 +159,6 @@ export function parsePhaseMetadata(body = '', phaseNumber = null) {
     phaseBranch = 'phase/active-delivery';
   }
 
-  // Parse child task references from Markdown checkboxes e.g. - [ ] #101 or - [x] #102
   const tasks = [];
   const taskLines = body.split('\n');
   for (const line of taskLines) {
@@ -179,13 +177,16 @@ export function parsePhaseMetadata(body = '', phaseNumber = null) {
 
 export function parseTaskMetadata(body = '') {
   let parentPhaseNumber = null;
-  const match = body.match(/Parent\s+Phase:\s*#(\d+)/i) || body.match(/Parent:\s*#(\d+)/i) || body.match(/#(\d+)/);
-  if (match) {
-    parentPhaseNumber = Number(match[1]);
+  const parentMatch = body.match(/Parent\s+Phase:\s*#(\d+)/i) ||
+                      body.match(/Parent:\s*#(\d+)/i) ||
+                      body.match(/#(\d+)/);
+  if (parentMatch) {
+    parentPhaseNumber = Number(parentMatch[1]);
   }
 
   let agent = null;
-  const agentMatch = body.match(/Agent:?\s*([a-zA-Z0-9_\-]+)/i);
+  const agentMatch = body.match(/(?:^|\n)\s*#{0,6}\s*Agent\s*:\s*`?([a-zA-Z0-9_-]+)`?\s*(?:\n|$)/i) ||
+                     body.match(/(?:^|\n)\s*#{0,6}\s*Agent\s*\n\s*`?([a-zA-Z0-9_-]+)`?\s*(?:\n|$)/i);
   if (agentMatch) {
     agent = agentMatch[1].trim();
   }
@@ -244,14 +245,12 @@ export async function ensurePhaseBranch(
 export function selectEligiblePhase(phaseIssues = []) {
   if (!Array.isArray(phaseIssues) || phaseIssues.length === 0) return null;
 
-  // Active or Review phase takes top priority
   const reviewPhase = phaseIssues.find(i => hasLabel(i, 'status:review'));
   if (reviewPhase) return reviewPhase;
 
   const activePhase = phaseIssues.find(i => hasLabel(i, 'status:active'));
   if (activePhase) return activePhase;
 
-  // Next planned phase
   const plannedPhases = phaseIssues
     .filter(i => hasLabel(i, 'status:planned') && !hasLabel(i, 'status:blocked'))
     .sort((a, b) => a.number - b.number);
@@ -263,24 +262,19 @@ export function selectNextTask(phaseIssue, taskIssues = []) {
   if (!phaseIssue) return null;
   const { childTasks } = parsePhaseMetadata(phaseIssue.body || '', phaseIssue.number);
 
-  // Filter task issues that belong to this phase
   const eligibleTasks = taskIssues.filter(t => {
-    // Exclude completed or blocked tasks
     if (hasLabel(t, 'status:complete') || hasLabel(t, 'status:blocked')) return false;
 
-    // Check if task issue is explicitly referenced in phase issue
     if (childTasks.length > 0) {
       const referenced = childTasks.find(ct => ct.issueNumber === t.number);
       if (referenced && referenced.checked) return false;
       return Boolean(referenced);
     }
 
-    // Check task metadata parent link
     const meta = parseTaskMetadata(t.body || '');
     return meta.parentPhaseNumber === phaseIssue.number;
   });
 
-  // Sort by active first, then issue number
   const activeTask = eligibleTasks.find(t => hasLabel(t, 'status:active'));
   if (activeTask) return activeTask;
 
@@ -302,7 +296,6 @@ export function determineOrchestratorAction({
   const phaseStatus = getStatusLabel(activePhase);
   const { phaseBranch, childTasks } = parsePhaseMetadata(activePhase.body || '', activePhase.number);
 
-  // Case 1: Phase is in status:review
   if (phaseStatus === 'status:review') {
     if (phasePr && phasePr.merged) {
       return {
@@ -321,7 +314,6 @@ export function determineOrchestratorAction({
     };
   }
 
-  // Case 2: Active session in progress
   if (activeSession) {
     if (sessionPrMerged) {
       return {
@@ -338,10 +330,8 @@ export function determineOrchestratorAction({
     };
   }
 
-  // Case 3: Find next task to execute
   const nextTask = selectNextTask(activePhase, taskIssues);
 
-  // Check if all child tasks are finished
   const allChildTasksDone = childTasks.length > 0
     ? childTasks.every(ct => {
         if (ct.checked) return true;
@@ -386,7 +376,6 @@ export async function main() {
 
   console.log(`Resolving issues from repository ${REPO} on default branch ${defaultBranch}...`);
 
-  // Fetch open issues labeled type:phase and type:task
   const phaseIssues = await githubFetch('issues?labels=type:phase&state=open');
   const taskIssues = await githubFetch('issues?labels=type:task&state=open');
 
@@ -399,7 +388,6 @@ export async function main() {
   const { phaseBranch } = parsePhaseMetadata(activePhase.body || '', activePhase.number);
   console.log(`Active Phase #${activePhase.number}: "${activePhase.title}" (Branch: ${phaseBranch})`);
 
-  // Search for open Phase PR
   let phasePr = null;
   try {
     const prs = await githubFetch(`pulls?head=${REPO.split('/')[0]}:${phaseBranch}&base=${defaultBranch}&state=all`);
@@ -408,7 +396,6 @@ export async function main() {
     phasePr = null;
   }
 
-  // Check active Jules session state if present
   let sessionPrMerged = false;
   if (state.activeSession) {
     console.log(`Polling status of active session ${state.activeSession.name}...`);
@@ -491,17 +478,14 @@ export async function main() {
     case 'DISPATCH_TASK': {
       console.log(`Dispatching Task #${action.taskIssueNumber}: "${action.taskTitle}" on branch ${action.phaseBranch}...`);
 
-      // 1. Ensure phase branch exists or is created
       await ensurePhaseBranch(action.phaseBranch, defaultBranch);
 
-      // 2. Load specialist agent profile if specified
       const taskMeta = parseTaskMetadata(action.taskBody);
       const agentProfile = loadAgentProfile(taskMeta.agent);
       if (taskMeta.agent) {
         console.log(`Loaded specialist agent profile: ${taskMeta.agent}`);
       }
 
-      // 3. Update task issue label to status:active and phase label to status:active if needed
       await githubPatch(`issues/${action.taskIssueNumber}`, {
         labels: ['type:task', 'status:active', 'jules'],
       });
@@ -516,7 +500,7 @@ export async function main() {
         `Executing Task #${action.taskIssueNumber} on Phase Branch: ${action.phaseBranch}`,
         `Task Issue Title: ${action.taskTitle}`,
         taskMeta.agent ? `Assigned Specialist Agent: ${taskMeta.agent}` : null,
-        agentProfile ? `--- SPECIALIST PROFILE (${taskMeta.agent}) ---\n${agentProfile}\n--- END SPECIALIST PROFILE ---` : null,
+        agentProfile ? `--- SPECIALIST PROFILE (${taskMeta.agent})\n${agentProfile}\n--- END SPECIALIST PROFILE ---` : null,
         `Task Details:\n${action.taskBody}`,
         'Follow AGENT_RULES.md strictly. Run and verify all relevant tests before completing work.',
       ].filter(Boolean);
