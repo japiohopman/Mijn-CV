@@ -1,24 +1,28 @@
-name: Copilot Agent Setup
+name: Copilot Setup Steps
 
-# Deterministic environment bootstrap for GitHub cloud agents.
+# Deterministic environment bootstrap for GitHub Copilot cloud agents.
 # This workflow contains setup only; orchestration state belongs to Jules workflows/issues.
-
 on:
   workflow_dispatch:
   push:
-    branches:
-      - master
+    paths:
+      - '.github/workflows/copilot-setup-steps.yml'
+      - 'package.json'
+      - 'package-lock.json'
+  pull_request:
     paths:
       - '.github/workflows/copilot-setup-steps.yml'
       - 'package.json'
       - 'package-lock.json'
 
-permissions:
-  contents: read
-
 jobs:
-  setup:
+  # GitHub Copilot uses this exact job name for the development-environment setup.
+  copilot-setup-steps:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -29,10 +33,10 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Install dependencies
+      - name: Install project dependencies
         run: npm ci
 
-      - name: Verify toolchain
+      - name: Verify development toolchain
         run: |
           node --version
           npm --version
