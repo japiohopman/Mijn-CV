@@ -1,17 +1,16 @@
-name: Jules Queue Orchestrator
+name: Jules Queue Orchestrator v2
 
-# Event-driven ROADMAP dispatcher with a scheduled recovery heartbeat.
-# Changes to the queue definition or orchestrator itself on the repository's
-# default branch wake the queue. The scheduler remains the safety net.
+# Issue-Driven Jules Orchestrator workflow with scheduled recovery heartbeat.
+# Runs on push to orchestrator files, scheduled cron, or manual dispatch.
 
 on:
   push:
     branches:
       - master
     paths:
-      - 'ROADMAP.md'
       - '.github/workflows/jules-orchestrator.yml'
       - 'scripts/jules-orchestrator.mjs'
+      - 'JULES_ORCHESTRATOR_V2.md'
   schedule:
     - cron: '7,22,37,52 * * * *'
   workflow_dispatch: {}
@@ -19,6 +18,7 @@ on:
 permissions:
   contents: write
   pull-requests: read
+  issues: write
 
 concurrency:
   group: jules-orchestrator
@@ -37,11 +37,10 @@ jobs:
         with:
           node-version: 22
 
-      - name: Run orchestrator
+      - name: Run orchestrator v2
         env:
           JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           JULES_SOURCE: sources/github/${{ github.repository }}
-          JULES_STARTING_BRANCH: ${{ github.event.repository.default_branch }}
         run: node scripts/jules-orchestrator.mjs

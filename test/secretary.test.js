@@ -85,6 +85,18 @@ const testCases = [
     expectedIntent: 'route.share',
     expectedTool: 'openShare',
     expectedParam: undefined
+  },
+  {
+    query: 'draait Jaap ook als DJ?',
+    expectedIntent: 'background.dj_music',
+    expectedTool: 'navigateToSection',
+    expectedParam: '#over'
+  },
+  {
+    query: 'waar vind ik zijn DJ-pagina?',
+    expectedIntent: 'background.dj_music',
+    expectedTool: 'navigateToSection',
+    expectedParam: '#over'
   }
 ];
 
