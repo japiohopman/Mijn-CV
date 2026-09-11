@@ -395,7 +395,99 @@ await runAsyncTest('ensurePhaseBranch creates phase branch off default branch if
   assert.equal(createdRef.sha, 'master-sha-123');
 });
 
-// 9. Mocked Dispatch Verification Test
+// 9. Phase 10 — Autonomous Jules Dispatch Validation Tests
+runTest('Phase 10: selectEligiblePhase selects Phase 10 when active or planned', () => {
+  const phaseIssues = [
+    {
+      number: 10,
+      title: 'Phase 10 — Autonomous Jules Dispatch Validation',
+      labels: ['type:phase', 'status:planned'],
+      body: '## Objective\nProve issue-driven Jules automation works end-to-end.\n\n## Phase Branch\n`phase/10-jules-dispatch-validation`',
+    },
+  ];
+
+  const selected = selectEligiblePhase(phaseIssues);
+  assert.equal(selected.number, 10);
+  const { phaseBranch } = parsePhaseMetadata(selected.body, selected.number);
+  assert.equal(phaseBranch, 'phase/10-jules-dispatch-validation');
+});
+
+runTest('Phase 10: dispatch single session with explicit specialist agent profile loaded', () => {
+  const activePhase = {
+    number: 10,
+    title: 'Phase 10 — Autonomous Jules Dispatch Validation',
+    labels: ['type:phase', 'status:planned'],
+    body: '## Phase Branch\n`phase/10-jules-dispatch-validation`',
+  };
+
+  const taskIssue = {
+    number: 110,
+    title: 'Task: Verify automatic Task Issue dispatch',
+    labels: ['type:task', 'status:planned'],
+    body: 'Parent Phase\n#10\nAgent\narchitecture-specialist\n\n## Definition of Done\n- Eligible Task Issue triggers orchestrator\n- Phase branch created/reused\n- Explicit specialist profile loaded',
+  };
+
+  const action = determineOrchestratorAction({
+    activePhase,
+    taskIssues: [taskIssue],
+  });
+
+  assert.equal(action.type, 'DISPATCH_TASK');
+  assert.equal(action.phaseIssueNumber, 10);
+  assert.equal(action.taskIssueNumber, 110);
+  assert.equal(action.phaseBranch, 'phase/10-jules-dispatch-validation');
+
+  const taskMeta = parseTaskMetadata(action.taskBody);
+  assert.equal(taskMeta.agent, 'architecture-specialist');
+
+  const profile = loadAgentProfile(taskMeta.agent);
+  assert.ok(profile.includes('Architecture Specialist'));
+});
+
+runTest('Phase 10: repeated run does not duplicate active session (WAIT_ACTIVE_SESSION)', () => {
+  const activePhase = {
+    number: 10,
+    title: 'Phase 10 — Autonomous Jules Dispatch Validation',
+    labels: ['type:phase', 'status:active'],
+    body: '## Phase Branch\n`phase/10-jules-dispatch-validation`',
+  };
+
+  const activeSession = {
+    name: 'sessions/phase10-validation-session-1',
+    issueNumber: 110,
+    phaseNumber: 10,
+    phaseBranch: 'phase/10-jules-dispatch-validation',
+  };
+
+  const action = determineOrchestratorAction({
+    activePhase,
+    taskIssues: [{ number: 110, title: 'Task: Verify automatic Task Issue dispatch', labels: ['type:task', 'status:active'] }],
+    activeSession,
+    sessionPrMerged: false,
+  });
+
+  assert.equal(action.type, 'WAIT_ACTIVE_SESSION');
+  assert.equal(action.sessionName, 'sessions/phase10-validation-session-1');
+});
+
+runTest('Phase 10: human review remains final integration gate (WAIT_HUMAN_REVIEW)', () => {
+  const activePhase = {
+    number: 10,
+    title: 'Phase 10 — Autonomous Jules Dispatch Validation',
+    labels: ['type:phase', 'status:review'],
+    body: '## Phase Branch\n`phase/10-jules-dispatch-validation`',
+  };
+
+  const action = determineOrchestratorAction({
+    activePhase,
+    phasePr: { number: 99, merged: false },
+  });
+
+  assert.equal(action.type, 'WAIT_HUMAN_REVIEW');
+  assert.equal(action.prNumber, 99);
+});
+
+// 10. Mocked Dispatch Verification Test
 await runAsyncTest('Mocked task dispatch constructs valid Jules API payload and ensures phase branch', async () => {
   const activePhase = {
     number: 63,
