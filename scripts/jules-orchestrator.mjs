@@ -149,10 +149,14 @@ export function getStatusLabel(issue) {
 export function parsePhaseMetadata(body = '', phaseNumber = null) {
   let phaseBranch = null;
 
-  const branchMatch = body.match(/`?(phase\/[a-zA-Z0-9_\-\.]+)/i) ||
-                      body.match(/Phase\s+Branch:\s*`?([a-zA-Z0-9_\-\.\/]+)`?/i);
-  if (branchMatch) {
-    phaseBranch = branchMatch[1].trim();
+  // Only trust an explicit Phase Branch field. Do not scan arbitrary prose for `phase/...`.
+  const headingMatch = body.match(/(?:^|\n)\s*#{1,6}\s*Phase\s+Branch\s*\n\s*`(phase\/[a-zA-Z0-9_\-.\/]+)`\s*(?:\n|$)/i);
+  const inlineMatch = body.match(/(?:^|\n)\s*Phase\s+Branch\s*:\s*`?(phase\/[a-zA-Z0-9_\-.\/]+)`?\s*(?:\n|$)/i);
+
+  if (headingMatch) {
+    phaseBranch = headingMatch[1].trim();
+  } else if (inlineMatch) {
+    phaseBranch = inlineMatch[1].trim();
   } else if (phaseNumber !== null) {
     phaseBranch = `phase/${String(phaseNumber).padStart(2, '0')}-delivery`;
   } else {
@@ -478,14 +482,17 @@ export async function main() {
     case 'DISPATCH_TASK': {
       console.log(`Dispatching Task #${action.taskIssueNumber}: "${action.taskTitle}" on branch ${action.phaseBranch}...`);
 
+      // 1. Ensure phase branch exists or is created
       await ensurePhaseBranch(action.phaseBranch, defaultBranch);
 
+      // 2. Load specialist agent profile if specified
       const taskMeta = parseTaskMetadata(action.taskBody);
       const agentProfile = loadAgentProfile(taskMeta.agent);
       if (taskMeta.agent) {
         console.log(`Loaded specialist agent profile: ${taskMeta.agent}`);
       }
 
+      // 3. Update task issue label to status:active and phase label to status:active if needed
       await githubPatch(`issues/${action.taskIssueNumber}`, {
         labels: ['type:task', 'status:active', 'jules'],
       });
@@ -500,7 +507,7 @@ export async function main() {
         `Executing Task #${action.taskIssueNumber} on Phase Branch: ${action.phaseBranch}`,
         `Task Issue Title: ${action.taskTitle}`,
         taskMeta.agent ? `Assigned Specialist Agent: ${taskMeta.agent}` : null,
-        agentProfile ? `--- SPECIALIST PROFILE (${taskMeta.agent})\n${agentProfile}\n--- END SPECIALIST PROFILE ---` : null,
+        agentProfile ? `--- SPECIALIST PROFILE (${taskMeta.agent}) ---\n${agentProfile}\n--- END SPECIALIST PROFILE ---` : null,
         `Task Details:\n${action.taskBody}`,
         'Follow AGENT_RULES.md strictly. Run and verify all relevant tests before completing work.',
       ].filter(Boolean);
