@@ -5,7 +5,12 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+<<<<<<< Updated upstream
     "test": "node scripts/test-default-branch.mjs && node test/secretary.test.js && node test/server.test.js && node scripts/perf-audit.mjs"
+=======
+    "dev": "node server.js",
+    "test": "node scripts/test-default-branch.mjs && node test/server.test.js"
+>>>>>>> Stashed changes
   },
   "dependencies": {
     "compression": "^1.8.1",
