@@ -1,0 +1,43 @@
+name: Copilot Agent Setup
+
+# Deterministic environment bootstrap for GitHub cloud agents.
+# This workflow contains setup only; orchestration state belongs to Jules workflows/issues.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/copilot-setup-steps.yml'
+      - 'package.json'
+      - 'package-lock.json'
+
+permissions:
+  contents: read
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify toolchain
+        run: |
+          node --version
+          npm --version
+          test -f package.json
+          test -d node_modules
+
+      - name: Verify project test entrypoint
+        run: node -e "const p=require('./package.json'); if (!p.scripts?.test) throw new Error('package.json is missing the test script'); console.log('test script:', p.scripts.test)"
