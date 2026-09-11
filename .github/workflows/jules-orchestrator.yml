@@ -52,11 +52,6 @@ jobs:
           skip="$(printf '%s\n' "$output" | sed -n 's/^skip=//p' | tail -n 1)"
           printf 'skip=%s\n' "${skip:-false}" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/setup-node@v4
-        if: steps.jules-guard.outputs.skip != 'true'
-        with:
-          node-version: 22
-
       - name: Run orchestrator v2
         if: steps.jules-guard.outputs.skip != 'true'
         env:
@@ -68,4 +63,5 @@ jobs:
 
       - name: Report blocked dispatch
         if: steps.jules-guard.outputs.skip == 'true'
-        run: echo 'Jules dispatch skipped: another active Jules session owns the repository.'
+        run: |
+          echo "Jules dispatch skipped: another active Jules session owns the repository."
