@@ -1784,6 +1784,66 @@ img {
   color: rgba(238, 247, 255, 0.85);
 }
 
+/* The Vinyl Drop specific branding (Amber / Deep Vinyl Violet) */
+.projects .vinyl-card {
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  background:
+    radial-gradient(circle at top left, rgba(245, 158, 11, 0.12), transparent 40%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03)),
+    rgba(17, 13, 24, 0.88);
+}
+
+.projects .vinyl-card::after {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.25), transparent 66%);
+  width: 18rem;
+  height: 18rem;
+}
+
+.projects .vinyl-card:hover,
+.projects .vinyl-card:focus-within {
+  border-color: #f59e0b;
+  box-shadow: 0 32px 80px rgba(245, 158, 11, 0.2);
+}
+
+.projects .vinyl-card .btn-project-link:not(.secondary-link) {
+  background: linear-gradient(135deg, #f59e0b, #fef3c7);
+  color: #07111f !important;
+}
+
+.projects .vinyl-card .feature-item strong {
+  color: #fbbf24;
+}
+
+/* ParkNest Fundraiser Transparency specific branding (Emerald / Forest Green) */
+.projects .fundraiser-card {
+  border: 1px solid rgba(52, 211, 153, 0.28);
+  background:
+    radial-gradient(circle at top left, rgba(52, 211, 153, 0.12), transparent 40%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.03)),
+    rgba(6, 25, 18, 0.88);
+}
+
+.projects .fundraiser-card::after {
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.25), transparent 66%);
+  width: 18rem;
+  height: 18rem;
+}
+
+.projects .fundraiser-card:hover,
+.projects .fundraiser-card:focus-within {
+  border-color: #34d399;
+  box-shadow: 0 32px 80px rgba(52, 211, 153, 0.2);
+}
+
+.projects .fundraiser-card .btn-project-link:not(.secondary-link) {
+  background: linear-gradient(135deg, #10b981, #a7f3d0);
+  color: #07111f !important;
+}
+
+.projects .fundraiser-card .feature-item strong {
+  color: #6ee7b7;
+}
+
 /* SuperMail specific branding (Amber / Gold) */
 .projects .supermail-card {
   border: 1px solid rgba(255, 184, 77, 0.25);

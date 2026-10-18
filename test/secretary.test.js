@@ -63,6 +63,18 @@ const testCases = [
     expectedParam: 'supermail'
   },
   {
+    query: 'Vertel over The Vinyl Drop platenmarktplaats',
+    expectedIntent: 'projects.vinyldrop',
+    expectedTool: 'openProject',
+    expectedParam: 'vinyl-drop'
+  },
+  {
+    query: 'Vertel over ParkNest Fundraiser',
+    expectedIntent: 'projects.fundraiser',
+    expectedTool: 'openProject',
+    expectedParam: 'fundraiser'
+  },
+  {
     query: 'welke skills en tech stack gebruikt hij?',
     expectedIntent: 'skills.overview',
     expectedTool: 'navigateToSection',
@@ -222,7 +234,7 @@ const mockDoc = {
     if (mockLocationHref !== '/') {
       return null;
     }
-    if (['#over', '#projecten', '#skills', '#ervaring', '#contact', '.artificer-card', '.conquest-card', '.supermail-card'].includes(selector)) {
+    if (['#over', '#projecten', '#skills', '#ervaring', '#contact', '.artificer-card', '.conquest-card', '.supermail-card', '.vinyl-card', '.fundraiser-card'].includes(selector)) {
       return createMockElement(selector);
     }
     return null;
@@ -430,7 +442,9 @@ assert(defaultAdapter.enabled === false, 'LLM Adapter is disabled by default');
   const projectMap = {
     'artificer': '.artificer-card',
     'global-conquest': '.conquest-card',
-    'supermail': '.supermail-card'
+    'supermail': '.supermail-card',
+    'vinyl-drop': '.vinyl-card',
+    'fundraiser': '.fundraiser-card'
   };
 
   for (const intent of knowledgeData.intents) {

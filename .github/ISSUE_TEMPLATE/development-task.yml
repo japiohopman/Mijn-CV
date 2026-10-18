@@ -1,0 +1,53 @@
+name: Development task
+description: Define a reviewable, testable unit of development work
+title: "[Task]: "
+labels: ["proposed"]
+body:
+  - type: markdown
+    attributes:
+      value: "The Issue is the execution contract. Keep scope and acceptance criteria authoritative here."
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Describe the outcome and the boundaries of this change.
+      placeholder: Include repository evidence and the affected area.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Observable conditions that make this task complete.
+      placeholder: Use independently verifiable checklist items.
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: Link prerequisites and explain their completion semantics.
+      placeholder: "None, or list issue links and required outcome."
+    validations:
+      required: true
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: Out of scope
+      description: Explicitly exclude work that should become separate issues.
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation plan
+      description: Tests, checks, manual evidence, and failure cases.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Repository evidence
+      description: Paths, symbols, logs, or docs supporting the task.
+    validations:
+      required: true

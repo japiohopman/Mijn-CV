@@ -1,0 +1,19 @@
+name: Observe PR review event (unprivileged)
+
+on:
+  pull_request_review:
+    types: [submitted, edited, dismissed]
+
+# Do not check out repository code, read secrets, call APIs, or write state here.
+# pull_request_review may use a PR merge ref; a separate workflow_run event
+# wakes the privileged relay, which fetches current evidence from the default branch.
+permissions: {}
+
+jobs:
+  observe:
+    name: Observe review signal without secrets or repository code
+    if: ${{ github.event.pull_request.number }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record safe observation
+        run: echo "PR review event observed. Trusted relay will re-fetch authoritative review and check data."

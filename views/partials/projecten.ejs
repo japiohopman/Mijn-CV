@@ -189,6 +189,135 @@
       </div>
     </article>
 
+    <article class="project-card pinned hero-project vinyl-card">
+      <div class="hero-project-inner">
+        <div class="hero-project-info">
+          <div class="project-topline">
+            <span class="project-badge">Community Marketplace</span>
+            <span class="project-type">Local Trade · Vinyl Culture · TypeScript</span>
+          </div>
+          <h3>The Vinyl Drop</h3>
+          <p class="hero-project-desc">
+            Lokale marktplaats voor muziekliefhebbers en platenverzamelaars in Amsterdam Oost.
+            Gemaakt om fysieke platen te ontdekken, te ruilen en direct van verzamelaars te kopen op basis van specifieke persingen en staat.
+          </p>
+          <div class="project-features">
+            <div class="feature-item">
+              <strong>Doel &amp; Probleem</strong>
+              <span>Een transparante lokale marktplaats bieden waar platenverzamelaars specifieke persingen, media- en hoescondities kunnen inzien en direct lokaal afspreken zonder anonieme tussenpersonen.</span>
+            </div>
+            <div class="feature-item">
+              <strong>Rol &amp; Architectuur</strong>
+              <span>Ontwerp van de full-stack PostgreSQL/Drizzle ORM data-architectuur, Row Level Security (RLS) op verkopersprofielen, zoek- en filterpijplijnen en responsieve EJS/Tailwind UI.</span>
+            </div>
+            <div class="feature-item">
+              <strong>Bewijs &amp; Resultaat</strong>
+              <span>Volledig werkend staging-platform met geavanceerde zoekfilters op persing/cataloognummer, openbare verkopersprofielen en comment-threads per plaat.</span>
+            </div>
+          </div>
+          <details class="tech-details">
+            <summary class="tech-details-summary">
+              <span>Technische Diepgang &amp; Architectuur Besluiten</span>
+              <span class="summary-chevron" aria-hidden="true">&darr;</span>
+            </summary>
+            <div class="tech-details-content">
+              <ul>
+                <li><strong>Type-Safe Relational Data Layer:</strong> Drizzle ORM met Supabase/PostgreSQL voor performante relational query parsing en schemavalidatie.</li>
+                <li><strong>Fine-Grained Access &amp; RLS:</strong> Strikte Row Level Security policies voor directe verkopersauthenticatie en veilige profiel-/listingmutaties.</li>
+                <li><strong>Catalog Search &amp; Filtering:</strong> Gefilterde queries op albumtitel, artiest, catalogusnummer, genre, conditie en ruilopties.</li>
+              </ul>
+            </div>
+          </details>
+          <div class="project-tech-stack">
+            <span class="tech-label">Technologie:</span>
+            <div class="tech-chips">
+              <span class="tech-chip">TypeScript</span>
+              <span class="tech-chip">Node.js</span>
+              <span class="tech-chip">Drizzle ORM</span>
+              <span class="tech-chip">PostgreSQL / Supabase</span>
+              <span class="tech-chip">Tailwind CSS</span>
+            </div>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/japiohopman/the-vinyl-drop" target="_blank" rel="noreferrer" class="btn-project-link">Bekijk GitHub &rarr;</a>
+            <a href="https://the-vinyl-drop-staging.onrender.com/" target="_blank" rel="noreferrer" class="btn-project-link secondary-link">Staging Site &rarr;</a>
+          </div>
+        </div>
+        <div class="hero-project-gallery">
+          <div class="gallery-main" style="background: #110d18; display: flex; align-items: center; justify-content: center; padding: 1.5rem;">
+            <div style="text-align: center; color: #f59e0b;">
+              <span style="font-size: 3.5rem; display: block; margin-bottom: 0.5rem;">🎧</span>
+              <strong style="font-size: 1.25rem; font-family: var(--font-display); color: #fbbf24;">The Vinyl Drop</strong>
+              <p style="font-size: 0.85rem; color: #d1d5db; margin-top: 0.25rem;">Buy. Trade. Dig.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card pinned hero-project fundraiser-card">
+      <div class="hero-project-inner">
+        <div class="hero-project-info">
+          <div class="project-topline">
+            <span class="project-badge">Maatschappelijke Transparantie</span>
+            <span class="project-type">Crowdfunding Register · Amsterdam Oost</span>
+          </div>
+          <h3>ParkNest Fundraiser Transparency</h3>
+          <p class="hero-project-desc">
+            Onafhankelijk, bron-gecontroleerd informatieplatform ter documentatie en verheldering van de inzamelingsacties rondom de ParkNest brand in het Flevopark (Amsterdam-Oost).
+          </p>
+          <div class="project-features">
+            <div class="feature-item">
+              <strong>Doel &amp; Probleem</strong>
+              <span>Heldere transparantie bieden na een ingrijpende gebeurtenis: collectieve ParkNest inzamelingsacties onderscheiden van individuele herstelcampagnes met directe bronverwijzingen.</span>
+            </div>
+            <div class="feature-item">
+              <strong>Rol &amp; Architectuur</strong>
+              <span>Opzet van een neutrale, statische data-architectuur, redactierichtlijnen (`editorial-policy.md`), bronnendocumentatie en transparante HTML5/CSS3 presentatie.</span>
+            </div>
+            <div class="feature-item">
+              <strong>Bewijs &amp; Resultaat</strong>
+              <span>Gestructureerd openbaar register waarin elke actie een feitelijke, op openbare bronnen gebaseerde beschrijving en verificatielink heeft.</span>
+            </div>
+          </div>
+          <details class="tech-details">
+            <summary class="tech-details-summary">
+              <span>Technische Diepgang &amp; Architectuur Besluiten</span>
+              <span class="summary-chevron" aria-hidden="true">&darr;</span>
+            </summary>
+            <div class="tech-details-content">
+              <ul>
+                <li><strong>Static Data Architecture &amp; Zero Dependency:</strong> Lichtgewicht statische data-structuur voor maximale toegankelijkheid en verifieerbaarheid zonder backend overhead.</li>
+                <li><strong>Editorial &amp; Source Register Policy:</strong> Strikte scheiding van feiten en brondocumentatie in Markdown-registers met HTML-validatie via `.htmlvalidate.json`.</li>
+                <li><strong>Accessible &amp; Neutral UI Design:</strong> Hoge contrastverhoudingen, duidelijke typografie en neutrale visuele kaders om objectieve informatieoverdracht te waarborgen.</li>
+              </ul>
+            </div>
+          </details>
+          <div class="project-tech-stack">
+            <span class="tech-label">Technologie:</span>
+            <div class="tech-chips">
+              <span class="tech-chip">HTML5 / CSS3</span>
+              <span class="tech-chip">JavaScript</span>
+              <span class="tech-chip">Static Data Register</span>
+              <span class="tech-chip">Editorial Verification</span>
+            </div>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/japiohopman/fundraiser" target="_blank" rel="noreferrer" class="btn-project-link">Bekijk GitHub Repo &rarr;</a>
+          </div>
+        </div>
+        <div class="hero-project-gallery">
+          <div class="gallery-main" style="background: #061912; display: flex; align-items: center; justify-content: center; padding: 1.5rem;">
+            <div style="text-align: center; color: #34d399;">
+              <span style="font-size: 3.5rem; display: block; margin-bottom: 0.5rem;">🌱</span>
+              <strong style="font-size: 1.25rem; font-family: var(--font-display); color: #6ee7b7;">ParkNest Transparantie</strong>
+              <p style="font-size: 0.85rem; color: #9ca3af; margin-top: 0.25rem;">Amsterdam-Oost Inzamelingsregister</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
     <article class="project-card pinned hero-project supermail-card">
       <div class="hero-project-inner">
         <div class="hero-project-info">

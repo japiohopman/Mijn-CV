@@ -33,7 +33,9 @@
   const ALLOWED_PROJECT_IDS = [
     'artificer',
     'global-conquest',
-    'supermail'
+    'supermail',
+    'vinyl-drop',
+    'fundraiser'
   ];
 
   /**
@@ -283,7 +285,9 @@
         const selectorMap = {
           'artificer': '.artificer-card',
           'global-conquest': '.conquest-card',
-          'supermail': '.supermail-card'
+          'supermail': '.supermail-card',
+          'vinyl-drop': '.vinyl-card',
+          'fundraiser': '.fundraiser-card'
         };
 
         const targetSelector = selectorMap[projectId] || `#${projectId}`;
