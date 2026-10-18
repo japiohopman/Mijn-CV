@@ -2,7 +2,7 @@
 
 This is the strategic roadmap for `japiohopman/Mijn-CV`. It defines the long-term vision and structural progress for developing the portfolio from a CV site into a focused, high-impact professional creative developer portfolio.
 
-> **Note on Orchestration:** Automated execution is managed via **GitHub Issues**, **Phase Branches** (`phase/<phase-id>-<short-name>`), and human-gated Phase PRs. See [`JULES_ORCHESTRATOR_V2.md`](./JULES_ORCHESTRATOR_V2.md) for execution details and state machine specifications.
+> **Note on Orchestration & Workflow Loop:** Automated execution is managed via **GitHub Issues**, **Phase Branches** (`phase/<phase-id>-<short-name>`), and human-gated Phase PRs. See [`JULES_ORCHESTRATOR_V2.md`](./JULES_ORCHESTRATOR_V2.md) for orchestrator details and [`docs/WORKFLOW_AUTOLOOP.md`](./docs/WORKFLOW_AUTOLOOP.md) for the Development Autoloop specification.
 
 ---
 
