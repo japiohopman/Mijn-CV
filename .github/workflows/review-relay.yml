@@ -1,0 +1,132 @@
+name: Trusted review relay (guarded existing-session continuation)
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited, ready_for_review]
+  issue_comment:
+    types: [created, edited]
+  workflow_run:
+    workflows: ["Observe PR review event (unprivileged)"]
+    types: [completed]
+
+# Privileged relay events use trusted default-branch workflow code only.
+# A separate no-secret workflow observes pull_request_review events, then this
+# workflow re-reads current reviews/checks from default-branch code on workflow_run.
+# A trusted [autoloop:relay-review] PR comment is a safe manual retry path.
+# On a pushed head, provider access is allowed only when a durable prior repair
+# marker and its trusted changes-requested review are both verified.
+# The relay reconciles only the exact existing session named in the durable repair marker.
+# This workflow never creates a new provider session or replacement task.
+# Message acceptance is not success; outcome reconciliation remains required.
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+  checks: write
+
+concurrency:
+  group: review-relay-${{ github.repository }}-${{ github.event.pull_request.number || github.event.issue.number || github.event.workflow_run.pull_requests[0].number || 'unknown' }}
+  cancel-in-progress: false
+
+jobs:
+  review-relay:
+    name: Evaluate trusted review and existing-work handoff
+    if: ${{ github.event.pull_request.number || github.event.issue.pull_request || github.event.workflow_run.pull_requests[0].number }}
+    runs-on: ubuntu-latest
+    environment: autoloop-dispatch
+    timeout-minutes: 8
+    steps:
+      - name: Check out trusted default-branch code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 20
+      - name: Classify whether existing-work verification needs provider access
+        id: provider-access
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_API_URL: ${{ github.api_url }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFile, appendFile } from 'node:fs/promises';
+          import { shouldExposeProviderAccess } from './scripts/provider-access.mjs';
+
+          const output = process.env.GITHUB_OUTPUT;
+          const event = JSON.parse(await readFile(process.env.GITHUB_EVENT_PATH, 'utf8'));
+          const config = JSON.parse(await readFile('config/autoloop.json', 'utf8'));
+          const repo = process.env.GITHUB_REPOSITORY;
+          const [owner, name] = repo.split('/');
+          const eventName = process.env.GITHUB_EVENT_NAME;
+          const trustedRetry = eventName === 'issue_comment'
+            && event.issue?.pull_request
+            && /^\s*(?:\[autoloop:relay-review\]|@autoloop\s+relay-review)\s*$/i.test(String(event.comment?.body || ''));
+          const observerBridge = eventName === 'workflow_run'
+            && event.workflow_run?.name === 'Observe PR review event (unprivileged)';
+          const repairHeadSync = eventName === 'pull_request_target' && event.action === 'synchronize';
+          let needsProvider = false;
+
+          try {
+            const configReady = config.enabled === true && config.runMode === 'live'
+              && config.repairDispatchEnabled === true && config.repairPilotApproved === true
+              && config.humanReadinessRequired === true && config.automaticMerge === false
+              && config.scheduleEnabled === false;
+            const actor = String(event.comment?.user?.login || '').toLowerCase();
+            const trusted = new Set((config.trustedReviewers || []).map(value => String(value).toLowerCase()));
+            const eventEligible = observerBridge || repairHeadSync
+              || (trustedRetry && trusted.has(actor));
+            const prNumber = event.pull_request?.number || event.issue?.number
+              || event.workflow_run?.pull_requests?.[0]?.number;
+
+            if (configReady && eventEligible && prNumber) {
+              const headers = {
+                accept: 'application/vnd.github+json',
+                authorization: 'Bearer ' + process.env.GITHUB_TOKEN,
+                'x-github-api-version': '2022-11-28'
+              };
+              const get = async path => {
+                const response = await fetch(process.env.GITHUB_API_URL + '/repos/' + owner + '/' + name + path, { headers });
+                if (!response.ok) throw new Error('GitHub API lookup failed');
+                return response.json();
+              };
+              const getAllPages = async path => {
+                const items = [];
+                for (let page = 1; page <= 10; page++) {
+                  const batch = await get(path + (path.includes('?') ? '&' : '?') + 'per_page=100&page=' + page);
+                  if (!Array.isArray(batch)) throw new Error('Unexpected paginated response');
+                  items.push(...batch);
+                  if (batch.length < 100) return items;
+                }
+                throw new Error('API inventory exceeds safe page limit');
+              };
+              const pullRequest = await get('/pulls/' + prNumber);
+              const reviews = await getAllPages('/pulls/' + prNumber + '/reviews');
+              const comments = (repairHeadSync || observerBridge)
+                ? await getAllPages('/issues/' + prNumber + '/comments') : [];
+              needsProvider = shouldExposeProviderAccess({
+                eventName, event, config, pullRequest, reviews, comments
+              });
+            }
+          } catch {
+            // Fail closed: uncertainty must never make the provider secret available.
+            needsProvider = false;
+          }
+          await appendFile(output, 'needs_jules=' + String(needsProvider) + '\n');
+          NODE
+      - name: Run guarded review relay
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_EVENT_ACTION: ${{ github.event.action }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          JULES_API_KEY: ${{ steps.provider-access.outputs.needs_jules == 'true' && secrets.JULES_API_KEY || '' }}
+          AUTOLOOP_STATE_BRANCH: ${{ vars.AUTOLOOP_STATE_BRANCH || 'autoloop-state' }}
+          AUTOLOOP_CONFIG_PATH: config/autoloop.json
+        run: node scripts/review-relay.mjs

@@ -1,0 +1,76 @@
+name: Development Autoloop Dispatch (Live, Explicit Authorization)
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_repository:
+        description: "Type the exact owner/repository shown in this repository's URL."
+        required: true
+        type: string
+      dispatch_authorization:
+        description: "Type the exact dispatch authorization phrase configured in config/autoloop.json. This can create one Jules task."
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  issues: read
+  pull-requests: read
+
+jobs:
+  autoloop-live-dispatch:
+    name: Validate, reserve, and dispatch one eligible task
+    runs-on: ubuntu-latest
+    environment: autoloop-dispatch
+    timeout-minutes: 10
+    steps:
+      - name: Verify default branch ref
+        if: github.ref != format('refs/heads/{0}', github.event.repository.default_branch)
+        run: |
+          echo "::error::Live Autoloop dispatch can only run from the repository default branch."
+          exit 1
+      - name: Check out trusted default-branch code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 20
+      - name: Verify repository and dispatch authorization before exposing provider secrets
+        env:
+          CONFIRM_REPOSITORY: ${{ inputs.confirm_repository }}
+          DISPATCH_AUTHORIZATION: ${{ inputs.dispatch_authorization }}
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const config = JSON.parse(fs.readFileSync('config/autoloop.json', 'utf8'));
+          if (process.env.CONFIRM_REPOSITORY !== process.env.GITHUB_REPOSITORY) {
+            console.error('Blocked: repository confirmation must exactly match this repository.');
+            process.exit(1);
+          }
+          if (config.enabled !== true || config.runMode !== 'live') {
+            console.error('Blocked: config must explicitly set enabled=true and runMode=live.');
+            process.exit(1);
+          }
+          if (typeof config.requiredConfirmation !== 'string' ||
+              !config.requiredConfirmation.trim() ||
+              process.env.DISPATCH_AUTHORIZATION !== config.requiredConfirmation) {
+            console.error('Blocked: dispatch authorization does not exactly match config/autoloop.json.');
+            process.exit(1);
+          }
+          console.log('Authorization verified. Provider secrets will be made available only to the dispatch step.');
+          NODE
+      - name: Dispatch exactly one task after all safety gates pass
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+          CONFIRM_REPOSITORY: ${{ inputs.confirm_repository }}
+          DISPATCH_AUTHORIZATION: ${{ inputs.dispatch_authorization }}
+          AUTOLOOP_LIVE_DISPATCH: "true"
+          AUTOLOOP_STATE_BRANCH: ${{ vars.AUTOLOOP_STATE_BRANCH || 'autoloop-state' }}
+          AUTOLOOP_CONFIG_PATH: config/autoloop.json
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_ACTOR: ${{ github.actor }}
+        run: node scripts/autoloop-runner.mjs

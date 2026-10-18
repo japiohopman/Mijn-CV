@@ -1,0 +1,42 @@
+name: Read-only reconciliation
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_repository:
+        description: "Type the exact owner/repository shown in this repository's URL."
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
+jobs:
+  reconcile:
+    name: Reconcile Jules sessions (read-only)
+    runs-on: ubuntu-latest
+    environment: autoloop-dispatch
+    timeout-minutes: 5
+    steps:
+      - name: Verify default branch ref
+        if: github.ref != format('refs/heads/{0}', github.event.repository.default_branch)
+        run: |
+          echo "::error::Session reconciliation can only be executed from the repository default branch."
+          exit 1
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run read-only reconciliation
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
+          CONFIRM_REPOSITORY: ${{ inputs.confirm_repository }}
+          AUTOLOOP_STATE_BRANCH: ${{ vars.AUTOLOOP_STATE_BRANCH || 'autoloop-state' }}
+        run: node scripts/reconcile-readonly.mjs
