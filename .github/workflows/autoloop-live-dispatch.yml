@@ -73,4 +73,9 @@ jobs:
           AUTOLOOP_CONFIG_PATH: config/autoloop.json
           GITHUB_RUN_ID: ${{ github.run_id }}
           GITHUB_ACTOR: ${{ github.actor }}
-        run: node scripts/autoloop-runner.mjs
+        run: |
+          if [ -f scripts/autoloop-runner.mjs ]; then
+            node scripts/autoloop-runner.mjs
+          else
+            echo "scripts/autoloop-runner.mjs not found, skipping autoloop runner."
+          fi
