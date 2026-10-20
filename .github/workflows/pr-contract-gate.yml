@@ -37,6 +37,25 @@ jobs:
         with:
           node-version: 20
 
+      - name: Verify trusted gate implementation is installed
+        shell: bash
+        run: |
+          set -euo pipefail
+          required_files=(
+            "scripts/pr-contract-gate.mjs"
+            "src/pr-gate.mjs"
+            "src/contracts.mjs"
+            "src/config.mjs"
+            "config/autoloop.schema.v1.json"
+          )
+          for path in "${required_files[@]}"; do
+            if [[ ! -f "$path" ]]; then
+              echo "::error title=Trusted gate bootstrap pending::Missing trusted file '$path' on the checked-out base revision."
+              echo "This is a fail-closed bootstrap error. Do not execute code from the pull-request head and do not treat this run as a successful evaluation."
+              exit 1
+            fi
+          done
+
       - name: Evaluate PR contract using read-only GitHub metadata
         env:
           GITHUB_TOKEN: ${{ github.token }}
