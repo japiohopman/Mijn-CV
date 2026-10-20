@@ -14,75 +14,61 @@
         <%- include('partials/nav') %>
 
         <div class="hero-backdrop" aria-hidden="true">
-          <svg viewBox="0 0 800 600" class="hero-lines" role="presentation">
-            <defs>
-              <linearGradient id="heroStroke" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#7df9d0" stop-opacity="0.9" />
-                <stop offset="100%" stop-color="#ff8d5c" stop-opacity="0.15" />
-              </linearGradient>
-            </defs>
-            <path d="M40 250C170 90 320 60 510 150s220 240 250 360" />
-            <path d="M120 520c170-70 250-240 410-250 95-6 160 25 220 82" />
-            <path d="M90 90c62 40 85 110 40 190-44 77-7 136 79 145 94 9 151-58 204-117" />
-          </svg>
-          <div class="grid-accent"></div>
+          <div class="hero-glow-a"></div>
+          <div class="hero-glow-b"></div>
+          <div class="grid-pattern"></div>
         </div>
 
         <div class="hero-content container">
           <div class="hero-copy">
-            <p class="eyebrow">Developer &amp; Creative Technologist</p>
+            <div class="hero-badge">
+              <span class="status-pulse"></span>
+              Developer &amp; Creative Technologist
+            </div>
             <h1>
-              Ik bouw digitale ervaringen
-              <span>waarin technologie en creativiteit samenkomen.</span>
+              Ik bouw doordachte digitale producten met <span class="text-gradient">code, karakter en regie.</span>
             </h1>
             <p class="subtitle">
-              Ik ben Jaap Hopman — Developer &amp; Creative Technologist uit Amsterdam.
-              Ik bouw interactieve webapplicaties, games en AI-driven tools met TypeScript, React en Node.js.
-              Met een achtergrond in de professionele keuken en creatieve media breng ik complexe ideeën
-              samen met een hands-on uitvoeringsmentaliteit: een concept heeft pas waarde als het daadwerkelijk werkt.
+              Van AI-simulatie-engines en tactische strategy games tot audio-tools.
+              Met een achtergrond in creatieve audio en horeca breng ik een nuchtere, hands-on executie-mentaliteit: een idee heeft pas waarde als het vlekkeloos werkt.
             </p>
             <div class="hero-actions">
-              <a class="btn btn-primary" href="#contact">Neem contact op &rarr;</a>
-              <a class="btn btn-ghost" href="#projecten">Bekijk projecten &darr;</a>
-              <a class="btn btn-ghost share-btn-accent" href="/share">Deel &amp; QR</a>
+              <a class="btn btn-primary" href="#projecten">Bekijk projecten &rarr;</a>
+              <a class="btn btn-secondary" href="#contact">Neem contact op</a>
+              <a class="btn btn-ghost share-btn-accent" href="/share">Deel / QR</a>
               <a class="btn btn-ghost" href="https://github.com/japiohopman" target="_blank" rel="noreferrer">
                 GitHub &rarr;
               </a>
             </div>
 
-            <div class="proof-strip reveal">
-              <article>
-                <span class="proof-label">Build</span>
-                <strong>TypeScript, React, Node.js, game development en interactieve webapps</strong>
-              </article>
-              <article>
-                <span class="proof-label">Explore</span>
-                <strong>AI-integratie, local LLMs, speech-to-text, audio en creatieve software</strong>
-              </article>
-              <article>
-                <span class="proof-label">Background</span>
-                <strong>Horeca, muziek en een zelfstandige makersmentaliteit vormen mijn praktische basis</strong>
-              </article>
+            <div class="hero-highlights">
+              <div class="highlight-item">
+                <span class="highlight-label">Kernstack</span>
+                <span class="highlight-val">TypeScript, React, Node.js, Next.js</span>
+              </div>
+              <div class="highlight-item">
+                <span class="highlight-label">Focus</span>
+                <span class="highlight-val">AI Systems, Web Games, Interactive Web</span>
+              </div>
+              <div class="highlight-item">
+                <span class="highlight-label">Locatie</span>
+                <span class="highlight-val">Amsterdam &bull; Beschikbaar</span>
+              </div>
             </div>
           </div>
 
-          <aside class="hero-panel reveal">
-            <div class="portrait-wrap">
-              <div class="avatar-container">
-                <img src="/images/jaap-Hopman.webp" alt="Portret van Jaap Hopman" class="avatar avatar-default" onerror="this.onerror=null; this.src='/images/jaap-hopman.webp'; this.setAttribute('onerror', 'this.onerror=null; this.src=\'/images/jaap-Hopman.jpg\';');" />
-                <img src="/images/jaap-Hopman-muppet.webp" alt="Portret van Jaap Hopman (Muppet)" class="avatar avatar-hover" onerror="this.onerror=null; this.src='/images/jaap-hopman-muppet.webp';" />
+          <aside class="hero-panel">
+            <div class="portrait-card">
+              <div class="portrait-wrap">
+                <div class="avatar-container">
+                  <img src="/images/jaap-Hopman.webp" alt="Portret van Jaap Hopman" class="avatar avatar-default" onerror="this.onerror=null; this.src='/images/jaap-hopman.webp'; this.setAttribute('onerror', 'this.onerror=null; this.src=\'/images/jaap-Hopman.jpg\';');" />
+                  <img src="/images/jaap-Hopman-muppet.webp" alt="Portret van Jaap Hopman (Muppet)" class="avatar avatar-hover" onerror="this.onerror=null; this.src='/images/jaap-hopman-muppet.webp';" />
+                </div>
               </div>
-              <div class="portrait-ring portrait-ring-a" aria-hidden="true"></div>
-              <div class="portrait-ring portrait-ring-b" aria-hidden="true"></div>
-            </div>
-
-            <div class="hero-panel-card">
-              <p class="panel-kicker">Waar ik graag aan werk</p>
-              <ul class="availability-list">
-                <li>Interactieve webapps en digitale tools</li>
-                <li>Games, game systems en interactieve werelden</li>
-                <li>AI, audio en creatieve software</li>
-              </ul>
+              <div class="portrait-meta">
+                <p class="portrait-name">Jaap Hopman</p>
+                <p class="portrait-role">Creative Technologist</p>
+              </div>
             </div>
           </aside>
         </div>
