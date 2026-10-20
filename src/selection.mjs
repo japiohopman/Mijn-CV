@@ -111,9 +111,9 @@ function parseDependencyReference(value, expectedRepository) {
   const trimmed = value.trim();
   const local = trimmed.match(/^#?([1-9]\d*)$/);
   if (local) return { valid: true, number: Number(local[1]) };
-  const webURL = trimmed.match(/^https?:\/\/github\.com\/([^/\s]+)\/([^/\s]+)\/issues\/([1-9]\d+)\/?$/i);
-  const apiURL = trimmed.match(/^https?:\/\/api\.github\.com\/repos\/([^/\s]+)\/([^/\s]+)\/issues\/([1-9]\d+)\/?$/i);
-  const shorthand = trimmed.match(/^([^/\s]+)\/([^/\s]+)#([1-9]\d+)$/i);
+  const webURL = trimmed.match(/^https?:\/\/github\.com\/([^/\s]+)\/([^/\s]+)\/issues\/([1-9]\d*)\/?$/i);
+  const apiURL = trimmed.match(/^https?:\/\/api\.github\.com\/repos\/([^/\s]+)\/([^/\s]+)\/issues\/([1-9]\d*)\/?$/i);
+  const shorthand = trimmed.match(/^([^/\s]+)\/([^/\s]+)#([1-9]\d*)$/i);
   const match = webURL || apiURL || shorthand;
   if (!match) return { valid: false };
   const expected = normalizeRepositoryForReferences(expectedRepository);
@@ -280,7 +280,7 @@ function extractPRLinkedIssueNumbers(pr, repository = null) {
   if (Number.isInteger(Number(pr?.issueNumber)) && Number(pr.issueNumber) > 0) numbers.add(Number(pr.issueNumber));
   if (typeof pr?.body === 'string') {
     const refs = Array.from(pr.body.matchAll(
-      /https?:\/\/(?:api\.github\.com\/repos\/|github\.com\/)[^\s/]+\/[^\s/]+\/issues\/[1-9]\d+\/?|[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+#[1-9]\d+|(?<![A-Za-z0-9_./-])#[1-9]\d+/gi
+      /https?:\/\/(?:api\.github\.com\/repos\/|github\.com\/)[^\s/]+\/[^\s/]+\/issues\/[1-9]\d*\/?|[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+#[1-9]\d*|(?<![A-Za-z0-9_./-])#[1-9]\d*/gi
     ));
     for (const ref of refs) {
       const parsed = parseDependencyReference(ref[0].replace(/[),.;!?]+$/g, ''), repository);
