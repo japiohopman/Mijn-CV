@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "enabled": false,
+  "repairDispatchEnabled": false,
+  "repairPilotApproved": false,
+  "defaultBranch": "master",
+  "runMode": "dry-run",
+  "workProvider": "none",
+  "reviewProvider": "manual",
+  "maxConcurrentSessions": 1,
+  "humanReadinessRequired": true,
+  "automaticMerge": false,
+  "scheduleEnabled": false,
+  "requiredConfirmation": "DISPATCH",
+  "staleClaimMinutes": 45,
+  "labels": {
+    "proposed": "proposed",
+    "ready": "roadmap-ready",
+    "claimed": "automation-claimed",
+    "inProgress": "in-progress",
+    "awaitingReview": "awaiting-review",
+    "changesRequested": "changes-requested",
+    "approved": "review-approved",
+    "blocked": "automation-blocked",
+    "escalated": "needs-human"
+  },
+  "requiredIssueSections": [
+    "Scope",
+    "Acceptance criteria",
+    "Dependencies",
+    "Out of scope",
+    "Validation plan"
+  ],
+  "requiredChecks": [
+    "build-and-test"
+  ],
+  "trustedReviewers": [],
+  "sequenceSource": null
+}
