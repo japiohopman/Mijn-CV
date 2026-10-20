@@ -22,7 +22,8 @@
     "changesRequested": "changes-requested",
     "approved": "review-approved",
     "blocked": "automation-blocked",
-    "escalated": "needs-human"
+    "escalated": "needs-human",
+    "humanReady": "human-ready"
   },
   "requiredIssueSections": [
     "Scope",
@@ -31,7 +32,9 @@
     "Out of scope",
     "Validation plan"
   ],
-  "requiredChecks": [],
+  "requiredChecks": [
+    "build-and-test"
+  ],
   "trustedReviewers": [],
   "sequenceSource": null
 }
