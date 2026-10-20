@@ -157,9 +157,9 @@ const prBody = [
   '  - Evidence: This fixture supplies the governing issue, exact paths, commit trees, and successful checks.',
   '## Verification',
   '- Changed paths:',
-  '  - test/autoloop-bootstrap.test.mjs',
+  '  - ' + String.fromCharCode(96) + 'test/autoloop-bootstrap.test.mjs' + String.fromCharCode(96),
   '- Commands/checks run: node test/autoloop-bootstrap.test.mjs — passed',
-  '- Exact head SHA verified: ' + headSha,
+  '- Exact head SHA verified: ' + String.fromCharCode(96) + headSha + String.fromCharCode(96),
   '- Check results for that SHA: build-and-test completed successfully for the exact current head.',
   '## Risks and blockers',
   '- Security/permissions impact: none; deterministic metadata only.',
@@ -205,7 +205,18 @@ const completeEvidence = {
 };
 const accepted = evaluatePullRequestGate(completeEvidence);
 assert.equal(accepted.success, true, JSON.stringify(accepted.blockers));
+
 assert.equal(accepted.humanApproval.approved, false, 'Passing the gate must not approve the PR');
+
+const backtick = String.fromCharCode(96);
+const plainBody = prBody
+  .replace('  - ' + backtick + 'test/autoloop-bootstrap.test.mjs' + backtick, '  - test/autoloop-bootstrap.test.mjs')
+  .replace('Exact head SHA verified: ' + backtick + headSha + backtick, 'Exact head SHA verified: ' + headSha);
+const plainEvidence = {
+  ...completeEvidence,
+  pullRequest: { ...completeEvidence.pullRequest, body: plainBody }
+};
+assert.equal(evaluatePullRequestGate(plainEvidence).success, true, 'Plain-text paths and SHA must remain supported');
 
 const staleHead = evaluatePullRequestGate({ ...completeEvidence, eventHeadSha: parentSha });
 assert.equal(staleHead.success, false, 'An event from an older head must not pass');
