@@ -126,9 +126,12 @@ export function extractDependencyIssueNumbers(issue, repository = null) {
   const dependencyNumbers = new Set();
   let unparseable = false;
   let wrongRepository = false;
+
   if (Array.isArray(issue?.dependencies)) {
     for (const item of issue.dependencies) {
-      const raw = item && typeof item === 'object' ? item.html_url || item.url || item.number : item;
+      const raw = item && typeof item === 'object'
+        ? item.html_url || item.url || item.number
+        : item;
       const parsed = parseDependencyReference(raw, repository);
       if (parsed.valid) dependencyNumbers.add(parsed.number);
       else {
@@ -137,24 +140,37 @@ export function extractDependencyIssueNumbers(issue, repository = null) {
       }
     }
   }
+
   if (typeof issue?.body === 'string') {
     const sections = extractMarkdownSections(issue.body);
-    const body = sections.get('dependencies');
-    if (body && body.trim() && !/^(none|n\/a|no dependencies|nil|0|-)\.?$/i.test(body.trim())) {
-      const refs = Array.from(body.matchAll(
-        /https?:\/\/(?:api\.github\.com\/repos\/|github\.com\/)[^\s/]+\/[^\s/]+\/issues\/[1-9]\d+\/?|[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+#[1-9]\d+|(?<![A-Za-z0-9_./-])#[1-9]\d+/gi
-      ));
-      if (refs.length === 0) unparseable = true;
-      for (const ref of refs) {
-        const token = ref[0].replace(/[),.;!?]+$/g, '');
-        const parsed = parseDependencyReference(token, repository);
-        if (!parsed.valid) {
+    const section = sections.get('dependencies');
+    if (section && section.trim() && !/^(none|n\/a|no dependencies|nil|0|-)\.?$/i.test(section.trim())) {
+      // Parse one dependency reference per list item. Strict token parsing avoids
+      // accidentally treating a cross-repository URL or surrounding prose as local.
+      for (const rawLine of section.split(/\r?\n/)) {
+        let token = rawLine.trim();
+        if (!token) continue;
+        token = token.replace(/^(?:[-*+]\s+|\d+[.)]\s+)/, '').trim();
+        const markdownLink = token.match(/^\[[^\]]+\]\((https?:\/\/[^)]+)\)$/i);
+        if (markdownLink) token = markdownLink[1].trim();
+        const candidates = token.split(/\s*[,;]\s*/).map((value) => value.replace(/[),.;!?]+$/g, '').trim()).filter(Boolean);
+        if (candidates.length === 0) {
           unparseable = true;
-          if (parsed.wrongRepository) wrongRepository = true;
-        } else if (parsed.number !== Number(issue.number)) dependencyNumbers.add(parsed.number);
+          continue;
+        }
+        for (const candidate of candidates) {
+          const parsed = parseDependencyReference(candidate, repository);
+          if (!parsed.valid) {
+            unparseable = true;
+            if (parsed.wrongRepository) wrongRepository = true;
+          } else if (parsed.number !== Number(issue.number)) {
+            dependencyNumbers.add(parsed.number);
+          }
+        }
       }
     }
   }
+
   if (unparseable) {
     return {
       valid: false,
@@ -164,7 +180,10 @@ export function extractDependencyIssueNumbers(issue, repository = null) {
         : 'Issue Dependencies section or array contains unparseable prose or invalid Issue references.'
     };
   }
-  return { valid: true, numbers: Array.from(dependencyNumbers).sort((a, b) => a - b) };
+  return {
+    valid: true,
+    numbers: Array.from(dependencyNumbers).sort((a, b) => a - b)
+  };
 }
 
 /**
