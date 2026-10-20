@@ -4,37 +4,43 @@ on:
   workflow_dispatch:
     inputs:
       confirm_repository:
-        description: "Type the exact owner/repository shown in this repository's URL."
+        description: "Exact owner/repository shown in this repository URL."
         required: true
         type: string
 
 permissions:
+  actions: read
+  checks: read
   contents: read
   issues: read
   pull-requests: read
+  statuses: read
+
+concurrency:
+  group: autoloop-plan-only
+  cancel-in-progress: false
 
 jobs:
   autoloop-plan:
-    name: Run Autoloop preflight and candidate selection (Plan-Only)
+    name: Run Autoloop preflight and candidate selection (plan-only)
     runs-on: ubuntu-latest
-    environment: autoloop-dispatch
     timeout-minutes: 5
     steps:
       - name: Verify default branch ref
-        if: github.ref != format('refs/heads/{0}', github.event.repository.default_branch)
+        if: ${{ github.ref != format('refs/heads/{0}', github.event.repository.default_branch) }}
         run: |
-          echo "::error::Autoloop dispatch can only be executed from the repository default branch."
+          echo "::error::Autoloop plan-only can only run from the repository default branch."
           exit 1
-      - name: Check out repository
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Check out trusted default-branch code
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false
       - name: Set up Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
-      - name: Verify repository confirmation before exposing provider secrets
+          node-version: '22'
+      - name: Verify repository confirmation
         env:
           CONFIRM_REPOSITORY: ${{ inputs.confirm_repository }}
         run: |
@@ -42,11 +48,13 @@ jobs:
             echo "::error::Repository confirmation must exactly match this repository."
             exit 1
           fi
-      - name: Run Autoloop plan
+      - name: Run Autoloop plan-only preflight
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
-          CONFIRM_REPOSITORY: ${{ inputs.confirm_repository }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REF: ${{ github.ref }}
+          CONFIRM_REPOSITORY: __CONFIRM_REPOSITORY__
           AUTOLOOP_STATE_BRANCH: ${{ vars.AUTOLOOP_STATE_BRANCH || 'autoloop-state' }}
           AUTOLOOP_CONFIG_PATH: config/autoloop.json
+          AUTOLOOP_LIVE_DISPATCH: 'false'
         run: node scripts/autoloop-runner.mjs
