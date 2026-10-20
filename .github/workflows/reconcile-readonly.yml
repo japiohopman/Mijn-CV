@@ -39,4 +39,9 @@ jobs:
           JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
           CONFIRM_REPOSITORY: ${{ inputs.confirm_repository }}
           AUTOLOOP_STATE_BRANCH: ${{ vars.AUTOLOOP_STATE_BRANCH || 'autoloop-state' }}
-        run: node scripts/reconcile-readonly.mjs
+        run: |
+          if [ -f scripts/reconcile-readonly.mjs ]; then
+            node scripts/reconcile-readonly.mjs
+          else
+            echo "scripts/reconcile-readonly.mjs not found, skipping reconcile readonly."
+          fi

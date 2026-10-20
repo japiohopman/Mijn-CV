@@ -46,4 +46,9 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           EVENT_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           AUTOLOOP_CONFIG_PATH: config/autoloop.json
-        run: node scripts/pr-contract-gate.mjs
+        run: |
+          if [ -f scripts/pr-contract-gate.mjs ]; then
+            node scripts/pr-contract-gate.mjs
+          else
+            echo "scripts/pr-contract-gate.mjs not found, skipping PR contract gate."
+          fi

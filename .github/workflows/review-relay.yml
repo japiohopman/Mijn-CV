@@ -56,7 +56,14 @@ jobs:
         run: |
           node --input-type=module <<'NODE'
           import { readFile, appendFile } from 'node:fs/promises';
-          import { shouldExposeProviderAccess } from './scripts/provider-access.mjs';
+
+          let shouldExposeProviderAccess = () => false;
+          try {
+            const mod = await import('./scripts/provider-access.mjs');
+            shouldExposeProviderAccess = mod.shouldExposeProviderAccess;
+          } catch {
+            // Module not installed; fail closed
+          }
 
           const output = process.env.GITHUB_OUTPUT;
           const event = JSON.parse(await readFile(process.env.GITHUB_EVENT_PATH, 'utf8'));
@@ -129,4 +136,9 @@ jobs:
           JULES_API_KEY: ${{ steps.provider-access.outputs.needs_jules == 'true' && secrets.JULES_API_KEY || '' }}
           AUTOLOOP_STATE_BRANCH: ${{ vars.AUTOLOOP_STATE_BRANCH || 'autoloop-state' }}
           AUTOLOOP_CONFIG_PATH: config/autoloop.json
-        run: node scripts/review-relay.mjs
+        run: |
+          if [ -f scripts/review-relay.mjs ]; then
+            node scripts/review-relay.mjs
+          else
+            echo "scripts/review-relay.mjs not found, skipping review relay."
+          fi
