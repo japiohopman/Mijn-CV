@@ -77,14 +77,6 @@ export function evaluateHumanReadiness(issue, config) {
     return { verified: true };
   }
 
-  if (issue?.humanReadiness === true || issue?.humanReady === true || issue?.humanReadinessVerified === true) {
-    return { verified: true };
-  }
-  if (issue?.humanReadiness && typeof issue.humanReadiness === 'object'
-    && (issue.humanReadiness.verified === true || issue.humanReadiness.ready === true)) {
-    return { verified: true };
-  }
-
   return {
     verified: false,
     reason: 'Candidate Issue #' + (issue?.number ?? 'unknown') + ' lacks explicit evidence using the configured human-readiness label.'

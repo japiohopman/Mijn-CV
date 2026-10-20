@@ -224,6 +224,7 @@ await test('human readiness accepts only the configured humanReady label', () =>
   const config = { humanReadinessRequired: true, labels: { humanReady: 'human-ready' } };
   assert.equal(evaluateHumanReadiness({ number: 1, labels: ['human-ready'] }, config).verified, true);
   assert.equal(evaluateHumanReadiness({ number: 1, labels: ['human-approved'] }, config).verified, false);
+  assert.equal(evaluateHumanReadiness({ number: 1, labels: [], humanReadiness: true }, config).verified, false);
   assert.equal(evaluateHumanReadiness({ number: 1, labels: [] }, { humanReadinessRequired: true, labels: {} }).verified, false);
 });
 
