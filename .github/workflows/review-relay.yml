@@ -45,6 +45,33 @@ jobs:
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 20
+      - name: Verify trusted review-relay implementation is installed
+        shell: bash
+        run: |
+          set -euo pipefail
+          required_files=(
+            "config/autoloop.json"
+            "config/autoloop.schema.v1.json"
+            "scripts/provider-access.mjs"
+            "scripts/review-relay.mjs"
+            "src/claims.mjs"
+            "src/config.mjs"
+            "src/contracts.mjs"
+            "src/jules.mjs"
+            "src/pagination.mjs"
+            "src/preflight.mjs"
+            "src/pr-gate.mjs"
+            "src/reconciliation.mjs"
+            "src/review-relay.mjs"
+          )
+          for path in "${required_files[@]}"; do
+            if [[ ! -f "$path" ]]; then
+              echo "::error title=Trusted relay bootstrap pending::Missing trusted file '$path' on the checked-out default branch."
+              echo "The provider-access classification and review relay must not run until all trusted dependencies are installed. No provider secret will be exposed by this failed job."
+              exit 1
+            fi
+          done
+
       - name: Classify whether existing-work verification needs provider access
         id: provider-access
         env:
