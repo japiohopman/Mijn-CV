@@ -16,6 +16,10 @@ The workflow acts as the autonomous coordinator that safely discovers GitHub Iss
 
 ---
 
+**Jules dispatch warning:** This repository's orchestrator dispatches via the Jules API. Do not put the native `jules` trigger label on phase/task queue issues: the separate Jules GitHub integration can create sessions immediately and bypass the orchestrator's single-flight guard. Queue issues must use only `type:phase` / `type:task` plus lifecycle labels; code-driven label updates must not add `jules`.
+
+---
+
 ## 2. Core Execution Loop Phases
 
 | Phase | Description | Key Rules & Actions |

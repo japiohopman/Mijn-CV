@@ -156,6 +156,26 @@ export function hasLabel(issue, labelName) {
   return issue.labels.some(l => (typeof l === 'string' ? l : l.name) === labelName);
 }
 
+/**
+ * Build queue labels without the native `jules` trigger label.
+ * This orchestrator dispatches through the Jules API itself; adding the
+ * native trigger label would start a second, competing session.
+ */
+const MANAGED_ISSUE_TYPES = new Set(['type:phase', 'type:task']);
+const MANAGED_STATUSES = new Set([
+  'status:planned',
+  'status:active',
+  'status:blocked',
+  'status:review',
+  'status:complete',
+]);
+
+export function managedIssueLabels(type, status) {
+  if (!MANAGED_ISSUE_TYPES.has(type)) throw new Error(`Unsupported managed issue type: ${type}`);
+  if (!MANAGED_STATUSES.has(status)) throw new Error(`Unsupported managed issue status: ${status}`);
+  return [type, status];
+}
+
 export function getStatusLabel(issue) {
   if (!issue || !Array.isArray(issue.labels)) return 'status:planned';
   const statusLabels = issue.labels
@@ -496,7 +516,7 @@ export async function main() {
       console.log(`Phase PR #${action.prNumber} is merged! Transitioning Phase #${action.phaseIssueNumber} to status:complete.`);
       await githubPatch(`issues/${action.phaseIssueNumber}`, {
         state: 'closed',
-        labels: ['type:phase', 'status:complete', 'jules'],
+        labels: managedIssueLabels('type:phase', 'status:complete'),
       });
       state.activeSession = null;
       state.activePhase = null;
@@ -515,7 +535,7 @@ export async function main() {
       console.log(`Task PR #${action.prNumber} merged into ${action.phaseBranch}. Advancing task.`);
       await githubPatch(`issues/${action.taskIssueNumber}`, {
         state: 'closed',
-        labels: ['type:task', 'status:complete', 'jules'],
+        labels: managedIssueLabels('type:task', 'status:complete'),
       });
       state.activeSession = null;
       saveState(state);
@@ -527,7 +547,7 @@ export async function main() {
       console.log(`Jules session ${action.sessionName} completed with no outstanding PR merge. Advancing Task #${action.taskIssueNumber}.`);
       await githubPatch(`issues/${action.taskIssueNumber}`, {
         state: 'closed',
-        labels: ['type:task', 'status:complete', 'jules'],
+        labels: managedIssueLabels('type:task', 'status:complete'),
       });
       state.activeSession = null;
       saveState(state);
@@ -537,7 +557,7 @@ export async function main() {
     case 'FAIL_SESSION_TASK':
       console.warn(`Jules session ${action.sessionName} failed. Blocking Task #${action.taskIssueNumber} for human investigation.`);
       await githubPatch(`issues/${action.taskIssueNumber}`, {
-        labels: ['type:task', 'status:blocked', 'jules'],
+        labels: managedIssueLabels('type:task', 'status:blocked'),
       });
       state.activeSession = null;
       saveState(state);
@@ -558,7 +578,7 @@ export async function main() {
         console.warn(`Phase PR creation note: ${err.message}`);
       }
       await githubPatch(`issues/${action.phaseIssueNumber}`, {
-        labels: ['type:phase', 'status:review', 'jules'],
+        labels: managedIssueLabels('type:phase', 'status:review'),
       });
       break;
 
@@ -577,11 +597,11 @@ export async function main() {
 
       // 3. Update task issue label to status:active and phase label to status:active if needed
       await githubPatch(`issues/${action.taskIssueNumber}`, {
-        labels: ['type:task', 'status:active', 'jules'],
+        labels: managedIssueLabels('type:task', 'status:active'),
       });
       if (!hasLabel(activePhase, 'status:active')) {
         await githubPatch(`issues/${action.phaseIssueNumber}`, {
-          labels: ['type:phase', 'status:active', 'jules'],
+          labels: managedIssueLabels('type:phase', 'status:active'),
         });
       }
 
