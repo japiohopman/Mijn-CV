@@ -1,0 +1,43 @@
+name: Autoloop state bootstrap
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_repository:
+        description: 'Type the exact owner/repository shown in this repository URL.'
+        required: true
+        type: string
+      state_bootstrap_confirmation:
+        description: 'Enter INITIALIZE_EMPTY_AUTOLOOP_STATE to create only the empty claim-state branch.'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: autoloop-state-bootstrap
+  cancel-in-progress: false
+
+jobs:
+  initialize-empty-state:
+    name: Initialize empty claim state (no Jules dispatch)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out trusted default branch
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Bootstrap the empty state ledger
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_API_URL: https://api.github.com
+          CONFIRM_REPOSITORY: ${{ inputs.confirm_repository }}
+          STATE_BOOTSTRAP_CONFIRMATION: ${{ inputs.state_bootstrap_confirmation }}
+          AUTOLOOP_STATE_BRANCH: ${{ vars.AUTOLOOP_STATE_BRANCH || 'autoloop-state' }}
+          AUTOLOOP_CONFIG_PATH: config/autoloop.json
+        run: node scripts/bootstrap-autoloop-state.mjs

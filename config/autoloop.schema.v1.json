@@ -96,7 +96,8 @@
         "changesRequested",
         "approved",
         "blocked",
-        "escalated"
+        "escalated",
+        "humanReady"
       ],
       "properties": {
         "proposed": {
@@ -143,6 +144,11 @@
           "type": "string",
           "minLength": 1,
           "pattern": "\\S"
+        },
+        "humanReady": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
         }
       }
     },
@@ -161,7 +167,8 @@
         "type": "string",
         "minLength": 1,
         "pattern": "\\S"
-      }
+      },
+      "minItems": 1
     },
     "trustedReviewers": {
       "type": "array",
