@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       confirm_repository:
-        description: "Type the exact owner/repository shown in this repository's URL."
+        description: "Exact owner/repository (e.g. japiohopman/Mijn-CV)"
         required: true
         type: string
 

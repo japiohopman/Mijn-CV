@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       confirm_repository:
-        description: "Type the exact owner/repository shown in this repository's URL."
+        description: "Exact owner/repository (e.g. japiohopman/Mijn-CV)"
         required: true
         type: string
       dispatch_authorization:
-        description: "Type the exact dispatch authorization phrase configured in config/autoloop.json. This can create one Jules task."
+        description: "Dispatch authorization word configured in config/autoloop.json (Enter: DISPATCH)"
         required: true
         type: string
 
