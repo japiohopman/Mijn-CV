@@ -58,3 +58,20 @@ When configuring Development Autoloop in `config/autoloop.json`:
 1. **Protected Environment:** Store `JULES_API_KEY` strictly inside the GitHub Actions Environment `autoloop-dispatch` restricted to default branch deployments (`main` / `master`).
 2. **Head SHA Invalidation:** Any new commit pushed to a PR immediately invalidates previous approval evidence and triggers fresh evaluation of required checks and tree differences.
 3. **Human Approval Gate:** Human merge review remains the non-negotiable final integration boundary before code reaches default branch.
+
+## Trusted workflow bootstrap (one-time installation)
+
+The Autoloop PR contract gate and trusted review relay deliberately check out code from the trusted base/default branch. They must never execute checker code taken from an unreviewed pull-request head with elevated permissions.
+
+When first installing these checks, the bootstrap PR itself cannot run the newly introduced checker from its own head: GitHub's `pull_request_target` event uses the workflow from the base branch. If the trusted base does not yet contain the checker, the check may fail with a missing-module error before evaluating PR metadata. **This is a one-time bootstrap condition, not a passing check.** Do not fix it by skipping the checker, adding a no-op script that exits successfully, or checking out the PR head.
+
+Safe bootstrap procedure:
+
+1. Confirm the ordinary, unprivileged CI run and bootstrap regression tests pass on the exact bootstrap head SHA.
+2. Independently review the added trusted scripts, their imports, workflow permissions, and the disabled-by-default configuration.
+3. Perform the one-time manual bootstrap merge only after that review. Do not enable live dispatch or automatic merging as part of the bootstrap.
+4. Open or update a small, real test PR after the merge so both workflows load code from the updated trusted base. Confirm that the PR gate emits a real metadata/check-evidence decision for the current head, and that the review relay validates all of its dependencies before classifying whether provider access is allowed.
+5. If a later PR still reports a missing trusted module, treat that as a regression and keep the check failed. Do not bypass the check.
+
+Live task dispatch stays disabled until the durable state store is initialized and the at-most-one-session end-to-end proof is recorded in the relevant Issues. Passing the contract gate never approves or merges a PR; human review remains separate.
+
