@@ -75,3 +75,17 @@ Safe bootstrap procedure:
 
 Live task dispatch stays disabled until the durable state store is initialized and the at-most-one-session end-to-end proof is recorded in the relevant Issues. Passing the contract gate never approves or merges a PR; human review remains separate.
 
+
+
+## One-time claim-state bootstrap (no Jules dispatch)
+
+A missing state branch is a setup error, not an empty ledger. The runner refuses to select or dispatch work until a versioned claims file is readable.
+
+To initialize it, use the manual GitHub Actions workflow named **Autoloop state bootstrap** from the trusted default branch:
+1. Confirm the repository field matches this repository exactly.
+2. Enter the exact confirmation text requested by the workflow.
+3. The workflow checks that production configuration is still disabled/dry-run, that the target is not the default branch, and that no state branch already exists.
+4. It creates only a separate data branch containing a versioned claims.json with an empty claims array. It never calls Jules and does not need the Jules API key.
+5. If two bootstrap runs race, GitHub's create-ref operation permits only one to win. The other run verifies the winner's empty state; it never overwrites it. A malformed or non-empty state store is a hard blocker and must be investigated rather than reset.
+
+Do not manually create a non-empty initial ledger, do not delete a broken store to make a test pass, and do not enable live mode as part of bootstrap.

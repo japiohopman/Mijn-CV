@@ -42,6 +42,12 @@ function invalidStateStoreError(message) {
   return error;
 }
 
+function stateStoreNotInitializedError(message) {
+  const error = new Error(message);
+  error.code = 'STATE_STORE_NOT_INITIALIZED';
+  return error;
+}
+
 function validateStateSnapshot(snapshot) {
   if (!snapshot || typeof snapshot !== 'object' || Array.isArray(snapshot)) {
     return { valid: false, reason: 'State snapshot must be an object.' };
@@ -389,7 +395,7 @@ export class InMemoryStateAdapter {
  * Stores state on a dedicated, non-default state branch.
  */
 export class GitHubStateBranchAdapter {
-  constructor({ octokit, repository, stateBranch = 'autoloop-state', defaultBranch = 'main' }) {
+  constructor({ octokit, repository, stateBranch = 'autoloop-state', defaultBranch = 'main', allowInitialize = false }) {
     if (!octokit) throw new TypeError('octokit instance is required.');
     const repoCheck = normalizeRepositoryIdentity(repository);
     if (!repoCheck.valid) throw new TypeError('repository owner and repo are required.');
@@ -399,7 +405,11 @@ export class GitHubStateBranchAdapter {
     this.repo = repoCheck.repository.repo;
     this.stateBranch = stateBranch.trim();
     this.defaultBranch = defaultBranch.trim();
+    this.allowInitialize = allowInitialize === true;
 
+    if (!this.stateBranch || !this.defaultBranch) {
+      throw new Error('State and default branch names must be non-empty.');
+    }
     if (this.stateBranch === this.defaultBranch) {
       throw new Error('State branch ("' + this.stateBranch + '") cannot be the protected default branch ("' + this.defaultBranch + '").');
     }
@@ -414,9 +424,13 @@ export class GitHubStateBranchAdapter {
         ref: 'heads/' + this.stateBranch
       });
     } catch (err) {
-      // Only a missing branch means an uninitialized (empty) state store.
-      // A missing claims.json on an existing branch is corruption, not emptiness.
-      if (err.status === 404) return { head: null, claims: [] };
+      // A missing branch is a setup blocker, not an empty ledger.
+      // Only the explicit one-time bootstrap may initialize it.
+      if (err.status === 404) {
+        throw stateStoreNotInitializedError(
+          'State branch ' + this.stateBranch + ' is missing. Run the explicit one-time Autoloop state bootstrap workflow; refusing to treat missing state as empty.'
+        );
+      }
       throw err;
     }
 
@@ -453,16 +467,31 @@ export class GitHubStateBranchAdapter {
       throw invalidStateStoreError('Persisted claims.json is not valid JSON.');
     }
 
-    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || !Array.isArray(parsed.claims)) {
-      throw invalidStateStoreError('Persisted claims.json must be an object containing a claims array.');
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)
+      || parsed.schemaVersion !== CLAIM_SCHEMA_VERSION || !Array.isArray(parsed.claims)) {
+      throw invalidStateStoreError(
+        'Persisted claims.json must contain schemaVersion ' + CLAIM_SCHEMA_VERSION + ' and a claims array.'
+      );
     }
-
+    const snapshotCheck = validateStateSnapshot({ head: headSha, claims: parsed.claims });
+    if (!snapshotCheck.valid) throw invalidStateStoreError(snapshotCheck.reason);
     return { head: headSha, claims: parsed.claims };
   }
 
   async commitStateChange(expectedHead, newClaims) {
     try {
-      const contentStr = JSON.stringify({ claims: newClaims }, null, 2) + '\n';
+      if (!Array.isArray(newClaims)) {
+        return { success: false, head: null, reason: 'INVALID_STATE_STORE', ambiguous: false };
+      }
+      if (!expectedHead && !this.allowInitialize) {
+        return { success: false, head: null, reason: 'STATE_STORE_NOT_INITIALIZED', ambiguous: false };
+      }
+      if (!expectedHead && newClaims.length !== 0) {
+        return { success: false, head: null, reason: 'BOOTSTRAP_MUST_START_EMPTY', ambiguous: false };
+      }
+      const snapshotCheck = validateStateSnapshot({ head: expectedHead || 'initializing', claims: newClaims });
+      if (!snapshotCheck.valid) return { success: false, head: null, reason: snapshotCheck.reason, ambiguous: false };
+      const contentStr = JSON.stringify({ schemaVersion: CLAIM_SCHEMA_VERSION, claims: newClaims }, null, 2) + '\n';
       const contentBase64 = Buffer.from(contentStr, 'utf8').toString('base64');
 
       if (!expectedHead) {
@@ -695,7 +724,7 @@ export async function acquireClaim({
     try {
       snapshot = await stateAdapter.readState();
     } catch (err) {
-      const invalid = err?.code === 'INVALID_STATE_STORE';
+      const invalid = err?.code === 'INVALID_STATE_STORE' || err?.code === 'STATE_STORE_NOT_INITIALIZED';
       return {
         claim: null,
         decisionCode: invalid ? CLAIM_CODES.CLAIM_INVALID_STATE : CLAIM_CODES.CLAIM_PERSISTENCE_FAILED,
