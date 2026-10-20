@@ -125,3 +125,99 @@ for (const file of syntaxFiles) {
 }
 
 console.log('Autoloop trusted-code bootstrap regressions passed.');
+
+
+// Exercise the actual PR-gate decision module with deterministic trusted metadata.
+const { evaluatePullRequestGate } = await import('../src/pr-gate.mjs');
+const headSha = 'a'.repeat(40);
+const baseSha = 'b'.repeat(40);
+const parentSha = 'c'.repeat(40);
+const headTreeSha = 'd'.repeat(40);
+const parentTreeSha = 'e'.repeat(40);
+const governingIssue = {
+  number: 99,
+  state: 'open',
+  body: [
+    '## Scope', 'Bootstrap unit-test fixture.',
+    '## Acceptance criteria', 'Contains a complete, reviewable contract.',
+    '## Dependencies', 'None.',
+    '## Out of scope', 'No live dispatch or repository writes.',
+    '## Validation plan', 'Run deterministic unit tests.'
+  ].join('\n\n')
+};
+const prBody = [
+  '## Governing Issue',
+  'Closes #99',
+  '## Summary',
+  'Exercise the trusted PR gate using a complete metadata fixture.',
+  '## Scope boundary',
+  'This unit test does not change runtime workflow behavior.',
+  '## Acceptance criteria evidence',
+  '- [x] Criterion: A complete current-head evidence packet passes.',
+  '  - Evidence: This fixture supplies the governing issue, exact paths, commit trees, and successful checks.',
+  '## Verification',
+  '- Changed paths:',
+  '  - test/autoloop-bootstrap.test.mjs',
+  '- Commands/checks run: node test/autoloop-bootstrap.test.mjs — passed',
+  '- Exact head SHA verified: ' + headSha,
+  '- Check results for that SHA: build-and-test completed successfully for the exact current head.',
+  '## Risks and blockers',
+  '- Security/permissions impact: none; deterministic metadata only.',
+  '- Known blockers: none for this fixture.',
+  '- Recovery or rollback: revert this test-only addition.',
+  '## Handoff',
+  '- Latest reviewer instructions addressed: first review.',
+  '- Next action and owner: maintainer inspects the current head.',
+  '- [x] No-op commit check completed'
+].join('\n\n');
+const completeEvidence = {
+  repositoryFullName: 'japiohopman/Mijn-CV',
+  pullRequest: {
+    number: 101,
+    state: 'open',
+    merged: false,
+    body: prBody,
+    head: { sha: headSha },
+    base: { sha: baseSha }
+  },
+  eventHeadSha: headSha,
+  confirmedCurrentHeadSha: headSha,
+  issue: governingIssue,
+  requiredIssueSections: ['Scope', 'Acceptance criteria', 'Dependencies', 'Out of scope', 'Validation plan'],
+  requiredChecks: ['build-and-test'],
+  changedFiles: [{ filename: 'test/autoloop-bootstrap.test.mjs' }],
+  checkRuns: [{
+    name: 'build-and-test',
+    head_sha: headSha,
+    status: 'completed',
+    conclusion: 'success',
+    completed_at: '2026-10-20T10:00:00Z'
+  }],
+  headCommit: {
+    sha: headSha,
+    parents: [{ sha: parentSha }],
+    commit: { tree: { sha: headTreeSha } }
+  },
+  parentCommit: {
+    sha: parentSha,
+    commit: { tree: { sha: parentTreeSha } }
+  }
+};
+const accepted = evaluatePullRequestGate(completeEvidence);
+assert.equal(accepted.success, true, JSON.stringify(accepted.blockers));
+assert.equal(accepted.humanApproval.approved, false, 'Passing the gate must not approve the PR');
+
+const staleHead = evaluatePullRequestGate({ ...completeEvidence, eventHeadSha: parentSha });
+assert.equal(staleHead.success, false, 'An event from an older head must not pass');
+assert.ok(staleHead.blockers.some(blocker => blocker.code === 'EVENT_HEAD_SHA_STALE'));
+
+const missingCheck = evaluatePullRequestGate({ ...completeEvidence, checkRuns: [] });
+assert.equal(missingCheck.success, false, 'Missing required checks must not pass');
+assert.ok(missingCheck.blockers.some(blocker => blocker.code === 'REQUIRED_CHECK_MISSING_FOR_HEAD'));
+
+const noOp = evaluatePullRequestGate({
+  ...completeEvidence,
+  headCommit: { ...completeEvidence.headCommit, commit: { tree: { sha: parentTreeSha } } }
+});
+assert.equal(noOp.success, false, 'A no-op head commit must not pass');
+assert.ok(noOp.blockers.some(blocker => blocker.code === 'NO_OP_HEAD_COMMIT'));
