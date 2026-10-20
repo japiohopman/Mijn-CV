@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 import {
   parsePhaseMetadata,
@@ -6,6 +7,7 @@ import {
   ensurePhaseBranch,
   hasLabel,
   getStatusLabel,
+  managedIssueLabels,
   selectEligiblePhase,
   selectNextTask,
   determineOrchestratorAction,
@@ -94,6 +96,16 @@ runTest('hasLabel correctly checks string and object label representations', () 
 runTest('getStatusLabel retrieves status label cleanly', () => {
   const issue = { labels: ['type:phase', 'status:review', 'jules'] };
   assert.equal(getStatusLabel(issue), 'status:review');
+});
+
+runTest('managedIssueLabels never adds the native Jules trigger label', () => {
+  assert.deepEqual(managedIssueLabels('type:task', 'status:active'), ['type:task', 'status:active']);
+  assert.deepEqual(managedIssueLabels('type:phase', 'status:review'), ['type:phase', 'status:review']);
+  assert.throws(() => managedIssueLabels('type:task', 'status:unknown'));
+  assert.throws(() => managedIssueLabels('jules', 'status:active'));
+
+  const orchestratorSource = readFileSync(new URL('../scripts/jules-orchestrator.mjs', import.meta.url), 'utf8');
+  assert.equal(orchestratorSource.includes(", 'jules']"), false);
 });
 
 // 3. Phase Selection Tests

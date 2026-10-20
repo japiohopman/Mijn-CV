@@ -5,7 +5,7 @@ labels: ["proposed"]
 body:
   - type: markdown
     attributes:
-      value: "The Issue is the execution contract. Keep scope and acceptance criteria authoritative here."
+      value: "The Issue is the execution contract. Keep scope and acceptance criteria authoritative here. Do not add the native `jules` label to queue issues; this repository dispatches through its orchestrator API."
   - type: textarea
     id: scope
     attributes:

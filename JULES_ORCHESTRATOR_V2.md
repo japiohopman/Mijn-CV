@@ -55,7 +55,10 @@ The Jules Orchestrator v2 shifts the portfolio's execution model from fragile Ma
 | `status:blocked` | Lifecycle | Work item is blocked and skipped by orchestrator dispatch. |
 | `status:review` | Lifecycle | Phase implementation is finished and Phase PR is awaiting human review. |
 | `status:complete` | Lifecycle | Work item is merged into main and closed. |
-| `jules` | Scope | Marks an issue as managed by the Jules Orchestrator. |
+
+---
+
+**Dispatch safety rule:** Do not add the native `jules` label to phase or task issues in this repository. The orchestrator creates sessions directly through the Jules API. The native Jules GitHub integration also reacts to the `jules` label, so using it here creates competing sessions outside the orchestrator's single-flight guard. Use `type:phase` / `type:task` and lifecycle labels only. The orchestrator itself must never write the `jules` label.
 
 ---
 
@@ -65,7 +68,7 @@ The Jules Orchestrator v2 shifts the portfolio's execution model from fragile Ma
 A parent issue representing an entire phase.
 
 - **Title**: `Phase <N> — <Phase Name>`
-- **Labels**: `type:phase`, `status:planned` (or `status:active`), `jules`
+- **Labels**: `type:phase` plus exactly one lifecycle label (for example `status:planned` or `status:active`).
 - **Body Schema**:
 ```markdown
 ## Objective
@@ -88,7 +91,7 @@ Brief summary of the phase objective.
 A child issue representing one specific implementation step within a phase.
 
 - **Title**: `Task: <Task Name>`
-- **Labels**: `type:task`, `status:planned` (or `status:active`), `jules`
+- **Labels**: `type:task` plus exactly one lifecycle label (for example `status:planned` or `status:active`).
 - **Body Schema**:
 ```markdown
 ## Parent Phase
@@ -111,7 +114,7 @@ Description of the issue or requirement.
 ## 5. Execution & Orchestration Flow
 
 1. **Phase Discovery**:
-   - The orchestrator fetches all open issues labeled `type:phase` and `jules`.
+   - The orchestrator fetches open issues by `type:phase` and `type:task`; lifecycle labels determine eligibility. The native `jules` trigger label is not part of this queue contract.
    - It selects the active phase (`status:active`) or the next planned phase (`status:planned`).
 2. **Branch Isolation**:
    - The orchestrator verifies or creates the designated phase branch (`phase/...`) off the default branch (`master`/`main`).
@@ -137,9 +140,9 @@ Description of the issue or requirement.
 
 ### How to Create a New Phase
 1. Create a GitHub Issue with title `Phase <N> — <Title>`.
-2. Apply labels: `type:phase`, `status:planned`, `jules`.
+2. Apply labels: `type:phase` and `status:planned`. Do not add `jules`.
 3. Specify the phase branch name in the issue body (e.g., ``phase/10-new-feature``).
-4. Create child Task Issues with title `Task: <Title>` and labels `type:task`, `status:planned`, `jules`.
+4. Create child Task Issues with title `Task: <Title>` and labels `type:task`, `status:planned`. Do not add `jules`.
 5. Link child task issues in the Phase Issue body under `## Tasks` as `- [ ] #<task_issue_number>`.
 
 ### How to Review and Merge a Phase
