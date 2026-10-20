@@ -92,7 +92,7 @@ function extractChangedPathEvidence(section) {
     if (!line.trim()) continue;
     const bullet = line.match(/^\s*[-*]\s+(.+?)\s*$/);
     if (!bullet) { invalid = true; continue; }
-    const path = bullet[1].trim().replace(/^["']|["']$/g, '');
+    const path = bullet[1].trim().replace(/^[`"']|[`"']$/g, '');
     if (!path || path.startsWith('/') || path.split('/').includes('..')) { invalid = true; continue; }
     paths.push(path);
   }
@@ -251,7 +251,7 @@ export function evaluatePullRequestGate({
   if (!hasUsefulText(summary)) addBlocker('PR_SUMMARY_EMPTY', 'The Summary is empty or still contains placeholder text.', 'Explain what changed and why in plain language.');
   if (!hasUsefulText(scopeBoundary)) addBlocker('PR_SCOPE_BOUNDARY_EMPTY', 'The Scope boundary is empty or still contains placeholder text.', 'State what the PR deliberately does not change.');
 
-  const reportedSha = verification.match(/Exact head SHA verified:\s*([0-9a-f]{40})/i)?.[1]?.toLowerCase() || null;
+  const reportedSha = verification.match(/Exact head SHA verified:\s*`?([0-9a-f]{40})`?/i)?.[1]?.toLowerCase() || null;
   if (!reportedSha || reportedSha !== headSha) {
     addBlocker('VERIFICATION_SHA_MISMATCH', 'The Verification section must name the exact current PR head SHA.', 'Copy the current 40-character head SHA from GitHub and refresh evidence for that commit.');
   }
