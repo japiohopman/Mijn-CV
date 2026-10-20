@@ -53,7 +53,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_REF: ${{ github.ref }}
-          CONFIRM_REPOSITORY: __CONFIRM_REPOSITORY__
+          CONFIRM_REPOSITORY: ${{ inputs.confirm_repository }}
           AUTOLOOP_STATE_BRANCH: ${{ vars.AUTOLOOP_STATE_BRANCH || 'autoloop-state' }}
           AUTOLOOP_CONFIG_PATH: config/autoloop.json
           AUTOLOOP_LIVE_DISPATCH: 'false'
