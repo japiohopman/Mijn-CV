@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "autoloop.schema.v1.json",
+  "title": "Development Autoloop configuration",
+  "description": "Version 1 configuration contract. The local validator supports the schema keywords used in this document.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "enabled",
+    "repairDispatchEnabled",
+    "repairPilotApproved",
+    "defaultBranch",
+    "runMode",
+    "workProvider",
+    "reviewProvider",
+    "maxConcurrentSessions",
+    "humanReadinessRequired",
+    "automaticMerge",
+    "scheduleEnabled",
+    "requiredConfirmation",
+    "staleClaimMinutes",
+    "labels",
+    "requiredIssueSections",
+    "requiredChecks",
+    "trustedReviewers",
+    "sequenceSource"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "repairDispatchEnabled": {
+      "type": "boolean"
+    },
+    "repairPilotApproved": {
+      "type": "boolean",
+      "description": "Explicit maintainer approval for a controlled repair-dispatch pilot. Must remain false until the dispatcher and reconciliation checks are validated."
+    },
+    "defaultBranch": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "runMode": {
+      "type": "string",
+      "enum": [
+        "dry-run",
+        "live"
+      ]
+    },
+    "workProvider": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "reviewProvider": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "maxConcurrentSessions": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "humanReadinessRequired": {
+      "type": "boolean"
+    },
+    "automaticMerge": {
+      "type": "boolean"
+    },
+    "scheduleEnabled": {
+      "type": "boolean"
+    },
+    "requiredConfirmation": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "staleClaimMinutes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "labels": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proposed",
+        "ready",
+        "claimed",
+        "inProgress",
+        "awaitingReview",
+        "changesRequested",
+        "approved",
+        "blocked",
+        "escalated"
+      ],
+      "properties": {
+        "proposed": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "ready": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "claimed": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "inProgress": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "awaitingReview": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "changesRequested": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "approved": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "blocked": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "escalated": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S"
+        }
+      }
+    },
+    "requiredIssueSections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      }
+    },
+    "requiredChecks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      }
+    },
+    "trustedReviewers": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\S"
+      }
+    },
+    "sequenceSource": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "pattern": "\\S"
+    }
+  }
+}
