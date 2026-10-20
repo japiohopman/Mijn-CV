@@ -110,10 +110,10 @@ The Intent Matcher evaluates user inputs against an enumerated catalog of intent
 * **Associated Tool:** `navigateToSection({ anchor: "#projecten" })`
 
 #### Intent 3: `projects.artificer`
-* **Triggers / Keywords:** `"artificer"`, `"dnd"`, `"dungeons and dragons"`, `"dice simulator"`, `"roll initiative"`
+* **Triggers / Keywords:** `"artificer"`, `"dnd"`, `"dungeons and dragons"`, `"roll initiative"`
 * **Regex:** `/artificer|d&d|dungeons|dobbelsteen/i`
 * **Answer Source:** `views/partials/projecten.ejs` (§Artificer), `GOALS.md`
-* **Retrieved Answer:** *"Artificer is een AI-gestuurde D&D 5e simulatieplatform dat een LLM Dungeon Master koppelt aan TypeScript spellogica, persistentie en een interactieve dobbelsteen-simulator."*
+* **Retrieved Answer:** *"Artificer is een AI-gestuurd D&D 5e simulatieplatform dat een LLM Dungeon Master koppelt aan TypeScript spellogica, persistentie en tactische combat."*
 * **Associated Tool:** `openProject({ projectId: "artificer" })`
 
 #### Intent 4: `projects.conquest`

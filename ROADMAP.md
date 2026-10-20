@@ -46,8 +46,8 @@ The site answers, within seconds:
 - Zero client-side tracking policy and privacy assertions.
 
 ### Phase 7 — Interactive Proof & Final Polish (Complete)
-- Interactive dice rolling simulator (Artificer), live iframe embed (Global Conquest), and email classification pipeline simulator (SuperMail).
-- Web Audio API synthesizer simulation and BPM beat engine in About section.
+- Live iframe embed (Global Conquest) and email classification pipeline simulator (SuperMail).
+- Clean framing of creative audio/sound design and game engineering background.
 
 ### Phase 8 — Portfolio Secretary: Product & Architecture (Complete)
 - Deterministic UMD intent engine and canonical knowledge registry (`secretary_knowledge.json`).
