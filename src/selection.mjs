@@ -66,6 +66,32 @@ export function hasLabel(issue, targetLabel) {
   return names.some((name) => name.toLowerCase() === String(targetLabel).toLowerCase());
 }
 
+export function evaluateHumanReadiness(issue, config) {
+  if (config?.humanReadinessRequired !== true) return { verified: true };
+
+  const configuredLabel = config?.labels?.humanReady;
+  const labelNames = extractLabelNames(issue?.labels).map((label) => label.toLowerCase());
+  if (typeof configuredLabel === 'string'
+    && configuredLabel.trim()
+    && labelNames.includes(configuredLabel.trim().toLowerCase())) {
+    return { verified: true };
+  }
+
+  if (issue?.humanReadiness === true || issue?.humanReady === true || issue?.humanReadinessVerified === true) {
+    return { verified: true };
+  }
+  if (issue?.humanReadiness && typeof issue.humanReadiness === 'object'
+    && (issue.humanReadiness.verified === true || issue.humanReadiness.ready === true)) {
+    return { verified: true };
+  }
+
+  return {
+    verified: false,
+    reason: 'Candidate Issue #' + (issue?.number ?? 'unknown') + ' lacks explicit evidence using the configured human-readiness label.'
+  };
+}
+
+
 function normalizeRepositoryForReferences(repository) {
   if (typeof repository === 'string') {
     const parts = repository.trim().split('/');
